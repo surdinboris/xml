@@ -8,6 +8,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import datetime
+ascii_uppercase = 'BCDEFGHIJKLMNOPQRSTUVWXYZ'
 import xlsxwriter
 
 def getdata(xml,classname, name, rawsearch=None):
@@ -98,7 +99,7 @@ def writetoxlsx(worksheet, results):
             if type(result[r]) == list and len(result[r]) > 1 :
                 for ind, v in enumerate(result[r]):
                     #need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                    #worksheet.write('B{}'.format(ind), str(v))
+                    worksheet.write('{}{}'.format(ascii_uppercase[ind],i), str(v))
             else:
                 worksheet.write('B{}'.format(i), str(result[r]))
 
