@@ -112,7 +112,7 @@ def writetoxlsx(worksheet, results, geometry='rows'):
         return str(val)
     if geometry == "columns":
         for i, result in enumerate(results, 0):
-            data = result['data']
+            data = results[result]
             print(i, data,ascii_uppercase[i])
             for r in data:
                 #header
