@@ -113,8 +113,10 @@ def writetoxlsx(worksheet, results, geometry='rows'):
     if geometry == "columns":
         for i, result in enumerate(results, 0):
             data = results[result]
+            ######data shuld be retrieved as ['data']
             print(i, data,ascii_uppercase[i])
             for r in data:
+                print(r,r,r)
                 #header
                 coords='{}1'.format(ascii_uppercase[i])
                 worksheet.write(coords, toStr(r,coords))
@@ -128,8 +130,8 @@ def writetoxlsx(worksheet, results, geometry='rows'):
                     worksheet.write(coords, toStr(data[r], coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
-            data = result['data']
-            print(i, data)
+            data = results[result]
+            print(i, data, ascii_uppercase[i])
             for r in data:
                 # header
                 coords = 'A{}'.format(i)
