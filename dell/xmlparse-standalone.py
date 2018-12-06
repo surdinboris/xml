@@ -97,8 +97,10 @@ def unpack(latest_file):
                 if os.path.splitext(f)[1] == '.xml':
                     return(os.path.join(epath,f))
 #columns
+#to be refactored accordingly new report structure
 def writetoxlsx(worksheet, results, geometry='rows'):
     maxwidth = {}
+
     #helper to calculate and update with for column
     def toStr(val, coord):
         try:
@@ -110,35 +112,37 @@ def writetoxlsx(worksheet, results, geometry='rows'):
         return str(val)
     if geometry == "columns":
         for i, result in enumerate(results, 0):
-            print(i, result,ascii_uppercase[i])
-            for r in result:
+            data = result['data']
+            print(i, data,ascii_uppercase[i])
+            for r in data:
                 #header
                 coords='{}1'.format(ascii_uppercase[i])
                 worksheet.write(coords, toStr(r,coords))
                 #in case of multiple values data
-                if type(result[r]) == list and len(result[r]) > 1 :
-                    for ind, v in enumerate(result[r],2):
+                if type(data[r]) == list and len(data[r]) > 1 :
+                    for ind, v in enumerate(data[r],2):
                         coords = '{}{}'.format(ascii_uppercase[i], ind)
                         worksheet.write(coords, toStr(v, coords))
                 else:
                     coords = '{}2'.format(ascii_uppercase[i])
-                    worksheet.write(coords, toStr(result[r], coords))
+                    worksheet.write(coords, toStr(data[r], coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
-            print(i, result)
-            for r in result:
+            data = result['data']
+            print(i, data)
+            for r in data:
                 # header
                 coords = 'A{}'.format(i)
                 worksheet.write(coords, toStr(r, coords))
                 # in case of multiple values data
-                if type(result[r]) == list and len(result[r]) > 1:
-                    for ind, v in enumerate(result[r]):
+                if type(data[r]) == list and len(data[r]) > 1:
+                    for ind, v in enumerate(data[r]):
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
                         worksheet.write(coords, toStr(v, coords))
                 else:
                     coords = 'B{}'.format(i)
-                    worksheet.write(coords, toStr(result[r], coords))
+                    worksheet.write(coords, toStr(data[r], coords))
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
@@ -208,13 +212,14 @@ def report(xml):
     results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber')})
     results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
     results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
+
+    #building data structure
     resData = {}
     for r in results:
         for key in r:
-            resData[key] = r[key]
+            resData[key] = {'data': r[key]}
 
-    print(resData)
-    return results
+    return resData
 
 
 # def sendrep(sysserial):
