@@ -14,7 +14,6 @@ master = 'HardwareInventory.master'
 
 def getdata(xml,classname, name, rawsearch=None):
     listval = []
-
     with open(xml, 'r') as x:
         data = x.read()
     root = ET.fromstring(data)
@@ -34,7 +33,7 @@ def getdata(xml,classname, name, rawsearch=None):
                     val= prop.find('VALUE').text
                     listval.append(val)
 
-    return(listval[0] if len(listval)==1 else listval)
+    return listval[0] if len(listval) == 1 else listval
 
 
 def main(argv):
@@ -209,6 +208,12 @@ def report(xml):
     results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber')})
     results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
     results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
+    resData = {}
+    for r in results:
+        for key in r:
+            resData[key] = r[key]
+
+    print(resData)
     return results
 
 
