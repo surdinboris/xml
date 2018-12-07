@@ -37,8 +37,9 @@ def getdata(xml,classname, name, rawsearch=None):
 
 
 def main(argv):
-    inputdir = ''
-    outputdir = ''
+    #fallbacks - to current workdir
+    inputdir = os.getcwd()
+    outputdir = os.getcwd()
     try:
         opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
     except getopt.GetoptError:
@@ -79,20 +80,32 @@ def files_processing(inputdir, outputdir):
 
 def report_analyze(current,master):
     result={}
+
     print(current, ' \nversus\n', master)
     for record in current:
-        print(record)
-        # try:
-        #     master_record = master[record]
-        # except KeyError:
-        #     #if failed to find master value in master file - assign specific attribute
-        #     validated = 5
-        #     result[record] = {'data':record['data'], 'valid': validated}
+        #in case of record availalable in master file
+        try:
+            master_record = master[record]
+            if master_record['data'] == current[record]['data']:
+                print('equals', master_record['data'])
+            else:
+                print('uequal', master_record['data'], current[record]['data'])
+            # if master_record[record]['data'] == current[record]['data']:
+            #     print(current[record]['data'])
+            #     result[record]=999
+
+        except KeyError:
+            #if failed to find master value in master file - assign specific attribute
+            validated = 5
+            result[record] = {'data':record['data'], 'valid': validated}
+        #print(master_record)
+
+    #print(result)
         #
         # if validated and validated !=5:
-        validated='t'
-        result[record] = {'data': current[record]['data'], 'valid': validated}
-    print('resulted', result)
+        #validated='t'
+        #result[record] = {'data': current[record]['data'], 'valid': validated}
+    #print('resulted', result)
 
 def unpack(latest_file):
     epath, tail =os.path.split(latest_file)
