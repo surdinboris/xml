@@ -25,7 +25,7 @@ def getdata(xml,classname, name, rawsearch=None):
         classnameattr = 'CLASSNAME'
     #searching for items
     for i in inst:
-       # gathering results for regular data
+       # gathering results
         if i.attrib[classnameattr] == classname:
             props=i.findall('PROPERTY')
             for prop in props:
@@ -54,11 +54,11 @@ def main(argv):
             outputdir = arg
     print('Input file:', inputdir)
     print('Report outputdir:', outputdir)
-    filesProcessing(inputdir, outputdir)
+    files_processing(inputdir, outputdir)
 
-def filesProcessing(inputdir, outputdir):
-    masterRepo = report(os.path.join(inputdir, master))
-    print('Master report generated from HardwareInventory.master \n', masterRepo)
+def files_processing(inputdir, outputdir):
+    master_report = report(os.path.join(inputdir, master))
+    print('Master report generated from HardwareInventory.master \n')
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
@@ -67,12 +67,32 @@ def filesProcessing(inputdir, outputdir):
             print('Found xml files:', fn)
             print('Processing files...')
             #report generation
-            repo = report(os.path.join(inputdir, inputfile))
+            cur_report = report(os.path.join(inputdir, inputfile))
+            #report analysing
+            #cur_report=report_analyze(cur_report,master_report)
+            report_analyze(cur_report, master_report)
+            writetoxlsx(worksheet, cur_report, geometry='columns')
 
-            writetoxlsx(worksheet, repo, geometry='columns')
             workbook.close()
             # reportfile.close()
             # sendrep(sysserial)
+
+def report_analyze(current,master):
+    result={}
+    print(current, ' \nversus\n', master)
+    for record in current:
+        print(record)
+        # try:
+        #     master_record = master[record]
+        # except KeyError:
+        #     #if failed to find master value in master file - assign specific attribute
+        #     validated = 5
+        #     result[record] = {'data':record['data'], 'valid': validated}
+        #
+        # if validated and validated !=5:
+        validated='t'
+        result[record] = {'data': current[record]['data'], 'valid': validated}
+    print('resulted', result)
 
 def unpack(latest_file):
     epath, tail =os.path.split(latest_file)
@@ -101,7 +121,7 @@ def unpack(latest_file):
 def writetoxlsx(worksheet, results, geometry='rows'):
     maxwidth = {}
 
-    #helper to calculate and update with for column
+    #helper to calculate and update width for column
     def toStr(val, coord):
         try:
             curr = maxwidth[coord[0]]
@@ -110,41 +130,43 @@ def writetoxlsx(worksheet, results, geometry='rows'):
         except KeyError:
             maxwidth[coord[0]] = len(val)
         return str(val)
+
     if geometry == "columns":
         for i, result in enumerate(results, 0):
-            data = results[result]
-            ######data shuld be retrieved as ['data']
-            print(i, data,ascii_uppercase[i])
-            for r in data:
-                print(r,r,r)
-                #header
-                coords='{}1'.format(ascii_uppercase[i])
-                worksheet.write(coords, toStr(r,coords))
-                #in case of multiple values data
-                if type(data[r]) == list and len(data[r]) > 1 :
-                    for ind, v in enumerate(data[r],2):
-                        coords = '{}{}'.format(ascii_uppercase[i], ind)
-                        worksheet.write(coords, toStr(v, coords))
-                else:
-                    coords = '{}2'.format(ascii_uppercase[i])
-                    worksheet.write(coords, toStr(data[r], coords))
+            record = results[result]
+            #extracting data values list
+            data = record['data']
+            #do validation coloring!
+            validated = record['valid']
+            #header
+            coords='{}1'.format(ascii_uppercase[i])
+            worksheet.write(coords, toStr(result, coords))
+            #in case of multiple values data
+            if type(data) == list and len(data) > 1:
+                for ind, v in enumerate(data, 2):
+                    coords = '{}{}'.format(ascii_uppercase[i], ind)
+                    worksheet.write(coords, toStr(v, coords))
+            else:
+                coords = '{}2'.format(ascii_uppercase[i])
+                worksheet.write(coords, toStr(data, coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
-            data = results[result]
-            print(i, data, ascii_uppercase[i])
+            record = results[result]
+            data = record['data']
+            #print(i, data, ascii_uppercase[i])
             for r in data:
                 # header
                 coords = 'A{}'.format(i)
-                worksheet.write(coords, toStr(r, coords))
+                worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
-                if type(data[r]) == list and len(data[r]) > 1:
-                    for ind, v in enumerate(data[r]):
+                if type(data) == list and len(data) > 1:
+                    for ind, v in enumerate(data):
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
                         worksheet.write(coords, toStr(v, coords))
                 else:
                     coords = 'B{}'.format(i)
-                    worksheet.write(coords, toStr(data[r], coords))
+                    worksheet.write(coords, toStr(data, coords))
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
@@ -194,24 +216,25 @@ def report(xml):
     #reportfile.write('System CPUs model: {0}\n'.format(cpusmodel))
     results = []
     #workbook.add_format()
+    #compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
     #xls - add data
-    results.append({'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag')})
+    results.append({'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
     results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})
     #PCI
     results.append({'PCI device': getdata(xml, classname='DCIM_PCIDeviceView', name='Description')})
     #Memory
     results.append({'System memory size': getdata(xml, classname='DCIM_SystemView', name='SysMemTotalSize')})
-    results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber')})
+    results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber'), 'excluded_for_validation': 1})
     results.append({'Memory module part number': getdata(xml, classname='DCIM_MemoryView', name='PartNumber')})
     results.append({'Memory slot': getdata(xml, classname='DCIM_MemoryView', name='FQDD')})
     #HDD
-    results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber')})
+    results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber'),'excluded_for_validation': 1})
     results.append({'HDD model': getdata(xml, classname='DCIM_PhysicalDiskView', name='Model')})
     results.append({'HDD fw': getdata(xml, classname='DCIM_PhysicalDiskView', name='Revision')})
     results.append({'HDD slot population': getdata(xml, classname='DCIM_PhysicalDiskView', name='Slot')})
     #PSU
     results.append({'PSU part number': getdata(xml, classname='DCIM_PowerSupplyView', name='PartNumber')})
-    results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber')})
+    results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber'), 'excluded_for_validation': 1})
     results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
     results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
 
@@ -219,8 +242,21 @@ def report(xml):
     resData = {}
     for r in results:
         for key in r:
-            resData[key] = {'data': r[key]}
+            #generating enty only for data keys (not for compare or something else)
+            if key != 'excluded_for_validation':
+                #in case of compare attribute not defined - adding validation to be executed
+                try:
+                    excluded = r['excluded_for_validation']
+                except KeyError:
+                    excluded = 0
+                if excluded:
+                    #validated = 2  to avoid further validation and make grey colored value
+                    validated = 2
+                else:
+                    validated = 0
 
+                resData[key] = {'data': r[key], 'valid': validated}
+    #print(resData)
     return resData
 
 
