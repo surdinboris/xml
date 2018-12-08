@@ -73,7 +73,7 @@ def files_processing(inputdir, outputdir):
             #report analysing
             report_analyze(cur_report, master_report)
             cur_report=report_analyze(cur_report, master_report)
-            writetoxlsx(worksheet, cur_report, geometry='rows')
+            writetoxlsx(worksheet, cur_report, geometry='columns')
 
             workbook.close()
             # reportfile.close()
