@@ -73,7 +73,7 @@ def files_processing(inputdir, outputdir):
             #report analysing
             report_analyze(cur_report, master_report)
             cur_report=report_analyze(cur_report, master_report)
-            writetoxlsx(worksheet, cur_report, geometry='columns')
+            writetoxlsx(worksheet, cur_report, geometry='rows')
 
             workbook.close()
             # reportfile.close()
@@ -184,7 +184,6 @@ def writetoxlsx(worksheet, results, geometry='rows'):
         for i, result in enumerate(results, 0):
             for data_item in results[result]:
                 print(result,"----------->>>",data_item)
-            record = results[result]
             #extracting data values list
             data = results[result]
             # #do validation coloring!
@@ -201,8 +200,7 @@ def writetoxlsx(worksheet, results, geometry='rows'):
                 worksheet.write(coords, toStr(data, coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
-            record = results[result]
-            data = record['data']
+            data = results[result]
             #print(i, data, ascii_uppercase[i])
             for r in data:
                 # header
