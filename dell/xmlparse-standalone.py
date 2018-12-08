@@ -186,19 +186,19 @@ def writetoxlsx(worksheet, results, geometry='rows'):
                 print(result,"----------->>>",data_item)
             record = results[result]
             #extracting data values list
-            # data = record['data']
+            data = results[result]
             # #do validation coloring!
             # #header
-            # coords='{}1'.format(ascii_uppercase[i])
-            # worksheet.write(coords, toStr(result, coords))
-            # #in case of multiple values data
-            # if type(data) == list and len(data) > 1:
-            #     for ind, v in enumerate(data, 2):
-            #         coords = '{}{}'.format(ascii_uppercase[i], ind)
-            #         worksheet.write(coords, toStr(v, coords))
-            # else:
-            #     coords = '{}2'.format(ascii_uppercase[i])
-            #     worksheet.write(coords, toStr(data, coords))
+            coords='{}1'.format(ascii_uppercase[i])
+            worksheet.write(coords, toStr(result, coords))
+            #in case of multiple values data
+            if type(data) == list and len(data) > 1:
+                for ind, v in enumerate(data, 2):
+                    coords = '{}{}'.format(ascii_uppercase[i], ind)
+                    worksheet.write(coords, toStr(v, coords))
+            else:
+                coords = '{}2'.format(ascii_uppercase[i])
+                worksheet.write(coords, toStr(data, coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
             record = results[result]
