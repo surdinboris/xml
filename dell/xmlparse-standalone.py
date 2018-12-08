@@ -84,23 +84,25 @@ def report_analyze(current,master):
     print(current, ' \nversus\n', master)
     for record in current:
         #in case of record availalable in master file
+        if current[record]['valid'] == 2:
+            result[record]=current[record]
+            continue
         try:
             master_record = master[record]
             if master_record['data'] == current[record]['data']:
-                print('equals', master_record['data'])
+                #print('equals', master_record['data'],'\n')
+                result[record] = {'data': current[record]['data'], 'valid': 1}
             else:
-                print('uequal', master_record['data'], current[record]['data'])
-            # if master_record[record]['data'] == current[record]['data']:
-            #     print(current[record]['data'])
-            #     result[record]=999
+                #print('unequal', master_record['data'], current[record]['data'],'\n')
+                result[record] = {'data': current[record]['data'], 'valid': 0}
 
         except KeyError:
             #if failed to find master value in master file - assign specific attribute
-            validated = 5
-            result[record] = {'data':record['data'], 'valid': validated}
+            result[record] = {'data':record['data'], 'valid': 5}
         #print(master_record)
 
-    #print(result)
+    print('resulted',result)
+    return result
         #
         # if validated and validated !=5:
         #validated='t'
