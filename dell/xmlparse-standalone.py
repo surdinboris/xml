@@ -72,7 +72,7 @@ def files_processing(inputdir, outputdir):
             cur_report = report(os.path.join(inputdir, inputfile))
             #report analysing
             report_analyze(cur_report, master_report)
-            #cur_report=report_analyze(cur_report, master_report)
+            cur_report=report_analyze(cur_report, master_report)
             writetoxlsx(worksheet, cur_report, geometry='columns')
 
             workbook.close()
@@ -182,23 +182,23 @@ def writetoxlsx(worksheet, results, geometry='rows'):
 
     if geometry == "columns":
         for i, result in enumerate(results, 0):
+            for data_item in results[result]:
+                print(result,"----------->>>",data_item)
             record = results[result]
             #extracting data values list
-            data = record['data']
-            #do validation coloring!
-            valid = record['valid']
-            #print(data,valid)
-            #header
-            coords='{}1'.format(ascii_uppercase[i])
-            worksheet.write(coords, toStr(result, coords))
-            #in case of multiple values data
-            if type(data) == list and len(data) > 1:
-                for ind, v in enumerate(data, 2):
-                    coords = '{}{}'.format(ascii_uppercase[i], ind)
-                    worksheet.write(coords, toStr(v, coords))
-            else:
-                coords = '{}2'.format(ascii_uppercase[i])
-                worksheet.write(coords, toStr(data, coords))
+            # data = record['data']
+            # #do validation coloring!
+            # #header
+            # coords='{}1'.format(ascii_uppercase[i])
+            # worksheet.write(coords, toStr(result, coords))
+            # #in case of multiple values data
+            # if type(data) == list and len(data) > 1:
+            #     for ind, v in enumerate(data, 2):
+            #         coords = '{}{}'.format(ascii_uppercase[i], ind)
+            #         worksheet.write(coords, toStr(v, coords))
+            # else:
+            #     coords = '{}2'.format(ascii_uppercase[i])
+            #     worksheet.write(coords, toStr(data, coords))
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
             record = results[result]
