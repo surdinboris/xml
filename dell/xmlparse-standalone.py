@@ -33,7 +33,8 @@ def getdata(xml,classname, name, rawsearch=None):
                     val= prop.find('VALUE').text
                     listval.append(val)
 
-    return listval[0] if len(listval) == 1 else listval
+    #return listval[0] if len(listval) == 1 else listval
+    return listval
 
 
 def main(argv):
@@ -70,8 +71,8 @@ def files_processing(inputdir, outputdir):
             #report generation
             cur_report = report(os.path.join(inputdir, inputfile))
             #report analysing
-            #cur_report=report_analyze(cur_report,master_report)
             report_analyze(cur_report, master_report)
+            #cur_report=report_analyze(cur_report, master_report)
             writetoxlsx(worksheet, cur_report, geometry='columns')
 
             workbook.close()
@@ -80,28 +81,61 @@ def files_processing(inputdir, outputdir):
 
 def report_analyze(current,master):
     result={}
+    #exp = {}
+    #building up data structure as following:
+    # {'Memory slot': [{'DIMM.Socket.A1': 1}, {'DIMM.Socket.A2': 1}, {'DIMM.Socket.A3': 1}, {'DIMM.Socket.A4': 1},
+    #                  {'DIMM.Socket.B1': 1}, {'DIMM.Socket.B2': 1}, {'DIMM.Socket.B3': 1}, {'DIMM.Socket.B4': 1}],
+    #  'PSU model': [{'PWR SPLY,750W,RDNT,DELTA      ': 1}, {'PWR SPLY,750W,RDNT,DELTA      ': 1}]}
 
-    print(current, ' \nversus\n', master)
+    #instead of
+    # {'ServiceTag': {'data': 'C1WN2S2', 'valid': 2},
+    # {'CPU model': {'data': ['Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz', 'Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz'],
+    #                'valid': 0}
+
+
+    #print(current, ' \nversus\n', master)
     for record in current:
         #in case of record availalable in master file
+        data_per = []
         if current[record]['valid'] == 2:
-            result[record]=current[record]
+            for data_item in current[record]['data']:
+                data_per.append({data_item:2})
+            result[record]=data_per
             continue
         try:
             master_record = master[record]
-            if master_record['data'] == current[record]['data']:
-                #print('equals', master_record['data'],'\n')
-                result[record] = {'data': current[record]['data'], 'valid': 1}
-            else:
+            data_per = []
+            for i, data_item in enumerate(current[record]['data']):
+                try:
+                    master_val = master[record]['data'][i]
+                except IndexError:
+                    master_val = 'not availalable in master configuration'
+                data_per.append({data_item: int(data_item == master_val)})
+                result[record] = data_per
+
+            #for data_item, pos in enumerate(current[record]['data']):
+
+                #print(data_item,pos)
+                #data_per.append({data_item: 1})
+            result[record] = data_per
+
+
                 #print('unequal', master_record['data'], current[record]['data'],'\n')
-                result[record] = {'data': current[record]['data'], 'valid': 0}
+                #old result[record] = {'data': current[record]['data'], 'valid': 0}
 
         except KeyError:
-            #if failed to find master value in master file - assign specific attribute
-            result[record] = {'data':record['data'], 'valid': 5}
-        #print(master_record)
+            #if failed to find whole master values branch in master file - assign specific attribute
+            data_per = []
+            for data_item in current[record]['data']:
+                data_per.append({data_item: 5})
+            result[record] = data_per
+                #continue
+            #result[record] = {'data':record['data'], 'valid': 5}
 
-    print('resulted',result)
+        #print(master_record)
+    print(result)
+    #print('resulted',result)
+
     return result
         #
         # if validated and validated !=5:
@@ -152,7 +186,8 @@ def writetoxlsx(worksheet, results, geometry='rows'):
             #extracting data values list
             data = record['data']
             #do validation coloring!
-            validated = record['valid']
+            valid = record['valid']
+            #print(data,valid)
             #header
             coords='{}1'.format(ascii_uppercase[i])
             worksheet.write(coords, toStr(result, coords))
