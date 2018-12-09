@@ -12,28 +12,66 @@ ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 import xlsxwriter
 master = 'HardwareInventory.master'
 
-def getdata(xml,classname, name, rawsearch=None):
-    listval = []
+#getroot helper for use directly from report (for configuration pasing) and in getdata requests (for hw inventory parsing)
+def getroot(xml):
     with open(xml, 'r') as x:
         data = x.read()
     root = ET.fromstring(data)
-    #patch to use both two types of xml retrieved via web interface and racadmin
-    inst = root.findall('Component')
-    classnameattr = 'Classname'
-    if len(root.findall('MESSAGE')) == 1:
+    return root
+
+def getdata(xml,classname, name):
+    listval = []
+    # with open(xml, 'r') as x:
+    #     data = x.read()
+    # root = ET.fromstring(data)
+    root = getroot(xml)
+    #router to use both two types of hwinventory retrieved via web interface or
+    #racadmin and for segregate requests configuration parsing (possibly not needed)
+    inst = ''
+    classnameattr = ''
+    if root.tag =='Inventory':
+        inst = root.findall('Component')
+        classnameattr = 'Classname'
+        #probing for second type of  inventory xml
+    elif root.tag == 'CIM':
         inst = root.findall('MESSAGE/SIMPLEREQ/VALUE.NAMEDINSTANCE/INSTANCE')
         classnameattr = 'CLASSNAME'
-    #searching for items
-    for i in inst:
-       # gathering results
-        if i.attrib[classnameattr] == classname:
-            props=i.findall('PROPERTY')
-            for prop in props:
-                if prop.attrib['NAME'] == name:
-                    val= prop.find('VALUE').text
-                    listval.append(val)
+    #probing for configuration xml
+    #if len(root.findall('SystemConfiguration')) == 1:
+    elif root.tag =='SystemConfiguration':
+        inst = root.findall('Component')
+        classnameattr = 'FQDD'
 
-    #return listval[0] if len(listval) == 1 else listval
+    #searching for hw inventory items in case of hwinventory detected
+    if root.tag =='Inventory' or root.tag =='CIM':
+        for i in inst:
+           # gathering results example: Component Classname="DCIM_ControllerView
+            if i.attrib[classnameattr] == classname:
+                props=i.findall('PROPERTY')
+                for prop in props:
+                    if prop.attrib['NAME'] == name:
+                        val= prop.find('VALUE').text
+                        listval.append(val)
+
+    #searching for hw inventory items in case of configuration parsing detected
+    #possibly not need to support equestst via getdata due to no
+    # need to individual requests for configuration parsing
+    # elif root.tag =='SystemConfiguration':
+    #     for i in inst:
+    #         # gathering results examle: FQDD="LifecycleController.Embedded.1
+    #         if i.attrib[classnameattr] == classname:
+    #             props = i.findall('Attribute')
+    #             for prop in props:
+    #                 if prop.attrib['Name'] == name:
+    #                     val = prop.text
+    #                     listval.append(val)
+    elif root.tag =='SystemConfiguration':
+        for i in inst:
+            # gathering results examle: FQDD="LifecycleController.Embedded.1
+                props = i.findall('Attribute')
+                for prop in props:
+                        val = prop.text
+                        listval.append(val)
     return listval
 
 
@@ -59,19 +97,21 @@ def main(argv):
     files_processing(inputdir, outputdir)
 
 def files_processing(inputdir, outputdir):
-    master_report = report(os.path.join(inputdir, master))
+    master_report_hwinvent = report(os.path.join(inputdir, master))
+    master_report_config = report(os.path.join(inputdir, master))
     print('Master report generated from HardwareInventory.master \n')
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
             report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
-            print('Found xml files:', fn)
-            print('Processing files...')
+            print('Found xml file: <<', fn+ext, '>> Processing...')
             #report generation
             cur_report = report(os.path.join(inputdir, inputfile))
+            #routing for hwinventory  or configuration
+
             #report analysing
-            report_analyze(cur_report, master_report)
-            cur_report=report_analyze(cur_report, master_report)
+            report_analyze(cur_report, master_report_hwinvent)
+            cur_report=report_analyze(cur_report, master_report_hwinvent)
             writetoxlsx(report_file, cur_report, geometry='columns')
             # reportfile.close()
             # sendrep(sysserial)
@@ -83,12 +123,6 @@ def report_analyze(current,master):
     # {'Memory slot': [{'DIMM.Socket.A1': 1}, {'DIMM.Socket.A2': 1}, {'DIMM.Socket.A3': 1}, {'DIMM.Socket.A4': 1},
     #                  {'DIMM.Socket.B1': 1}, {'DIMM.Socket.B2': 1}, {'DIMM.Socket.B3': 1}, {'DIMM.Socket.B4': 1}],
     #  'PSU model': [{'PWR SPLY,750W,RDNT,DELTA      ': 1}, {'PWR SPLY,750W,RDNT,DELTA      ': 1}]}
-
-    #instead of
-    # {'ServiceTag': {'data': 'C1WN2S2', 'valid': 2},
-    # {'CPU model': {'data': ['Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz', 'Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz'],
-    #                'valid': 0}
-
 
     #print(current, ' \nversus\n', master)
     for record in current:
@@ -167,18 +201,19 @@ def writetoxlsx(report_file, results, geometry='rows'):
     maxwidth = {}
     #creating xls file
     workbook = xlsxwriter.Workbook(report_file)
-    #green cell
+    #header
+    header_cell = workbook.add_format()
+    header_cell.set_bold()
+    #green cell - passed validation against master file
     green_cell = workbook.add_format()
-    green_cell.set_bold()
     green_cell.set_font_color('green')
-    #red cell
+    #red cell - failed validation against master file
     red_cell = workbook.add_format()
-    red_cell.set_bold()
     red_cell.set_font_color('red')
-    #grey_cell
-    grey_cell = workbook.add_format()
-    grey_cell.set_bold()
-    grey_cell.set_font_color('grey')
+    #black_cell - dynamic data such as SN that non need to be validated
+    # ( added 'excluded_for_validation': 1 to results in report constructor)
+    black_cell = workbook.add_format()
+    black_cell.set_font_color('gray')
     #create worksheet
     worksheet = workbook.add_worksheet()
 
@@ -199,7 +234,7 @@ def writetoxlsx(report_file, results, geometry='rows'):
             # #header
             coords='{}1'.format(ascii_uppercase[i])
 
-            worksheet.write(coords, toStr(result, coords))
+            worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
                 coords = '{}{}'.format(ascii_uppercase[i], ind)
                 for key,value in v.items():
@@ -211,7 +246,7 @@ def writetoxlsx(report_file, results, geometry='rows'):
                     elif valid == 1:
                         worksheet.write(coords, toStr(data, coords), green_cell)
                     elif valid == 2:
-                        worksheet.write(coords, toStr(data, coords), grey_cell)
+                        worksheet.write(coords, toStr(data, coords), black_cell)
 
         #print(maxwidth)
     if geometry == 'rows':
@@ -234,49 +269,70 @@ def writetoxlsx(report_file, results, geometry='rows'):
                     elif valid == 1:
                         worksheet.write(coords, toStr(data, coords), green_cell)
                     elif valid == 2:
-                        worksheet.write(coords, toStr(data, coords), grey_cell)
+                        worksheet.write(coords, toStr(data, coords), black_cell)
 
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     workbook.close()
 
-#report generation
+#report constructor
 def report(xml):
-    #ol stuff
-    #reportfile = open(os.path.join(outputdir, xml) +'_report.log', "w")
-    #reportfile.write('{0}Parsing logfile {1} started{0}\n'.format('*' * 20, xml))
-    #reportfile.write('System serial number: {0}\n'.format(sysserial))
-    #reportfile.write('System CPUs model: {0}\n'.format(cpusmodel))
     results = []
-    #workbook.add_format()
-    #compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
-    #xls - add data
-    results.append({'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
-    results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})
-    #PCI
-    results.append({'PCI device': getdata(xml, classname='DCIM_PCIDeviceView', name='Description')})
-    #Memory
-    results.append({'System memory size': getdata(xml, classname='DCIM_SystemView', name='SysMemTotalSize')})
-    results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber'), 'excluded_for_validation': 1})
-    results.append({'Memory module part number': getdata(xml, classname='DCIM_MemoryView', name='PartNumber')})
-    results.append({'Memory slot': getdata(xml, classname='DCIM_MemoryView', name='FQDD')})
-    #HDD
-    results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber'),'excluded_for_validation': 1})
-    results.append({'HDD model': getdata(xml, classname='DCIM_PhysicalDiskView', name='Model')})
-    results.append({'HDD fw': getdata(xml, classname='DCIM_PhysicalDiskView', name='Revision')})
-    results.append({'HDD slot population': getdata(xml, classname='DCIM_PhysicalDiskView', name='Slot')})
-    #PSU
-    results.append({'PSU part number': getdata(xml, classname='DCIM_PowerSupplyView', name='PartNumber')})
-    results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber'), 'excluded_for_validation': 1})
-    results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
-    results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
+    #probing for hwinventory
+
+    service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
+    if len(service_tag) == 1 and len(service_tag[0]) == 7:
+        print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
+
+        # compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
+        # xls - add data
+        results.append(
+            {'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
+        results.append({'Inventory date': getdata(xml, classname='DCIM_SystemView', name='LastSystemInventoryTime'),
+                        'excluded_for_validation': 1})
+        results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})
+        # PCI
+        results.append({'PCI device': getdata(xml, classname='DCIM_PCIDeviceView', name='Description')})
+        # Memory
+        results.append({'System memory size': getdata(xml, classname='DCIM_SystemView', name='SysMemTotalSize')})
+        results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'Memory module part number': getdata(xml, classname='DCIM_MemoryView', name='PartNumber')})
+        results.append({'Memory slot': getdata(xml, classname='DCIM_MemoryView', name='FQDD')})
+        # HDD
+        results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'HDD model': getdata(xml, classname='DCIM_PhysicalDiskView', name='Model')})
+        results.append({'HDD fw': getdata(xml, classname='DCIM_PhysicalDiskView', name='Revision')})
+        results.append({'HDD slot population': getdata(xml, classname='DCIM_PhysicalDiskView', name='Slot')})
+        # PSU
+        results.append({'PSU part number': getdata(xml, classname='DCIM_PowerSupplyView', name='PartNumber')})
+        results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
+        results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
+        # Inventory  - for testing
+        results.append(
+            {'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
+
+    elif len(getroot(xml).attrib['ServiceTag']) == 7:
+        service_tag = getroot(xml).attrib['ServiceTag']
+        print('configuration data for {} discovered {}'.format(service_tag, xml))
+        #possibly its configuration, trying to request ServiceTag via document root
+        #implement same interface as for getdata with only difference that all data vill be invoked by
+        # by looping over xml data
+        print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
+
+    else:
+        return {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}
+
 
     #building data structure
     resData = {}
     for r in results:
         for key in r:
-            #generating enty only for data keys (not for compare or something else)
+            #generating entries only for data keys (not for 'excluded_for_validation' "input" key or something else)
             if key != 'excluded_for_validation':
                 #in case of compare attribute not defined - adding validation to be executed
                 try:
@@ -288,9 +344,8 @@ def report(xml):
                     validated = 2
                 else:
                     validated = 0
-
                 resData[key] = {'data': r[key], 'valid': validated}
-    #print(resData)
+
     return resData
 
 
