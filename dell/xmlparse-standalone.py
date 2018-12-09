@@ -229,7 +229,13 @@ def writetoxlsx(report_file, results, geometry='rows'):
                         valid = value
                     # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                     coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
-                    worksheet.write(coords, toStr(data, coords))
+                    if valid == 0:
+                        worksheet.write(coords, toStr(data, coords), red_cell)
+                    elif valid == 1:
+                        worksheet.write(coords, toStr(data, coords), green_cell)
+                    elif valid == 2:
+                        worksheet.write(coords, toStr(data, coords), grey_cell)
+
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
