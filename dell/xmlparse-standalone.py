@@ -64,8 +64,7 @@ def files_processing(inputdir, outputdir):
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
-            workbook = xlsxwriter.Workbook(os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx')
-            worksheet = workbook.add_worksheet()
+            report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
             print('Found xml files:', fn)
             print('Processing files...')
             #report generation
@@ -73,9 +72,7 @@ def files_processing(inputdir, outputdir):
             #report analysing
             report_analyze(cur_report, master_report)
             cur_report=report_analyze(cur_report, master_report)
-            writetoxlsx(worksheet, cur_report, geometry='columns')
-
-            workbook.close()
+            writetoxlsx(report_file, cur_report, geometry='columns')
             # reportfile.close()
             # sendrep(sysserial)
 
@@ -131,9 +128,8 @@ def report_analyze(current,master):
             result[record] = data_per
                 #continue
             #result[record] = {'data':record['data'], 'valid': 5}
-
-        #print(master_record)
-    print(result)
+            #print(master_record)
+    #print(result)
     #print('resulted',result)
 
     return result
@@ -167,8 +163,24 @@ def unpack(latest_file):
                     return(os.path.join(epath,f))
 #columns
 #to be refactored accordingly new report structure
-def writetoxlsx(worksheet, results, geometry='rows'):
+def writetoxlsx(report_file, results, geometry='rows'):
     maxwidth = {}
+    #creating xls file
+    workbook = xlsxwriter.Workbook(report_file)
+    #green cell
+    green_cell = workbook.add_format()
+    green_cell.set_bold()
+    green_cell.set_font_color('green')
+    #red cell
+    red_cell = workbook.add_format()
+    red_cell.set_bold()
+    red_cell.set_font_color('red')
+    #grey_cell
+    grey_cell = workbook.add_format()
+    grey_cell.set_bold()
+    grey_cell.set_font_color('grey')
+    #create worksheet
+    worksheet = workbook.add_worksheet()
 
     #helper to calculate and update width for column
     def toStr(val, coord):
@@ -182,78 +194,46 @@ def writetoxlsx(worksheet, results, geometry='rows'):
 
     if geometry == "columns":
         for i, result in enumerate(results, 0):
-            for data_item in results[result]:
-                print(result,"----------->>>",data_item)
             #extracting data values list
-            data = results[result]
-            # #do validation coloring!
+            res = results[result]
             # #header
             coords='{}1'.format(ascii_uppercase[i])
+
             worksheet.write(coords, toStr(result, coords))
-            #in case of multiple values data
-            if type(data) == list and len(data) > 1:
-                for ind, v in enumerate(data, 2):
-                    coords = '{}{}'.format(ascii_uppercase[i], ind)
-                    worksheet.write(coords, toStr(v, coords))
-            else:
-                coords = '{}2'.format(ascii_uppercase[i])
-                worksheet.write(coords, toStr(data, coords))
+            for ind, v in enumerate(res, 2):
+                coords = '{}{}'.format(ascii_uppercase[i], ind)
+                for key,value in v.items():
+                    data = key
+                    valid = value
+                    #cell coloring based on value
+                    if valid == 0:
+                        worksheet.write(coords, toStr(data, coords), red_cell)
+                    elif valid == 1:
+                        worksheet.write(coords, toStr(data, coords), green_cell)
+                    elif valid == 2:
+                        worksheet.write(coords, toStr(data, coords), grey_cell)
+
+        #print(maxwidth)
     if geometry == 'rows':
         for i, result in enumerate(results, 1):
-            data = results[result]
+            res = results[result]
             #print(i, data, ascii_uppercase[i])
-            for r in data:
+            for r in res:
                 # header
                 coords = 'A{}'.format(i)
                 worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
-                if type(data) == list and len(data) > 1:
-                    for ind, v in enumerate(data):
-                        # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                        coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
-                        worksheet.write(coords, toStr(v, coords))
-                else:
-                    coords = 'B{}'.format(i)
+                for ind, v in enumerate(res):
+                    for key, value in v.items():
+                        data = key
+                        valid = value
+                    # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                    coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
                     worksheet.write(coords, toStr(data, coords))
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
-
-
-# #rows
-# def writetoxlsxRow(worksheet, results):
-#     maxwidth = {}
-#     #helper to calculate and update with for column
-#     def toStr(val, coord):
-#         try:
-#             curr = maxwidth[coord]
-#             if curr < len(val):
-#                 maxwidth[coord] = len(val)
-#         except KeyError:
-#             maxwidth[coord] = len(val)
-#         return str(val)
-#
-#     #processing results
-#     for i, result in enumerate(results, 1):
-#         print(i, result)
-#         for r in result:
-#             #header
-#             coords = 'A{}'.format(i)
-#             worksheet.write(coords, toStr(r,coords))
-#             # in case of multiple values data
-#             if type(result[r]) == list and len(result[r]) > 1 :
-#                 for ind, v in enumerate(result[r]):
-#                     #need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-#                     coords='{}{}'.format(ascii_uppercase[ind+1],i)
-#                     worksheet.write(coords, toStr(v,coords))
-#             else:
-#                 coords = 'B{}'.format(i)
-#                 worksheet.write(coords, toStr(result[r], coords))
-#
-#     #sheet setup for better look
-#     for m in maxwidth:
-#         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
-
+    workbook.close()
 
 #report generation
 def report(xml):
