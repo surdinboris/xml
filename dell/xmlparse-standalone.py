@@ -22,9 +22,9 @@ def getroot(xml):
 
 def getdata(xml,classname='', name=''):
     root = getroot(xml)
-    #data collect helper
+    #hwinventory collect helper
     def collect(inst, classnameattr):
-        listval = []
+        hwinventory = []
         for i in inst:
             # gathering results example: Component Classname="DCIM_ControllerView
             if i.attrib[classnameattr] == classname:
@@ -32,8 +32,8 @@ def getdata(xml,classname='', name=''):
                 for prop in props:
                     if prop.attrib['NAME'] == name:
                         val = prop.find('VALUE').text
-                        listval.append(val)
-        return listval
+                        hwinventory.append(val)
+        return hwinventory
     #router to use both two types of hwinventory retrieved via web interface or
     #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
 
@@ -51,7 +51,7 @@ def getdata(xml,classname='', name=''):
     #collecting hwinventory items in case of configuration parsing detected
     #and building custom structure attribute-value pairs
     elif root.tag =='SystemConfiguration':
-        listval=[]
+        confinventory=[]
         inst = root.findall('Component')
         for i in inst:
             # gathering results examle: FQDD="LifecycleController.Embedded.1
@@ -59,8 +59,8 @@ def getdata(xml,classname='', name=''):
             for prop in props:
                 val = prop.text
                 key = prop.attrib['Name']
-                listval.append({key: val})
-        return listval
+                confinventory.append({key: val})
+        return confinventory
 
 
 def main(argv):
@@ -100,7 +100,7 @@ def files_processing(inputdir, outputdir):
             #report analysing
             report_analyze(cur_report, master_report_hwinvent)
             cur_report=report_analyze(cur_report, master_report_hwinvent)
-            writetoxlsx(report_file, cur_report, geometry='columns')
+            writetoxlsx(report_file, cur_report, geometry='rows')
             # reportfile.close()
             # sendrep(sysserial)
 
@@ -222,9 +222,7 @@ def writetoxlsx(report_file, results, geometry='rows'):
             worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
                 coords = '{}{}'.format(ascii_uppercase[i], ind)
-                for key,value in v.items():
-                    data = key
-                    valid = value
+                for data,valid in v.items():
                     #cell coloring based on value
                     if valid == 0:
                         worksheet.write(coords, toStr(data, coords), red_cell)
@@ -244,17 +242,15 @@ def writetoxlsx(report_file, results, geometry='rows'):
                 worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
                 for ind, v in enumerate(res):
-                    for key, value in v.items():
-                        data = key
-                        valid = value
-                    # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                    coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
-                    if valid == 0:
-                        worksheet.write(coords, toStr(data, coords), red_cell)
-                    elif valid == 1:
-                        worksheet.write(coords, toStr(data, coords), green_cell)
-                    elif valid == 2:
-                        worksheet.write(coords, toStr(data, coords), black_cell)
+                    for data, valid in v.items():
+                        # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
+                        if valid == 0:
+                            worksheet.write(coords, toStr(data, coords), red_cell)
+                        elif valid == 1:
+                            worksheet.write(coords, toStr(data, coords), green_cell)
+                        elif valid == 2:
+                            worksheet.write(coords, toStr(data, coords), black_cell)
 
     #sheet setup for better look
     for m in maxwidth:
@@ -296,7 +292,7 @@ def report(xml):
                         'excluded_for_validation': 1})
         results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
         results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
-
+        print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
     #probing for configuration data
     else:
         #checking for ServiceTag directly in root attribute
@@ -307,8 +303,12 @@ def report(xml):
             #implement same interface as for getdata with only difference that all data vill be invoked by
             # by looping over xml data
             #getdata in key-value
-            #getdata(xml)
+            configitems=getdata(xml)
+            for conf in configitems:
+                for param,value in conf.items():
+                    results.append({param:value})
             #resData -> to build standard data object for report analyzing
+
             #print('for refactoring', {
             #'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
 
@@ -319,6 +319,7 @@ def report(xml):
 
     #building data structure
     resData = {}
+    print(results) ##### add data attr
     for r in results:
         for key in r:
             #generating entries only for data keys (not for 'excluded_for_validation' "input" key or something else)
