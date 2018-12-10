@@ -22,7 +22,7 @@ def getroot(xml):
 
 def getdata(xml,classname='', name=''):
     root = getroot(xml)
-    #collect helper
+    #data collect helper
     def collect(inst, classnameattr):
         listval = []
         for i in inst:
@@ -36,7 +36,8 @@ def getdata(xml,classname='', name=''):
         return listval
     #router to use both two types of hwinventory retrieved via web interface or
     #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
-    #collecting hw inventory items in case of hwinventory detected
+
+    #collecting hwinventory items in case of hwinventory detected
     if root.tag =='Inventory':
         inst = root.findall('Component')
         classnameattr = 'Classname'
@@ -47,17 +48,18 @@ def getdata(xml,classname='', name=''):
         classnameattr = 'CLASSNAME'
         return collect(inst, classnameattr)
 
-    #searching for hw inventory items in case of configuration parsing detected
-
+    #collecting hwinventory items in case of configuration parsing detected
+    #and building custom structure attribute-value pairs
     elif root.tag =='SystemConfiguration':
         listval=[]
         inst = root.findall('Component')
         for i in inst:
             # gathering results examle: FQDD="LifecycleController.Embedded.1
-                props = i.findall('Attribute')
-                for prop in props:
-                        val = prop.text
-                        listval.append(val)
+            props = i.findall('Attribute')
+            for prop in props:
+                val = prop.text
+                key = prop.attrib['Name']
+                listval.append({key: val})
         return listval
 
 
@@ -129,15 +131,12 @@ def report_analyze(current,master):
                     master_val = 'not availalable in master configuration'
                 data_per.append({data_item: int(data_item == master_val)})
                 result[record] = data_per
-
-            #for data_item, pos in enumerate(current[record]['data']):
+                #for data_item, pos in enumerate(current[record]['data']):
 
                 #print(data_item,pos)
                 #data_per.append({data_item: 1})
             result[record] = data_per
-
-
-                #print('unequal', master_record['data'], current[record]['data'],'\n')
+               #print('unequal', master_record['data'], current[record]['data'],'\n')
                 #old result[record] = {'data': current[record]['data'], 'valid': 0}
 
         except KeyError:
@@ -297,19 +296,21 @@ def report(xml):
                         'excluded_for_validation': 1})
         results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
         results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
-        # Inventory  - for testing
-        results.append(
-            {'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
+
     #probing for configuration data
     else:
-        #checking for service tag directly in root attribute
+        #checking for ServiceTag directly in root attribute
         try:
             service_tag = getroot(xml).attrib['ServiceTag']
             print('configuration data for {} discovered {}'.format(service_tag, xml))
             #possibly its configuration, trying to request ServiceTag via document root
             #implement same interface as for getdata with only difference that all data vill be invoked by
             # by looping over xml data
-            print(getdata(xml))
+            #getdata in key-value
+            #getdata(xml)
+            #resData -> to build standard data object for report analyzing
+            #print('for refactoring', {
+            #'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
 
         #in case of both requests failed - writing some error info
         except:
