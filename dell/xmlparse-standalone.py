@@ -8,9 +8,18 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import datetime
-ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 import xlsxwriter
-master = 'HardwareInventory.master'
+#generator for AB style excell cells
+def colnum_string(n):
+    string = ""
+    while n > 0:
+        n, remainder = divmod(n - 1, 26)
+        string = chr(65 + remainder) + string
+    return string
+
+
+hardware_master = 'HardwareInventory.master'
+configuration_master = 'ConfigurationInventory.master'
 
 #getroot helper for use directly from report (for configuration pasing)
 #  and in getdata requests (for hw inventory parsing)
@@ -85,8 +94,8 @@ def main(argv):
     files_processing(inputdir, outputdir)
 
 def files_processing(inputdir, outputdir):
-    master_report_hwinvent = report(os.path.join(inputdir, master))
-    master_report_config = report(os.path.join(inputdir, master))
+    master_report_hwinvent = report(os.path.join(inputdir, hardware_master))
+    master_report_config = report(os.path.join(inputdir, configuration_master))
     print('Master report generated from HardwareInventory.master \n')
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
@@ -213,15 +222,15 @@ def writetoxlsx(report_file, results, geometry='rows'):
         return str(val)
 
     if geometry == "columns":
-        for i, result in enumerate(results, 0):
+        for i, result in enumerate(results, 1):
             #extracting data values list
             res = results[result]
             # #header
-            coords='{}1'.format(ascii_uppercase[i])
+            coords='{}1'.format(colnum_string(i))
 
             worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
-                coords = '{}{}'.format(ascii_uppercase[i], ind)
+                coords = '{}{}'.format(colnum_string(i), ind)
                 for data,valid in v.items():
                     #cell coloring based on value
                     if valid == 0:
@@ -241,10 +250,10 @@ def writetoxlsx(report_file, results, geometry='rows'):
                 coords = 'A{}'.format(i)
                 worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
-                for ind, v in enumerate(res):
+                for ind, v in enumerate(res, 1):
                     for data, valid in v.items():
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                        coords = '{}{}'.format(ascii_uppercase[ind + 1], i)
+                        coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
                             worksheet.write(coords, toStr(data, coords), red_cell)
                         elif valid == 1:
@@ -292,7 +301,7 @@ def report(xml):
                         'excluded_for_validation': 1})
         results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
         results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
-        print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
+        #print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
     #probing for configuration data
     else:
         #checking for ServiceTag directly in root attribute
@@ -305,8 +314,9 @@ def report(xml):
             #getdata in key-value
             configitems=getdata(xml)
             for conf in configitems:
-                for param,value in conf.items():
-                    results.append({param:value})
+                for param, value in conf.items():
+                    results.append({param:[value]})
+            #?include some template\mask to determine validation?
             #resData -> to build standard data object for report analyzing
 
             #print('for refactoring', {
@@ -319,7 +329,7 @@ def report(xml):
 
     #building data structure
     resData = {}
-    print(results) ##### add data attr
+    print('resuuults',results) ##### add data attr
     for r in results:
         for key in r:
             #generating entries only for data keys (not for 'excluded_for_validation' "input" key or something else)
@@ -335,7 +345,7 @@ def report(xml):
                 else:
                     validated = 0
                 resData[key] = {'data': r[key], 'valid': validated}
-
+    print('resData', resData)
     return resData
 
 
