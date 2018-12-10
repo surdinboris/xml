@@ -94,56 +94,55 @@ def main(argv):
     files_processing(inputdir, outputdir)
 
 def files_processing(inputdir, outputdir):
-    master_report_hwinvent = report(os.path.join(inputdir, hardware_master))
-    master_report_config = report(os.path.join(inputdir, configuration_master))
-    print('Master report generated from HardwareInventory.master \n')
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
             report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
-            print('Found xml file: <<', fn+ext, '>> Processing...')
+            print('Found xml file: {} Processing...'.format(fn+ext))
             #report generation
             cur_report = report(os.path.join(inputdir, inputfile))
-            #routing for hwinventory  or configuration
-
             #report analysing
-            report_analyze(cur_report, master_report_hwinvent)
-            cur_report=report_analyze(cur_report, master_report_hwinvent)
-            writetoxlsx(report_file, cur_report, geometry='rows')
+            cur_report = report_analyze(cur_report)
+            writetoxlsx(report_file, cur_report, geometry='columns')
             # reportfile.close()
             # sendrep(sysserial)
 
-def report_analyze(current,master):
-    result={}
-    #exp = {}
+def report_analyze(currep):
+    result = {}
+    rep_type = currep['rep_type']
     #building up data structure as following:
     # {'Memory slot': [{'DIMM.Socket.A1': 1}, {'DIMM.Socket.A2': 1}, {'DIMM.Socket.A3': 1}, {'DIMM.Socket.A4': 1},
     #                  {'DIMM.Socket.B1': 1}, {'DIMM.Socket.B2': 1}, {'DIMM.Socket.B3': 1}, {'DIMM.Socket.B4': 1}],
     #  'PSU model': [{'PWR SPLY,750W,RDNT,DELTA      ': 1}, {'PWR SPLY,750W,RDNT,DELTA      ': 1}]}
 
-    #print(current, ' \nversus\n', master)
-    for record in current:
+    # routing for hwinventory  or configuration
+    if rep_type =='hwinvent_report':
+        master = report(os.path.join(os.getcwd(), hardware_master))['report']
+        print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), hardware_master)))
+    elif rep_type =='config_report':
+        master = report(os.path.join(os.getcwd(), configuration_master))['report']
+        print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), configuration_master)))
+
+    #extracting report
+    currep = currep['report']
+    for record in currep:
         #in case of record availalable in master file
         data_per = []
-        if current[record]['valid'] == 2:
-            for data_item in current[record]['data']:
+        if currep[record]['valid'] == 2:
+            for data_item in currep[record]['data']:
                 data_per.append({data_item:2})
             result[record]=data_per
             continue
         try:
             master_record = master[record]
             data_per = []
-            for i, data_item in enumerate(current[record]['data']):
+            for i, data_item in enumerate(currep[record]['data']):
                 try:
                     master_val = master[record]['data'][i]
                 except IndexError:
                     master_val = 'not availalable in master configuration'
                 data_per.append({data_item: int(data_item == master_val)})
                 result[record] = data_per
-                #for data_item, pos in enumerate(current[record]['data']):
-
-                #print(data_item,pos)
-                #data_per.append({data_item: 1})
             result[record] = data_per
                #print('unequal', master_record['data'], current[record]['data'],'\n')
                 #old result[record] = {'data': current[record]['data'], 'valid': 0}
@@ -151,16 +150,14 @@ def report_analyze(current,master):
         except KeyError:
             #if failed to find whole master values branch in master file - assign specific attribute
             data_per = []
-            for data_item in current[record]['data']:
+            for data_item in currep[record]['data']:
                 data_per.append({data_item: 5})
             result[record] = data_per
                 #continue
             #result[record] = {'data':record['data'], 'valid': 5}
             #print(master_record)
-    #print(result)
-    #print('resulted',result)
 
-    return result
+    return {'rep_type': rep_type, 'report': result}
         #
         # if validated and validated !=5:
         #validated='t'
@@ -191,8 +188,18 @@ def unpack(latest_file):
                     return(os.path.join(epath,f))
 #columns
 #to be refactored accordingly new report structure
-def writetoxlsx(report_file, results, geometry='rows'):
+def writetoxlsx(report_file, cur_report, geometry):
+
+    rep_type = cur_report['rep_type']
+    #overriding report type for
+    if rep_type == 'config_report':
+        geometry = 'rows'
+    #remooving attribute
+    cur_report=cur_report['report']
+
     maxwidth = {}
+
+
     #creating xls file
     workbook = xlsxwriter.Workbook(report_file)
     #header
@@ -213,6 +220,8 @@ def writetoxlsx(report_file, results, geometry='rows'):
 
     #helper to calculate and update width for column
     def toStr(val, coord):
+        if val == None:
+            val=''
         try:
             curr = maxwidth[coord[0]]
             if curr < len(val):
@@ -222,9 +231,9 @@ def writetoxlsx(report_file, results, geometry='rows'):
         return str(val)
 
     if geometry == "columns":
-        for i, result in enumerate(results, 1):
+        for i, result in enumerate(cur_report, 1):
             #extracting data values list
-            res = results[result]
+            res = cur_report[result]
             # #header
             coords='{}1'.format(colnum_string(i))
 
@@ -242,8 +251,8 @@ def writetoxlsx(report_file, results, geometry='rows'):
 
         #print(maxwidth)
     if geometry == 'rows':
-        for i, result in enumerate(results, 1):
-            res = results[result]
+        for i, result in enumerate(cur_report, 1):
+            res = cur_report[result]
             #print(i, data, ascii_uppercase[i])
             for r in res:
                 # header
@@ -273,6 +282,7 @@ def report(xml):
     service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
     if len(service_tag) == 1 and len(service_tag[0]) == 7:
         print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
+        rep_type = 'hwinvent_report'
 
         # compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
         # xls - add data
@@ -308,6 +318,7 @@ def report(xml):
         try:
             service_tag = getroot(xml).attrib['ServiceTag']
             print('configuration data for {} discovered {}'.format(service_tag, xml))
+            rep_type = 'config_report'
             #possibly its configuration, trying to request ServiceTag via document root
             #implement same interface as for getdata with only difference that all data vill be invoked by
             # by looping over xml data
@@ -324,12 +335,11 @@ def report(xml):
 
         #in case of both requests failed - writing some error info
         except:
-            return {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}
+            return {'rep_type':'error', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
 
 
     #building data structure
     resData = {}
-    print('resuuults',results) ##### add data attr
     for r in results:
         for key in r:
             #generating entries only for data keys (not for 'excluded_for_validation' "input" key or something else)
@@ -345,7 +355,7 @@ def report(xml):
                 else:
                     validated = 0
                 resData[key] = {'data': r[key], 'valid': validated}
-    print('resData', resData)
+    resData = {'rep_type': rep_type, 'report':resData}
     return resData
 
 

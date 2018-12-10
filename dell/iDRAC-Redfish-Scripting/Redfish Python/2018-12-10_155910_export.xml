@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TQ2S2" TimeStamp="Thu Dec  6 07:56:21 2018"> 
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WN2S2" TimeStamp="Mon Dec 10 14:59:23 2018"> 
 <!--Export type is Normal,RO,XML,IncludeHash--> 
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.--> 
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!--> 
@@ -15,18 +15,18 @@
  <Attribute Name="LCAttributes.1#VirtualAddressManagementApplication"></Attribute> 
  <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute> 
  <Attribute Name="LCAttributes.1#BIOSRTDRequested">False</Attribute> 
- <Attribute Name="LCAttributes.1#AutoUpdate">BAD PARAMETER</Attribute>
+ <Attribute Name="LCAttributes.1#AutoUpdate">Disabled</Attribute> 
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute> 
 </Component> 
  <Component FQDD="System.Embedded.1"> 
-<!--ReadOnly <Attribute Name="LCD.1#CurrentDisplay">ST: C1TQ2S2</Attribute>--> 
+<!--ReadOnly <Attribute Name="LCD.1#CurrentDisplay">ST: C1WN2S2</Attribute>--> 
  <Attribute Name="LCD.1#Configuration">Service Tag</Attribute> 
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute>--> 
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute> 
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute> 
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute> 
- <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute> 
  <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute> 
+ <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute> 
  <!--ReadOnly <Attribute Name="ThermalConfig.1#FreshAirCompliantConfiguration">Yes</Attribute>--> 
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute> 
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute> 
@@ -44,7 +44,7 @@
  <Attribute Name="ServerPwr.1#PowerCapSetting">Disabled</Attribute> 
  <!-- <Attribute Name="ServerPwr.1#PowerCapValue">185</Attribute>--> 
  <!--ReadOnly <Attribute Name="ServerPwr.1#PowerCapMaxThres">484</Attribute>--> 
- <!--ReadOnly <Attribute Name="ServerPwr.1#PowerCapMinThres">293</Attribute>--> 
+ <!--ReadOnly <Attribute Name="ServerPwr.1#PowerCapMinThres">295</Attribute>--> 
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute> 
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute> 
  <Attribute Name="ServerPwr.1#PSRapidOn">Enabled</Attribute> 
@@ -60,7 +60,7 @@
  <!-- <Attribute Name="ServerOS.1#HostName">MINWINPC</Attribute>--> 
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute>--> 
  <!--ReadOnly <Attribute Name="ServerOS.1#OSVersion"></Attribute>--> 
- <!--ReadOnly <Attribute Name="ServerOS.1#ServerPoweredOnTime">0</Attribute>--> 
+ <!--ReadOnly <Attribute Name="ServerOS.1#ServerPoweredOnTime">259226</Attribute>--> 
  <!--ReadOnly <Attribute Name="ServerOS.1#OEMOSVersion"></Attribute>--> 
  <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute> 
  <Attribute Name="RepositoryUpdate"></Attribute> 
@@ -70,7 +70,7 @@
  <!--ReadOnly <Attribute Name="Info.1#Description">This system component provides a complete set of remote management functions for Dell PowerEdge Servers</Attribute>--> 
  <!--ReadOnly <Attribute Name="Info.1#Version">2.50.50.50</Attribute>--> 
  <!--ReadOnly <Attribute Name="Info.1#Build">33</Attribute>--> 
- <!--ReadOnly <Attribute Name="Info.1#Name">idrac-C1TQ2S2</Attribute>--> 
+ <!--ReadOnly <Attribute Name="Info.1#Name">idrac-C1WN2S2</Attribute>--> 
  <!--ReadOnly <Attribute Name="Info.1#Type">13G Monolithic</Attribute>--> 
  <!--ReadOnly <Attribute Name="Info.1#ServerGen">13G</Attribute>--> 
  <Attribute Name="IPMILan.1#Enable">Disabled</Attribute> 
@@ -88,10 +88,10 @@
  <Attribute Name="Users.2#ProtocolEnable">Disabled</Attribute> 
  <Attribute Name="Users.2#AuthenticationProtocol">SHA</Attribute> 
  <Attribute Name="Users.2#PrivacyProtocol">AES</Attribute> 
- <!-- <Attribute Name="Users.2#SHA256Password">152112D61A459294A8A442A3DBA7DF806823C380AEE2AC7F46359CD0460CB65B</Attribute>--> 
+ <!-- <Attribute Name="Users.2#SHA256Password">B06A572B5F6E9F81DE7EDCED040A0855A6CDC45BE511266701E40054129D184A</Attribute>--> 
  <!-- <Attribute Name="Users.2#SHA1v3Key">cb915933b669f8b8be6d8c2f4395ff686ab05718</Attribute>--> 
  <!-- <Attribute Name="Users.2#MD5v3Key">947f1a44e14757af0712d5b51511365d</Attribute>--> 
- <!-- <Attribute Name="Users.2#SHA256PasswordSalt">FC96B8A29962AD967D021CE114E4FEA5</Attribute>--> 
+ <!-- <Attribute Name="Users.2#SHA256PasswordSalt">95BC967E3C860C7F1905C928E713FEBC</Attribute>--> 
  <Attribute Name="Users.3#UserName"></Attribute> 
  <!-- <Attribute Name="Users.3#Password">******</Attribute>--> 
  <Attribute Name="Users.3#Privilege">0</Attribute> 
@@ -359,11 +359,11 @@
  <Attribute Name="SNMP.1#SNMPProtocol">All</Attribute> 
  <Attribute Name="SNMP.1#DiscoveryPort">161</Attribute> 
  <Attribute Name="SNMP.1#AlertPort">162</Attribute> 
- <!--ReadOnly <Attribute Name="SNMP.1#EngineID">0x80001f8880383e3d237770e15b</Attribute>--> 
+ <!--ReadOnly <Attribute Name="SNMP.1#EngineID">0x80001f8880647925131072e15b</Attribute>--> 
  <Attribute Name="VirtualMedia.1#Attached">AutoAttach</Attribute> 
  <Attribute Name="VirtualMedia.1#BootOnce">Disabled</Attribute> 
  <Attribute Name="VirtualMedia.1#KeyEnable">Disabled</Attribute> 
- <Attribute Name="VirtualMedia.1#FloppyEmulation">Enabled</Attribute> 
+ <Attribute Name="VirtualMedia.1#FloppyEmulation">Disabled</Attribute> 
  <Attribute Name="VirtualMedia.1#EncryptEnable">Enabled</Attribute> 
  <Attribute Name="VirtualMedia.1#Enable">Enabled</Attribute> 
  <Attribute Name="IPBlocking.1#RangeEnable">Disabled</Attribute> 
@@ -503,14 +503,14 @@
  <Attribute Name="OS-BMC.1#PTMode">usb-p2p</Attribute> 
  <Attribute Name="OS-BMC.1#UsbNicIpAddress">169.254.0.1</Attribute> 
  <Attribute Name="NIC.1#Enable">Enabled</Attribute> 
- <!--ReadOnly <Attribute Name="NIC.1#MACAddress">54:48:10:F5:AC:9C</Attribute>--> 
+ <!--ReadOnly <Attribute Name="NIC.1#MACAddress">54:48:10:F7:56:D6</Attribute>--> 
  <Attribute Name="NIC.1#Selection">Dedicated</Attribute> 
  <Attribute Name="NIC.1#Failover">None</Attribute> 
  <Attribute Name="NIC.1#Autoneg">Enabled</Attribute> 
  <Attribute Name="NIC.1#Speed">1000</Attribute> 
  <Attribute Name="NIC.1#Duplex">Full</Attribute> 
  <Attribute Name="NIC.1#MTU">1500</Attribute> 
- <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1TQ2S2</Attribute>--> 
+ <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1WN2S2</Attribute>--> 
  <Attribute Name="NIC.1#DNSRegister">Disabled</Attribute> 
  <Attribute Name="NIC.1#VLanEnable">Disabled</Attribute> 
  <Attribute Name="NIC.1#VLanPriority">0</Attribute> 
@@ -1783,12 +1783,14 @@
     <!-- ReadOnly <Attribute Name="RAIDSupportedRAIDLevels">RAID-60,RAID-50,RAID-10,RAID-6,RAID-5,RAID-1,RAID-0</Attribute>--> 
     <!-- ReadOnly <Attribute Name="RAIDSupportedDiskProt">SAS,SATA</Attribute>--> 
     <!-- ReadOnly <Attribute Name="RAIDMaxCapableSpeed">12_GBS</Attribute>--> 
+    <!-- ReadOnly <Attribute Name="RAIDprIterations">0</Attribute>--> 
     <!-- ReadOnly <Attribute Name="RAIDspinDownIdleTime">30</Attribute>--> 
     <!-- ReadOnly <Attribute Name="RAIDSupportedInitTypes">Fast,Full</Attribute>--> 
     <Component FQDD="Disk.Virtual.0:RAID.Integrated.1-1"> 
         <Attribute Name="RAIDaction">Update</Attribute> 
         <Attribute Name="LockStatus">Unlocked</Attribute> 
         <Attribute Name="RAIDinitOperation">None</Attribute> 
+        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute>--> 
         <Attribute Name="DiskCachePolicy">Default</Attribute> 
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute> 
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute> 
@@ -1910,14 +1912,14 @@
     <!--ReadOnly  <Attribute Name="PCIDeviceID">10FB</Attribute>--> 
     <!--ReadOnly  <Attribute Name="BusDeviceFunction">01:00:00</Attribute>--> 
     <!--ReadOnly  <Attribute Name="LinkStatus">Disconnected</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:78</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:30</Attribute>--> 
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="FIPMacAddr">E4:43:4B:11:07:79</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="WWN">10:00:E4:43:4B:11:07:79</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="WWPN">20:00:E4:43:4B:11:07:79</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="FIPMacAddr">E4:43:4B:11:07:31</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="WWN">10:00:E4:43:4B:11:07:31</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="WWPN">20:00:E4:43:4B:11:07:31</Attribute>--> 
     <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute>--> 
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:79</Attribute>--> 
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:79</Attribute>--> 
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:31</Attribute>--> 
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:31</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SRIOVSupport">Available</Attribute>--> 
     <!--ReadOnly  <Attribute Name="RDMASupport">Unavailable</Attribute>--> 
     <!--ReadOnly  <Attribute Name="NumberVFSupported">64</Attribute>--> 
@@ -1980,14 +1982,14 @@
     <!--ReadOnly  <Attribute Name="PCIDeviceID">10FB</Attribute>--> 
     <!--ReadOnly  <Attribute Name="BusDeviceFunction">01:00:01</Attribute>--> 
     <!--ReadOnly  <Attribute Name="LinkStatus">Disconnected</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:7A</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:32</Attribute>--> 
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="FIPMacAddr">E4:43:4B:11:07:7B</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="WWN">10:00:E4:43:4B:11:07:7B</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="WWPN">20:00:E4:43:4B:11:07:7B</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="FIPMacAddr">E4:43:4B:11:07:33</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="WWN">10:00:E4:43:4B:11:07:33</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="WWPN">20:00:E4:43:4B:11:07:33</Attribute>--> 
     <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute>--> 
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:7B</Attribute>--> 
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:7B</Attribute>--> 
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:33</Attribute>--> 
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:33</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SRIOVSupport">Available</Attribute>--> 
     <!--ReadOnly  <Attribute Name="RDMASupport">Unavailable</Attribute>--> 
     <!--ReadOnly  <Attribute Name="NumberVFSupported">64</Attribute>--> 
@@ -2050,7 +2052,7 @@
     <!--ReadOnly  <Attribute Name="PCIDeviceID">1521</Attribute>--> 
     <!--ReadOnly  <Attribute Name="BusDeviceFunction">06:00:00</Attribute>--> 
     <!--ReadOnly  <Attribute Name="LinkStatus">Disconnected</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:7C</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:34</Attribute>--> 
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SRIOVSupport">Unavailable</Attribute>--> 
     <!--ReadOnly  <Attribute Name="RDMASupport">Unavailable</Attribute>--> 
@@ -2097,7 +2099,7 @@
     <!--ReadOnly  <Attribute Name="PCIDeviceID">1521</Attribute>--> 
     <!--ReadOnly  <Attribute Name="BusDeviceFunction">06:00:01</Attribute>--> 
     <!--ReadOnly  <Attribute Name="LinkStatus">Disconnected</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:7D</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="MacAddr">E4:43:4B:11:07:35</Attribute>--> 
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SRIOVSupport">Unavailable</Attribute>--> 
     <!--ReadOnly  <Attribute Name="RDMASupport">Unavailable</Attribute>--> 
@@ -2133,7 +2135,7 @@
     <!--ReadOnly  <Attribute Name="SystemModelName">PowerEdge R630</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SystemBiosVersion">2.8.0</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SystemMeVersion">3.1.3.38</Attribute>--> 
-    <!--ReadOnly  <Attribute Name="SystemServiceTag">C1TQ2S2</Attribute>--> 
+    <!--ReadOnly  <Attribute Name="SystemServiceTag">C1WN2S2</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SystemManufacturer">Dell Inc.</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SysMfrContactInfo">www.dell.com</Attribute>--> 
     <!--ReadOnly  <Attribute Name="SystemCpldVersion">1.0.1</Attribute>--> 
