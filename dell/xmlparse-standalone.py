@@ -12,67 +12,53 @@ ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 import xlsxwriter
 master = 'HardwareInventory.master'
 
-#getroot helper for use directly from report (for configuration pasing) and in getdata requests (for hw inventory parsing)
+#getroot helper for use directly from report (for configuration pasing)
+#  and in getdata requests (for hw inventory parsing)
 def getroot(xml):
     with open(xml, 'r') as x:
         data = x.read()
     root = ET.fromstring(data)
     return root
 
-def getdata(xml,classname, name):
-    listval = []
-    # with open(xml, 'r') as x:
-    #     data = x.read()
-    # root = ET.fromstring(data)
+def getdata(xml,classname='', name=''):
     root = getroot(xml)
+    #collect helper
+    def collect(inst, classnameattr):
+        listval = []
+        for i in inst:
+            # gathering results example: Component Classname="DCIM_ControllerView
+            if i.attrib[classnameattr] == classname:
+                props = i.findall('PROPERTY')
+                for prop in props:
+                    if prop.attrib['NAME'] == name:
+                        val = prop.find('VALUE').text
+                        listval.append(val)
+        return listval
     #router to use both two types of hwinventory retrieved via web interface or
-    #racadmin and for segregate requests configuration parsing (possibly not needed)
-    inst = ''
-    classnameattr = ''
+    #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
+    #collecting hw inventory items in case of hwinventory detected
     if root.tag =='Inventory':
         inst = root.findall('Component')
         classnameattr = 'Classname'
-        #probing for second type of  inventory xml
-    elif root.tag == 'CIM':
+        return collect(inst,classnameattr)
+
+    elif root.tag =='CIM':
         inst = root.findall('MESSAGE/SIMPLEREQ/VALUE.NAMEDINSTANCE/INSTANCE')
         classnameattr = 'CLASSNAME'
-    #probing for configuration xml
-    #if len(root.findall('SystemConfiguration')) == 1:
-    elif root.tag =='SystemConfiguration':
-        inst = root.findall('Component')
-        classnameattr = 'FQDD'
-
-    #searching for hw inventory items in case of hwinventory detected
-    if root.tag =='Inventory' or root.tag =='CIM':
-        for i in inst:
-           # gathering results example: Component Classname="DCIM_ControllerView
-            if i.attrib[classnameattr] == classname:
-                props=i.findall('PROPERTY')
-                for prop in props:
-                    if prop.attrib['NAME'] == name:
-                        val= prop.find('VALUE').text
-                        listval.append(val)
+        return collect(inst, classnameattr)
 
     #searching for hw inventory items in case of configuration parsing detected
-    #possibly not need to support equestst via getdata due to no
-    # need to individual requests for configuration parsing
-    # elif root.tag =='SystemConfiguration':
-    #     for i in inst:
-    #         # gathering results examle: FQDD="LifecycleController.Embedded.1
-    #         if i.attrib[classnameattr] == classname:
-    #             props = i.findall('Attribute')
-    #             for prop in props:
-    #                 if prop.attrib['Name'] == name:
-    #                     val = prop.text
-    #                     listval.append(val)
+
     elif root.tag =='SystemConfiguration':
+        listval=[]
+        inst = root.findall('Component')
         for i in inst:
             # gathering results examle: FQDD="LifecycleController.Embedded.1
                 props = i.findall('Attribute')
                 for prop in props:
                         val = prop.text
                         listval.append(val)
-    return listval
+        return listval
 
 
 def main(argv):
@@ -279,8 +265,7 @@ def writetoxlsx(report_file, results, geometry='rows'):
 #report constructor
 def report(xml):
     results = []
-    #probing for hwinventory
-
+    #probing for hwinventory by checking via getdata that request invoking a ServiceTag
     service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
     if len(service_tag) == 1 and len(service_tag[0]) == 7:
         print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
@@ -315,17 +300,20 @@ def report(xml):
         # Inventory  - for testing
         results.append(
             {'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
-
-    elif len(getroot(xml).attrib['ServiceTag']) == 7:
-        service_tag = getroot(xml).attrib['ServiceTag']
-        print('configuration data for {} discovered {}'.format(service_tag, xml))
-        #possibly its configuration, trying to request ServiceTag via document root
-        #implement same interface as for getdata with only difference that all data vill be invoked by
-        # by looping over xml data
-        print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
-
+    #probing for configuration data
     else:
-        return {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}
+        #checking for service tag directly in root attribute
+        try:
+            service_tag = getroot(xml).attrib['ServiceTag']
+            print('configuration data for {} discovered {}'.format(service_tag, xml))
+            #possibly its configuration, trying to request ServiceTag via document root
+            #implement same interface as for getdata with only difference that all data vill be invoked by
+            # by looping over xml data
+            print(getdata(xml))
+
+        #in case of both requests failed - writing some error info
+        except:
+            return {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}
 
 
     #building data structure
