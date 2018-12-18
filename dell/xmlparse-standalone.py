@@ -149,12 +149,11 @@ def report_analyze(currep):
             #if failed to find whole master values branch in master file - assign specific attribute
             data_per = []
             for data_item in currep[record]['data']:
-                data_per.append({data_item: 5, 'golden': 'golden setting not found'})
+                data_per.append({data_item: 5, 'golden': 'n/a'})
             result[record] = data_per
                 #continue
             #result[record] = {'data':record['data'], 'valid': 5}
             #print(master_record)
-    print({'rep_type': rep_type, 'report': result})
     return {'rep_type': rep_type, 'report': result}
         #
         # if validated and validated !=5:
@@ -240,13 +239,9 @@ def writetoxlsx(report_file, cur_report, geometry):
 
             worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
-
                 coords = '{}{}'.format(colnum_string(i), ind)
-                print(v.items())
                 for data, valid in v.items():
                     golden = v['golden']
-                    print(golden)
-
                     #cell coloring based on value
                     if valid == 0:
                         worksheet.write(coords, toStr('fail', coords), red_cell)
@@ -270,10 +265,8 @@ def writetoxlsx(report_file, cur_report, geometry):
                 worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
                 for ind, v in enumerate(res, 1):
-                    print(v.items())
                     for data, valid in v.items():
                         golden = v['golden']
-                        print(golden)
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
