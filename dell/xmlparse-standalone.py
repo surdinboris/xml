@@ -243,9 +243,9 @@ def writetoxlsx(report_file, cur_report, geometry):
                 for data,valid in v.items():
                     #cell coloring based on value
                     if valid == 0:
-                        worksheet.write(coords, toStr(data, coords), red_cell)
+                        worksheet.write(coords, toStr('fail', coords), red_cell)
                     elif valid == 1:
-                        worksheet.write(coords, toStr(data, coords), green_cell)
+                        worksheet.write(coords, toStr('pass', coords), green_cell)
                     elif valid == 2:
                         worksheet.write(coords, toStr(data, coords), black_cell)
 
@@ -264,9 +264,9 @@ def writetoxlsx(report_file, cur_report, geometry):
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
-                            worksheet.write(coords, toStr(data, coords), red_cell)
+                            worksheet.write(coords, toStr('failed', coords), red_cell)
                         elif valid == 1:
-                            worksheet.write(coords, toStr(data, coords), green_cell)
+                            worksheet.write(coords, toStr('passed', coords), green_cell)
                         elif valid == 2:
                             worksheet.write(coords, toStr(data, coords), black_cell)
 
