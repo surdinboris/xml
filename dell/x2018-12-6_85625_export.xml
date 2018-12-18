@@ -16,6 +16,7 @@
  <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute> 
  <Attribute Name="LCAttributes.1#BIOSRTDRequested">False</Attribute> 
  <Attribute Name="LCAttributes.1#AutoUpdate">BAD PARAMETER</Attribute>
+  <Attribute Name="LCAttributes.6#AutoUpdate">NOT PRESENT IN MASTER FILE PARAMETER</Attribute>
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute> 
 </Component> 
  <Component FQDD="System.Embedded.1"> 

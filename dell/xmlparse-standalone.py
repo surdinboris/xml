@@ -130,8 +130,8 @@ def report_analyze(currep):
         data_per = []
         if currep[record]['valid'] == 2:
             for data_item in currep[record]['data']:
-                data_per.append({data_item:2})
-            result[record]=data_per
+                data_per.append({data_item:2,'golden': 'dynamic field'})
+            result[record] = data_per
             continue
         try:
             master_record = master[record]
@@ -140,23 +140,21 @@ def report_analyze(currep):
                 try:
                     master_val = master[record]['data'][i]
                 except IndexError:
-                    master_val = 'not availalable in master configuration'
-                data_per.append({data_item: int(data_item == master_val)})
-                result[record] = data_per
+                    master_val = 'not present in golden configuration'
+                data_per.append({data_item: int(data_item == master_val), 'golden': master_val})
             result[record] = data_per
                #print('unequal', master_record['data'], current[record]['data'],'\n')
                 #old result[record] = {'data': current[record]['data'], 'valid': 0}
-
         except KeyError:
             #if failed to find whole master values branch in master file - assign specific attribute
             data_per = []
             for data_item in currep[record]['data']:
-                data_per.append({data_item: 5})
+                data_per.append({data_item: 5, 'golden': 'golden setting not found'})
             result[record] = data_per
                 #continue
             #result[record] = {'data':record['data'], 'valid': 5}
             #print(master_record)
-
+    print({'rep_type': rep_type, 'report': result})
     return {'rep_type': rep_type, 'report': result}
         #
         # if validated and validated !=5:
@@ -215,6 +213,9 @@ def writetoxlsx(report_file, cur_report, geometry):
     # ( added 'excluded_for_validation': 1 to results in report constructor)
     black_cell = workbook.add_format()
     black_cell.set_font_color('gray')
+    #yellow cell in case of result is not found in master file
+    orange_cell = workbook.add_format()
+    orange_cell.set_font_color('orange')
     #create worksheet
     worksheet = workbook.add_worksheet()
 
@@ -239,15 +240,24 @@ def writetoxlsx(report_file, cur_report, geometry):
 
             worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
+
                 coords = '{}{}'.format(colnum_string(i), ind)
-                for data,valid in v.items():
+                print(v.items())
+                for data, valid in v.items():
+                    golden = v['golden']
+                    print(golden)
+
                     #cell coloring based on value
                     if valid == 0:
                         worksheet.write(coords, toStr('fail', coords), red_cell)
+                        worksheet.write_comment(coords, '{} not equal golden setting {} '.format(data,golden))
                     elif valid == 1:
                         worksheet.write(coords, toStr('pass', coords), green_cell)
                     elif valid == 2:
                         worksheet.write(coords, toStr(data, coords), black_cell)
+                    elif valid == 5:
+                        worksheet.write(coords, toStr(data, coords), orange_cell)
+                        worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
 
         #print(maxwidth)
     if geometry == 'rows':
@@ -260,15 +270,22 @@ def writetoxlsx(report_file, cur_report, geometry):
                 worksheet.write(coords, toStr(result, coords))
                 # in case of multiple values data
                 for ind, v in enumerate(res, 1):
+                    print(v.items())
                     for data, valid in v.items():
+                        golden = v['golden']
+                        print(golden)
                         # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
                             worksheet.write(coords, toStr('failed', coords), red_cell)
+                            worksheet.write_comment(coords, '{} not equal golden setting {} '.format(data, golden))
                         elif valid == 1:
                             worksheet.write(coords, toStr('passed', coords), green_cell)
                         elif valid == 2:
                             worksheet.write(coords, toStr(data, coords), black_cell)
+                        elif valid == 5:
+                            worksheet.write(coords, toStr(data, coords),orange_cell)
+                            worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
 
     #sheet setup for better look
     for m in maxwidth:
