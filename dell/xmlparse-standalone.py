@@ -244,13 +244,10 @@ def writetoxlsx(report_file, cur_report, geometry):
                     #cell coloring based on value
                     if valid == 0:
                         worksheet.write(coords, toStr(data, coords), red_cell)
-                        worksheet.write_comment(coords, toStr(data, coords))
                     elif valid == 1:
                         worksheet.write(coords, toStr(data, coords), green_cell)
-                        worksheet.write_comment(coords, toStr(data, coords))
                     elif valid == 2:
                         worksheet.write(coords, toStr(data, coords), black_cell)
-                        worksheet.write_comment(coords, toStr(data, coords))
 
         #print(maxwidth)
     if geometry == 'rows':
@@ -268,13 +265,10 @@ def writetoxlsx(report_file, cur_report, geometry):
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
                             worksheet.write(coords, toStr(data, coords), red_cell)
-                            worksheet.write_comment(coords, toStr(data, coords))
                         elif valid == 1:
                             worksheet.write(coords, toStr(data, coords), green_cell)
-                            worksheet.write_comment(coords, toStr(data, coords))
                         elif valid == 2:
                             worksheet.write(coords, toStr(data, coords), black_cell)
-                            worksheet.write_comment(coords, toStr(data, coords))
 
     #sheet setup for better look
     for m in maxwidth:
