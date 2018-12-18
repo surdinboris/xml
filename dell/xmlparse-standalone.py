@@ -221,7 +221,7 @@ def writetoxlsx(report_file, cur_report, geometry):
     #helper to calculate and update width for column
     def toStr(val, coord):
         if val == None:
-            val=''
+            val='~no value~'
         try:
             curr = maxwidth[coord[0]]
             if curr < len(val):
@@ -244,10 +244,13 @@ def writetoxlsx(report_file, cur_report, geometry):
                     #cell coloring based on value
                     if valid == 0:
                         worksheet.write(coords, toStr(data, coords), red_cell)
+                        worksheet.write_comment(coords, toStr(data, coords))
                     elif valid == 1:
                         worksheet.write(coords, toStr(data, coords), green_cell)
+                        worksheet.write_comment(coords, toStr(data, coords))
                     elif valid == 2:
                         worksheet.write(coords, toStr(data, coords), black_cell)
+                        worksheet.write_comment(coords, toStr(data, coords))
 
         #print(maxwidth)
     if geometry == 'rows':
@@ -265,10 +268,13 @@ def writetoxlsx(report_file, cur_report, geometry):
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
                             worksheet.write(coords, toStr(data, coords), red_cell)
+                            worksheet.write_comment(coords, toStr(data, coords))
                         elif valid == 1:
                             worksheet.write(coords, toStr(data, coords), green_cell)
+                            worksheet.write_comment(coords, toStr(data, coords))
                         elif valid == 2:
                             worksheet.write(coords, toStr(data, coords), black_cell)
+                            worksheet.write_comment(coords, toStr(data, coords))
 
     #sheet setup for better look
     for m in maxwidth:
@@ -288,6 +294,8 @@ def report(xml):
         # xls - add data
         results.append(
             {'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
+        results.append(
+            {'HostName': getdata(xml, classname='DCIM_SystemView', name='HostName'), 'excluded_for_validation': 1})
         results.append({'Inventory date': getdata(xml, classname='DCIM_SystemView', name='LastSystemInventoryTime'),
                         'excluded_for_validation': 1})
         results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})

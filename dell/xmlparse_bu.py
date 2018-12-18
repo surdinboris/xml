@@ -73,7 +73,7 @@ for xml in xmlslist:
     psu2serial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name', rawsearch='Power Supply 2')
     bpserial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name', rawsearch='DASD Backplane 1')
     pcilist = getdata(xml, classname='IBMSG_PCIDevice', name='Description')
-
+    pcilist = getdata(xml, classname='IBMSG_PCIDevice', name='Description')
     print('{0}Parsing logfile {1} started{0}'.format('*'*20,xml))
     print('System serial number: {0}'.format(sysserial))
     print('RAID serial number: {0} firmware: {1}'.format(raidserial, raidfw))
