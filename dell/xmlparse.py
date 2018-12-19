@@ -5,6 +5,7 @@ import os.path
 import glob
 import sys, getopt
 import subprocess
+import shutil
 # import smtplib
 # from email.mime.multipart import MIMEMultipart
 # from email.mime.text import MIMEText
@@ -80,28 +81,67 @@ def main(argv):
 
 
     # fallbacks - to current workdir
-    inputdir = os.getcwd()
-    outputdir = os.getcwd()
-    #get orig inventory:
-    print("Retrieving original inventory")
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "hw_orig_tmp.xml"])
-    # subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "conf_orig.tmp.xml"])
+    temp = os.path.join(os.getcwd(), 'temp')
+    arrived = os.path.join(os.getcwd(), 'arrived')
+    passed = os.path.join(os.getcwd(), 'passed')
 
-    files_processing(inputdir, outputdir)
+    #clean temp directory ####uncomment this after
+    # print("Clearing temporary files...")
+    # for inputfile in os.listdir(temp):
+    #     fn, ext = (os.path.splitext(inputfile))
+    #     if ext == '.xml':
+    #         os.remove(os.path.join(temp,inputfile))
 
-def files_processing(inputdir, outputdir):
+
+    #get orig data:
+    #subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "temp\hw_orig_tmp.xml"])
+    #subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "conf_orig.tmp.xml"])
+    files_processing(temp, arrived, step='arrived')
+
+    #os.path.join(outputdir, os.path.join(service_tag, tempdir)) + '_report.xlsx'
+    #applying golden template
+    #verifying against golden template
+    #files_processing(temp, passed, step='golden')
+
+def files_processing(inputdir, outputdir, step=None):
+    print('files_processing')
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
-            counter+=1
-            report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
-            print('Found xml file: {} Processing...'.format(fn+ext))
-            #report generation
-            cur_report = report(os.path.join(inputdir, inputfile))
-            #report analysing
-            cur_report = report_analyze(cur_report)
-            writetoxlsx(report_file, cur_report, geometry='columns')
+            #in case of arrived server checking - parsing xml and returning xml data
+            if step == 'arrived':
+                print('Found  xml file for arrived server data collection: {} Processing...'.format(fn + ext))
+                # report generation
+                cur_report = report(os.path.join(inputdir, inputfile))
+                service_tag = cur_report['service_tag']
+                rep_type = cur_report['rep_type']
+                shutil.copyfile(inputfile, os.path.join(outputdir, ("{}_{}_{}".format(service_tag, rep_type, fn+ext))))
+                print('written arrived report for ST{}'.format(service_tag))
+
+                counter += 1
+
+            elif step == 'golden':
+                report_file = os.path.join(outputdir, os.path.join(inputdir, inputfile)) + '_report.xlsx'
+                print('Found xml file for golden comparison: {} Processing...'.format(fn + ext))
+                # report generation
+                cur_report = report(os.path.join(inputdir, inputfile))
+                # report analysing
+                cur_report = report_analyze(cur_report)
+                writetoxlsx(report_file, cur_report, geometry='columns')
+                counter += 1
+                print('xls report was created for golden comparison')
+
+            #default behavior
+            else:
+                report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
+                print('Found xml file: {} Processing...'.format(fn+ext))
+                #report generation
+                cur_report = report(os.path.join(inputdir, inputfile))
+                #report analysing
+                cur_report = report_analyze(cur_report)
+                writetoxlsx(report_file, cur_report, geometry='columns')
+                counter += 1
 
 
     print('Done. Processed {}, files'.format(counter))
@@ -342,7 +382,7 @@ def report(xml):
 
         #in case of both requests failed - writing some error info
         except:
-            return {'rep_type':'error', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
+            return {'rep_type': 'error', 'service_tag': 'n/a', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
 
 
     #building data structure
@@ -362,7 +402,7 @@ def report(xml):
                 else:
                     validated = 0
                 resData[key] = {'data': r[key], 'valid': validated}
-    resData = {'rep_type': rep_type, 'report':resData}
+    resData = {'rep_type': rep_type, 'service_tag': service_tag, 'report':resData}
     return resData
 
 
