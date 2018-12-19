@@ -1,121 +1,407 @@
 import xml.etree.ElementTree as ET
-from os.path import join
+import gzip
 import os
-from os import listdir
-import django
-from mysite import settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
-django.setup()
+import os.path
+import glob
+import sys, getopt
+import subprocess
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+# import datetime
+import xlsxwriter
 
 
-def getdata(xml,classname, name, rawsearch=None):
 
-    listval = []
+
+#generator for AB style excell cells
+def colnum_string(n):
+    string = ""
+    while n > 0:
+        n, remainder = divmod(n - 1, 26)
+        string = chr(65 + remainder) + string
+    return string
+
+hardware_golden = 'HardwareInventory.golden'
+configuration_golden = 'ConfigurationInventory.golden'
+
+#getroot helper for use directly from report (for configuration pasing)
+#  and in getdata requests (for hw inventory parsing)
+def getroot(xml):
     with open(xml, 'r') as x:
         data = x.read()
     root = ET.fromstring(data)
+    return root
 
-
-    inst = root.findall('DECLARATION/DECLGROUP/VALUE.OBJECT/INSTANCE')
-
-    for i in inst:
-        if name == 'RawResult':  #searching in linear PCI inventory data
-            if i.attrib['CLASSNAME'] == classname:
-                vals=i.findall('PROPERTY.ARRAY/VALUE.ARRAY/VALUE')
-                for val in vals:
-                    if val.text and val.text.find(rawsearch) != -1:
-                        listval.append(val.text)
-
-                    if val.text and val.text.find('[SN]')!= -1 and len(listval)>0 and len(listval)%2 !=0:
-                        listval.append(val.text)
-
-        if name == 'RawResults':  # gathering results for raw pci data
-            if i.attrib['CLASSNAME'] == classname:
-                vals=i.findall('PROPERTY.ARRAY/VALUE.ARRAY/VALUE')
-                for val in vals:
-                    if val.text.find(rawsearch) == 0:
-                        if val.text not in listval:
-                             listval.append(val.text)
-
-        if name == 'Name' and rawsearch:  # gathering results for FRU data from two matching values inside one instance
-            if i.attrib['CLASSNAME'] == classname:
+def getdata(xml,classname='', name=''):
+    root = getroot(xml)
+    #hwinventory collect helper
+    def collect(inst, classnameattr):
+        hwinventory = []
+        for i in inst:
+            # gathering results example: Component Classname="DCIM_ControllerView
+            if i.attrib[classnameattr] == classname:
                 props = i.findall('PROPERTY')
                 for prop in props:
-                    if prop.attrib['NAME'] == name and prop.find('VALUE').text == rawsearch:
-                        for prop in props:
-                            if prop.attrib['NAME'] == 'SerialNumber':
-                                val = prop.find('VALUE').text
-                                listval.append(val)
-
-        else:  # gathering results for regular data
-            if i.attrib['CLASSNAME'] == classname:
-                props=i.findall('PROPERTY')
-                for prop in props:
                     if prop.attrib['NAME'] == name:
-                        val=prop.find('VALUE').text
-                        listval.append(val)
+                        val = prop.find('VALUE').text
+                        hwinventory.append(val)
+        return hwinventory
+    #router to use both two types of hwinventory retrieved via web interface or
+    #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
 
-    return(listval[0] if len(listval)==1 else listval)
+    #collecting hwinventory items in case of hwinventory detected
+    if root.tag =='Inventory':
+        inst = root.findall('Component')
+        classnameattr = 'Classname'
+        return collect(inst,classnameattr)
 
-def report(xmlname,ident):
+    elif root.tag =='CIM':
+        inst = root.findall('MESSAGE/SIMPLEREQ/VALUE.NAMEDINSTANCE/INSTANCE')
+        classnameattr = 'CLASSNAME'
+        return collect(inst, classnameattr)
 
-    xml=os.path.join(settings.MEDIA_ROOT, xmlname)
-    sysserial = getdata(xml, classname='IBMSG_ComputerSystem', name='SerialNumber')
-    dsabuild  =getdata(xml, classname='IBMSG_DsaVPD', name='BuildNumber')
-    dsaver  =getdata(xml, classname='IBMSG_DsaVPD', name='Version')
-    ipmibuild  =getdata(xml, classname='IBMSG_IPMIFirmwareElement', name='BuildNumber')
-    ipmiver  = getdata(xml, classname='IBMSG_IPMIFirmwareElement', name='Version')
-    uefibuild = getdata(xml, classname='IBMSG_SystemBIOSElement', name='BuildNumber')
-    uefiver = getdata(xml, classname='IBMSG_SystemBIOSElement', name='Version')
-
-    raidserial = getdata(xml, classname='LSIESG_PhysicalCard', name='SerialNumber')
-    raidfw = getdata(xml, classname='LSIESG_FirmwarePackageIdentity', name='VersionString')
-
-    drslot = getdata(xml, classname='LSIESG_PhysicalDrive', name='Slot_No')
-    drpartnumber = getdata(xml, classname='LSIESG_PhysicalDrive', name='PartNumber')
-    drserial = getdata(xml, classname='LSIESG_PhysicalDrive', name='SerialNumber')
-    disklist = zip(drslot, drpartnumber, drserial)
-
-    ethname = getdata(xml, classname='IBMSG_BcmDeviceFirmwareElement', name='Name')
-    ethfw = getdata(xml, classname='IBMSG_BcmDeviceFirmwareElement', name='Version')
-    ethlist = zip(ethname,ethfw)
-
-    mellanoxlist = getdata(xml, classname='IBMSG_PCIRawData', name='RawResult', rawsearch='Mellanox Technologies Device')
-
-    qlogicser = getdata(xml, classname='IBMSG_QLogicFibreChannelRawData', name='RawResults',rawsearch='Serial Number')
-    sbserial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name',rawsearch='System Board')
-    psu1serial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name',rawsearch='Power Supply 1')
-    psu2serial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name', rawsearch='Power Supply 2')
-    bpserial = getdata(xml, classname='IBMSG_IPMIFRU', name='Name', rawsearch='DASD Backplane 1')
-    pcilist = getdata(xml, classname='IBMSG_PCIDevice', name='Description')
-
-    reportfile = open(os.path.join(settings.MEDIA_ROOT, sysserial) + '_' +ident + '.txt', "w")
-
-    reportfile.write('{0}Parsing logfile {1} started{0}\n'.format('*' * 20, xml))
-    reportfile.write('System serial number: {0}\n'.format(sysserial))
-    reportfile.write('DSA OEM: {0} {1}\n'.format(dsabuild, dsaver))
-    reportfile.write('IPMI fw: {0} {1}\n'.format(ipmibuild, ipmiver))
-    reportfile.write('UEFI fw: {0} {1}\n'.format(uefibuild, uefiver))
-    reportfile.write('RAID serial number: {0} firmware: {1}\n'.format(raidserial, raidfw))
-    reportfile.write('Board serial number: {0}\n'.format(sbserial))
-    reportfile.write('PSU1 serial number: {0}\n'.format(psu1serial))
-    reportfile.write('PSU2 serial number: {0}\n'.format(psu2serial))
-    reportfile.write('Backplane serial number: {0}\n'.format(bpserial))
+    #collecting hwinventory items in case of configuration parsing detected
+    #and building custom structure attribute-value pairs
+    elif root.tag =='SystemConfiguration':
+        confinventory=[]
+        inst = root.findall('Component')
+        for i in inst:
+            # gathering results examle: FQDD="LifecycleController.Embedded.1
+            props = i.findall('Attribute')
+            for prop in props:
+                val = prop.text
+                key = prop.attrib['Name']
+                confinventory.append({key: val})
+        return confinventory
 
 
-    if len(mellanoxlist)==4:
-        reportfile.write('Mellanox serial numbers: {0} and {1}\n'.format(mellanoxlist[1][23:42],mellanoxlist[3][23:42]))
+def main(argv):
 
-    for disk in disklist:
-        reportfile.write('Drive slot:{0} P/N: {1} serial: {2}\n'.format(disk[0],disk[1],disk[2]))
-    for eth in ethlist:
-        ethd = eth[0].replace(":", "")
-        reportfile.write('Ethernet device: {0} firmware: {1}\n'.format(ethd, eth[1]))
-    for qlogic in qlogicser:
-        reportfile.write('Qlogic serial number: {0}\n'.format(qlogic))
-    reportfile.write('=' * 40+'\n')
-    for pci in pcilist:
-        reportfile.write('PCI device: {0}\n'.format(pci))
 
-    reportfile.close()
-    return sysserial,(sysserial+ '_' +ident+'.txt')
+    # fallbacks - to current workdir
+    inputdir = os.getcwd()
+    outputdir = os.getcwd()
+    #get orig inventory:
+    print("Retrieving original inventory")
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "hw_orig_tmp.xml"])
+    # subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "conf_orig.tmp.xml"])
+
+    files_processing(inputdir, outputdir)
+
+def files_processing(inputdir, outputdir):
+    counter = 0
+    for inputfile in os.listdir(inputdir):
+        fn, ext = (os.path.splitext(inputfile))
+        if ext == '.xml':
+            counter+=1
+            report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
+            print('Found xml file: {} Processing...'.format(fn+ext))
+            #report generation
+            cur_report = report(os.path.join(inputdir, inputfile))
+            #report analysing
+            cur_report = report_analyze(cur_report)
+            writetoxlsx(report_file, cur_report, geometry='columns')
+
+
+    print('Done. Processed {}, files'.format(counter))
+            # reportfile.close()
+            # sendrep(sysserial)
+
+def report_analyze(currep):
+    result = {}
+    rep_type = currep['rep_type']
+    #building up data structure as following:
+    # {'Memory slot': [{'DIMM.Socket.A1': 1}, {'DIMM.Socket.A2': 1}, {'DIMM.Socket.A3': 1}, {'DIMM.Socket.A4': 1},
+    #                  {'DIMM.Socket.B1': 1}, {'DIMM.Socket.B2': 1}, {'DIMM.Socket.B3': 1}, {'DIMM.Socket.B4': 1}],
+    #  'PSU model': [{'PWR SPLY,750W,RDNT,DELTA      ': 1}, {'PWR SPLY,750W,RDNT,DELTA      ': 1}]}
+
+    # routing for hwinventory  or configuration
+    if rep_type =='hwinvent_report':
+        master = report(os.path.join(os.getcwd(), hardware_golden))['report']
+        print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), hardware_golden)))
+    elif rep_type =='config_report':
+        master = report(os.path.join(os.getcwd(), configuration_golden))['report']
+        print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), configuration_golden)))
+
+    #extracting report
+    currep = currep['report']
+    for record in currep:
+        #in case of record availalable in master file
+        data_per = []
+        if currep[record]['valid'] == 2:
+            for data_item in currep[record]['data']:
+                data_per.append({data_item:2,'golden': 'dynamic field'})
+            result[record] = data_per
+            continue
+        try:
+            master_record = master[record]
+            data_per = []
+            for i, data_item in enumerate(currep[record]['data']):
+                try:
+                    master_val = master[record]['data'][i]
+                except IndexError:
+                    master_val = 'not present in golden configuration'
+                data_per.append({data_item: int(data_item == master_val), 'golden': master_val})
+            result[record] = data_per
+               #print('unequal', master_record['data'], current[record]['data'],'\n')
+                #old result[record] = {'data': current[record]['data'], 'valid': 0}
+        except KeyError:
+            #if failed to find whole master values branch in master file - assign specific attribute
+            data_per = []
+            for data_item in currep[record]['data']:
+                data_per.append({data_item: 5, 'golden': 'n/a'})
+            result[record] = data_per
+                #continue
+            #result[record] = {'data':record['data'], 'valid': 5}
+            #print(master_record)
+    return {'rep_type': rep_type, 'report': result}
+
+
+def unpack(latest_file):
+    epath, tail =os.path.split(latest_file)
+    for gzip_path in glob.glob(epath + "/*.gz"):
+        if os.path.isdir(gzip_path) == False:
+            inF = gzip.open(gzip_path, 'rb')
+            # uncompress the gzip_path INTO THE 's' variable
+            s = inF.read()
+            inF.close()
+            # get gzip filename (without directories)
+            gzip_fname = os.path.basename(gzip_path)
+            # get original filename (remove 3 characters from the end: ".gz")
+            fname = gzip_fname[:-3]
+            uncompressed_path = os.path.join(epath, fname)
+            # store uncompressed file data from 's' variable
+            open(uncompressed_path, 'wb').write(s)
+
+        for f in os.listdir(epath):
+            latest_file_spl=os.path.splitext(os.path.basename(latest_file))[0]
+            if f == latest_file_spl:
+                #fn, ext = (os.path.splitext(f))
+                if os.path.splitext(f)[1] == '.xml':
+                    return(os.path.join(epath,f))
+#columns
+#to be refactored accordingly new report structure
+def writetoxlsx(report_file, cur_report, geometry):
+
+    rep_type = cur_report['rep_type']
+    #overriding report type for
+    if rep_type == 'config_report':
+        geometry = 'rows'
+    #remooving attribute
+    cur_report=cur_report['report']
+
+    maxwidth = {}
+
+
+    #creating xls file
+    workbook = xlsxwriter.Workbook(report_file)
+    #header
+    header_cell = workbook.add_format()
+    header_cell.set_bold()
+    #green cell - passed validation against master file
+    green_cell = workbook.add_format()
+    green_cell.set_font_color('green')
+    #red cell - failed validation against master file
+    red_cell = workbook.add_format()
+    red_cell.set_font_color('red')
+    #black_cell - dynamic data such as SN that non need to be validated
+    # ( added 'excluded_for_validation': 1 to results in report constructor)
+    black_cell = workbook.add_format()
+    black_cell.set_font_color('gray')
+    #yellow cell in case of result is not found in master file
+    orange_cell = workbook.add_format()
+    orange_cell.set_font_color('orange')
+    #create worksheet
+    worksheet = workbook.add_worksheet()
+
+    #helper to calculate and update width for column
+    def toStr(val, coord):
+        if val == None:
+            val=''
+        try:
+            curr = maxwidth[coord[0]]
+            if curr < len(val):
+                maxwidth[coord[0]] = len(val)
+        except KeyError:
+            maxwidth[coord[0]] = len(val)
+        return str(val)
+
+    if geometry == "columns":
+        for i, result in enumerate(cur_report, 1):
+            #extracting data values list
+            res = cur_report[result]
+            # #header
+            coords='{}1'.format(colnum_string(i))
+
+            worksheet.write(coords, toStr(result, coords), header_cell)
+            for ind, v in enumerate(res, 2):
+                coords = '{}{}'.format(colnum_string(i), ind)
+                for data, valid in v.items():
+                    golden = v['golden']
+                    #cell coloring based on value
+                    if valid == 0:
+                        worksheet.write(coords, toStr('fail', coords), red_cell)
+                        worksheet.write_comment(coords, '\"{}\" not equal golden setting \"{}\" '.format(data,golden))
+                    elif valid == 1:
+                        worksheet.write(coords, toStr('pass', coords), green_cell)
+                    elif valid == 2:
+                        worksheet.write(coords, toStr(data, coords), black_cell)
+                    elif valid == 5:
+                        worksheet.write(coords, toStr(data, coords), orange_cell)
+                        worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
+
+        #print(maxwidth)
+    if geometry == 'rows':
+        for i, result in enumerate(cur_report, 1):
+            res = cur_report[result]
+            #print(i, data, ascii_uppercase[i])
+            for r in res:
+                # header
+                coords = 'A{}'.format(i)
+                worksheet.write(coords, toStr(result, coords))
+                # in case of multiple values data
+                for ind, v in enumerate(res, 1):
+                    for data, valid in v.items():
+                        golden = v['golden']
+                        # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        coords = '{}{}'.format(colnum_string(ind+1), i)
+                        if valid == 0:
+                            worksheet.write(coords, toStr('failed', coords), red_cell)
+                            worksheet.write_comment(coords, '\"{}\" not equal golden setting \"{}\" '.format(data, golden))
+                        elif valid == 1:
+                            worksheet.write(coords, toStr('passed', coords), green_cell)
+                        elif valid == 2:
+                            worksheet.write(coords, toStr(data, coords), black_cell)
+                        elif valid == 5:
+                            worksheet.write(coords, toStr(data, coords),orange_cell)
+                            worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
+
+    #sheet setup for better look
+    for m in maxwidth:
+        worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+    workbook.close()
+
+#report constructor
+def report(xml):
+    results = []
+    #probing for hwinventory by checking via getdata that request invoking a ServiceTag
+    service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
+    if len(service_tag) == 1 and len(service_tag[0]) == 7:
+        print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
+        rep_type = 'hwinvent_report'
+
+        # compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
+        # xls - add data
+        results.append(
+            {'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
+        results.append({'Inventory date': getdata(xml, classname='DCIM_SystemView', name='LastSystemInventoryTime'),
+                        'excluded_for_validation': 1})
+        results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})
+        # PCI
+        results.append({'PCI device': getdata(xml, classname='DCIM_PCIDeviceView', name='Description')})
+        # Memory
+        results.append({'System memory size': getdata(xml, classname='DCIM_SystemView', name='SysMemTotalSize')})
+        results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'Memory module part number': getdata(xml, classname='DCIM_MemoryView', name='PartNumber')})
+        results.append({'Memory slot': getdata(xml, classname='DCIM_MemoryView', name='FQDD')})
+        # HDD
+        results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'HDD model': getdata(xml, classname='DCIM_PhysicalDiskView', name='Model')})
+        results.append({'HDD fw': getdata(xml, classname='DCIM_PhysicalDiskView', name='Revision')})
+        results.append({'HDD slot population': getdata(xml, classname='DCIM_PhysicalDiskView', name='Slot')})
+        # PSU
+        results.append({'PSU part number': getdata(xml, classname='DCIM_PowerSupplyView', name='PartNumber')})
+        results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber'),
+                        'excluded_for_validation': 1})
+        results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
+        results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
+        #print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
+    #probing for configuration data
+    else:
+        #checking for ServiceTag directly in root attribute
+        try:
+            service_tag = getroot(xml).attrib['ServiceTag']
+            print('configuration data for {} discovered {}'.format(service_tag, xml))
+            rep_type = 'config_report'
+            #possibly its configuration, trying to request ServiceTag via document root
+            #implement same interface as for getdata with only difference that all data vill be invoked by
+            # by looping over xml data
+            #getdata in key-value
+            configitems=getdata(xml)
+            for conf in configitems:
+                for param, value in conf.items():
+                    results.append({param:[value]})
+            #?include some template\mask to determine validation?
+            #resData -> to build standard data object for report analyzing
+
+            #print('for refactoring', {
+            #'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
+
+        #in case of both requests failed - writing some error info
+        except:
+            return {'rep_type':'error', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
+
+
+    #building data structure
+    resData = {}
+    for r in results:
+        for key in r:
+            #generating entries only for data keys (not for 'excluded_for_validation' "input" key or something else)
+            if key != 'excluded_for_validation':
+                #in case of compare attribute not defined - adding validation to be executed
+                try:
+                    excluded = r['excluded_for_validation']
+                except KeyError:
+                    excluded = 0
+                if excluded:
+                    #validated = 2  to avoid further validation and make grey colored value
+                    validated = 2
+                else:
+                    validated = 0
+                resData[key] = {'data': r[key], 'valid': validated}
+    resData = {'rep_type': rep_type, 'report':resData}
+    return resData
+
+
+# def sendrep(sysserial):
+#     try:
+#         curtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+#         fromaddr = "jade@nextra01.xiv.ibm.com"
+#         toaddrs = ['IBM-IVT@tel-ad.co.il']
+#         subject = "Afterloan server " + sysserial + " test ended " + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#         msg = MIMEMultipart()
+#         msg["From"] = fromaddr
+#         msg["To"] = ",".join(toaddrs)
+#         msg["Subject"] = subject
+#         html = """
+#         <html>
+#         <head>
+#         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+#         </head>
+#         <body>
+#         <strong><b>Afterloan server passed:</b></strong>
+#         """ + sysserial + """
+#         <p><u>Log files were transferred to wiki, please follow the link below:</u><br>
+#         <a href="http://10.148.38.142/wiki/doku.php?id=lenovo:x3650m5:"""+ sysserial +"""">http://10.148.38.142/wiki/doku.php?id=lenovo:x3650m5:""" + sysserial + """ </a>
+#         <p>Using """ + os.path.realpath(__file__) +""" <p>
+#         <p>Generated at: """ + curtime + """
+#         <p>Tel-Ad IVT Team.<br>
+#         All Rights Reserved to Tel-Ad Electronics LTD. © 2017
+#         </body></html>
+#         """
+#         msg.attach(MIMEText(html, 'html'))
+#         server = smtplib.SMTP()
+#         server.connect('localhost')
+#         # server.send_message(msg)
+#         text = msg.as_string()
+#         server.sendmail(fromaddr, toaddrs, text)
+#         server.quit()
+#     except:
+#        if ConnectionRefusedError():
+#            print('SMTP connection error, please check network and local Sendmail server')
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

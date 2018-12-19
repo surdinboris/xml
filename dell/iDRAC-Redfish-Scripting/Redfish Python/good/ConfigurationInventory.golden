@@ -363,7 +363,7 @@
  <Attribute Name="VirtualMedia.1#Attached">AutoAttach</Attribute> 
  <Attribute Name="VirtualMedia.1#BootOnce">Disabled</Attribute> 
  <Attribute Name="VirtualMedia.1#KeyEnable">Disabled</Attribute> 
- <Attribute Name="VirtualMedia.1#FloppyEmulation">Enabled</Attribute> 
+ <Attribute Name="VirtualMedia.1#FloppyEmulation">Disabled</Attribute>
  <Attribute Name="VirtualMedia.1#EncryptEnable">Enabled</Attribute> 
  <Attribute Name="VirtualMedia.1#Enable">Enabled</Attribute> 
  <Attribute Name="IPBlocking.1#RangeEnable">Disabled</Attribute> 

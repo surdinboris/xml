@@ -1,0 +1,21 @@
+- Data collection timestamp: 12-18-2018  16:30:53
+
+---- System Information ----
+
+AssetTag: 
+BiosVersion: 2.8.0
+HostName: MINWINPC
+Id: System.Embedded.1
+IndicatorLED: Off
+Manufacturer: Dell Inc.
+MemorySummary: {'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}, 'TotalSystemMemoryGiB': 256.0}
+Model: PowerEdge R630
+Name: System
+PartNumber: 02C2CPA08
+PowerState: Off
+ProcessorSummary: {'Count': 2, 'Model': 'Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz', 'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}}
+SKU: C1TQ2S2
+SerialNumber: CNIVC0085V0415
+Status: {'Health': 'OK', 'HealthRollup': 'OK', 'State': 'StandbyOffline'}
+SystemType: Physical
+UUID: 4c4c4544-0031-5410-8051-c3c04f325332
