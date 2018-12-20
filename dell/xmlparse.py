@@ -6,6 +6,7 @@ import glob
 import sys, getopt
 import subprocess
 import shutil
+import time
 # import smtplib
 # from email.mime.multipart import MIMEMultipart
 # from email.mime.text import MIMEText
@@ -92,7 +93,9 @@ def main(argv):
     cleantemp(temp)
     #get orig data via racadm:
     subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "{}".format(os.path.join(temp,"conf_orig_tmp.xml"))])
+
+    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                    "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
     files_processing(temp, arrived, step='arrived')
     cleantemp(temp)
     #applying golden template
@@ -100,8 +103,9 @@ def main(argv):
 
     #get golden data via racadm:
     subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-                    "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+                   "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                    "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
 
     #verifying against golden template
     files_processing(temp, passed, step='golden')
@@ -120,10 +124,9 @@ def files_processing(inputdir, outputdir, step=None):
                 print('Found  xml file for arrived server: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
-                service_tag = cur_report['service_tag'][0]
+                service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
                 filename=os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+ext))
-                print('copyng', os.path.join(inputdir,inputfile ), os.path.join(outputdir,filename))
                 shutil.copyfile(os.path.join(inputdir,inputfile ), os.path.join(outputdir,filename))
                 print('Arrived report for ST{} stored in {}'.format(service_tag, filename))
                 counter += 1
@@ -133,14 +136,13 @@ def files_processing(inputdir, outputdir, step=None):
                 print('Found xml file for golden comparison: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
-                service_tag = cur_report['service_tag'][0]
+                service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
                 filename = os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn + ext))
-                print('copyng', os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
                 shutil.copyfile(os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
                 # report analysing
                 cur_report = report_analyze(cur_report)
-                writetoxlsx(report_file, cur_report, geometry='columns')
+                writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report, geometry='columns')
                 counter += 1
                 print('Passed report for ST{} stored in {}'.format(service_tag, filename))
 
@@ -340,6 +342,7 @@ def report(xml):
     #probing for hwinventory by checking via getdata that request invoking a ServiceTag
     service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
     if len(service_tag) == 1 and len(service_tag[0]) == 7:
+        service_tag=service_tag[0]
         print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
         rep_type = 'hwinvent_report'
 
