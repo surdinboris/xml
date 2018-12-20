@@ -78,47 +78,54 @@ def getdata(xml,classname='', name=''):
 
 
 def main(argv):
-
-
     # fallbacks - to current workdir
     temp = os.path.join(os.getcwd(), 'temp')
     arrived = os.path.join(os.getcwd(), 'arrived')
     passed = os.path.join(os.getcwd(), 'passed')
+    def cleantemp(temp):
+        for inputfile in os.listdir(temp):
+            print('clearing',os.path.join(temp,inputfile))
+            os.remove(os.path.join(temp,inputfile))
+        if len(os.listdir(temp)) !=0:
+           raise FileExistsError('Clearing of temporary dir failed, please check!')
 
-    #clean temp directory ####uncomment this after
-    # print("Clearing temporary files...")
-    # for inputfile in os.listdir(temp):
-    #     fn, ext = (os.path.splitext(inputfile))
-    #     if ext == '.xml':
-    #         os.remove(os.path.join(temp,inputfile))
-
-
-    #get orig data:
-    #subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "temp\hw_orig_tmp.xml"])
-    #subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "conf_orig.tmp.xml"])
+    cleantemp(temp)
+    #get orig data via racadm:
+    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "{}".format(os.path.join(temp,"conf_orig_tmp.xml"))])
     files_processing(temp, arrived, step='arrived')
-
-    #os.path.join(outputdir, os.path.join(service_tag, tempdir)) + '_report.xlsx'
+    cleantemp(temp)
     #applying golden template
+    #subprocess.run( config applly ......
+
+    #get golden data via racadm:
+    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+                    "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    subprocess.run(["racadm", "-r","192.168.0.120" "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f", "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+
     #verifying against golden template
-    #files_processing(temp, passed, step='golden')
+    files_processing(temp, passed, step='golden')
+    cleantemp(temp)
+    #
+
+    #files_processing(os.getcwd(), os.getcwd())
 
 def files_processing(inputdir, outputdir, step=None):
-    print('files_processing')
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
         if ext == '.xml':
             #in case of arrived server checking - parsing xml and returning xml data
             if step == 'arrived':
-                print('Found  xml file for arrived server data collection: {} Processing...'.format(fn + ext))
+                print('Found  xml file for arrived server: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
-                service_tag = cur_report['service_tag']
+                service_tag = cur_report['service_tag'][0]
                 rep_type = cur_report['rep_type']
-                shutil.copyfile(inputfile, os.path.join(outputdir, ("{}_{}_{}".format(service_tag, rep_type, fn+ext))))
-                print('written arrived report for ST{}'.format(service_tag))
-
+                filename=os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+ext))
+                print('copyng', os.path.join(inputdir,inputfile ), os.path.join(outputdir,filename))
+                shutil.copyfile(os.path.join(inputdir,inputfile ), os.path.join(outputdir,filename))
+                print('Arrived report for ST{} stored in {}'.format(service_tag, filename))
                 counter += 1
 
             elif step == 'golden':
@@ -126,11 +133,16 @@ def files_processing(inputdir, outputdir, step=None):
                 print('Found xml file for golden comparison: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
+                service_tag = cur_report['service_tag'][0]
+                rep_type = cur_report['rep_type']
+                filename = os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn + ext))
+                print('copyng', os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
+                shutil.copyfile(os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
                 # report analysing
                 cur_report = report_analyze(cur_report)
                 writetoxlsx(report_file, cur_report, geometry='columns')
                 counter += 1
-                print('xls report was created for golden comparison')
+                print('Passed report for ST{} stored in {}'.format(service_tag, filename))
 
             #default behavior
             else:
@@ -160,7 +172,7 @@ def report_analyze(currep):
     if rep_type =='hwinvent_report':
         master = report(os.path.join(os.getcwd(), hardware_golden))['report']
         print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), hardware_golden)))
-    elif rep_type =='config_report':
+    elif rep_type == 'config_report':
         master = report(os.path.join(os.getcwd(), configuration_golden))['report']
         print('Master report generated from {} \n'.format(os.path.join(os.getcwd(), configuration_golden)))
 
