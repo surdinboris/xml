@@ -58,9 +58,9 @@ def getdata(xml,classname='', name=''):
     if root.tag =='Inventory':
         inst = root.findall('Component')
         classnameattr = 'Classname'
-        return collect(inst,classnameattr)
+        return collect(inst, classnameattr)
 
-    elif root.tag =='CIM':
+    elif root.tag == 'CIM':
         inst = root.findall('MESSAGE/SIMPLEREQ/VALUE.NAMEDINSTANCE/INSTANCE')
         classnameattr = 'CLASSNAME'
         return collect(inst, classnameattr)
@@ -68,39 +68,10 @@ def getdata(xml,classname='', name=''):
     #collecting hwinventory items in case of configuration parsing detected
     #and building custom structure attribute-value pairs
     elif root.tag =='SystemConfiguration':
-
+        confinventory=[]
         #Additionally parsing for commented raidconf attrs
         raidconf= 'RAID conf n/a'
-        tree = etree.parse(xml)
-        def uncomment_child(tree):
-            for sc in tree.xpath('//SystemConfiguration'):
-                for compon in sc.xpath('//Component'):
-                    if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
-                        #print(compon.get('FQDD'))
-                        print()
-                        for ref in compon.getchildren():
-                            print('-'*40)
-                            #print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
-                            print(ref)
-                            #ref.getparent().replace(ref.getnext(), ref)
-                            # ref.getparent().append(etree.fromstring('<AppenderRef ref="STDOUT"/>'))
-            return tree
 
-
-            #return tree
-
-        newtree = uncomment_child(tree)
-        # for sc in newtree.xpath('//SystemConfiguration'):
-        #     for compon in sc.xpath('//Component'):
-        #         if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
-        #             print(compon.get('FQDD'))
-        #             for ref in compon.getchildren():
-        #                 print(ref.get('Name'))
-
-        #print("ETREE>>>>>",root, uncomment_child(tree, ''))
-
-
-        confinventory=[]
         inst = root.findall('Component')
         for i in inst:
             # gathering results examle: FQDD="LifecycleController.Embedded.1
@@ -109,7 +80,23 @@ def getdata(xml,classname='', name=''):
                 val = prop.text
                 key = prop.attrib['Name']
                 confinventory.append({key: val})
-        #print("confinventory>>>>>>>>>>>>>",confinventory)
+        #adding RAID data
+        tree = etree.parse(xml)
+        for sc in tree.xpath('//SystemConfiguration'):
+            for compon in sc.xpath('//Component'):
+                if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
+                    # print(compon.get('FQDD'))
+                    for ref in compon.getchildren():
+                        # print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
+                        if ref.get('Name') == None:
+                            # print('-' * 40)
+                            ref = str(ref)
+                            strref = ref.strip().replace('<!--', '').replace('-->', '').replace('ReadOnly', '')
+                            prop = etree.fromstring(strref)
+                            val = prop.text
+                            key = prop.attrib['Name']
+                            confinventory.append({key: val})
+
         return confinventory
 
 
