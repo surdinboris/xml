@@ -1,4 +1,6 @@
-import xml.etree.ElementTree as ET
+#old xml library
+#import xml.etree.ElementTree as ET
+from lxml import etree
 import gzip
 import os
 import os.path
@@ -12,9 +14,6 @@ import time
 # from email.mime.text import MIMEText
 # import datetime
 import xlsxwriter
-
-
-
 
 #generator for AB style excell cells
 def colnum_string(n):
@@ -32,8 +31,11 @@ configuration_golden = 'ConfigurationInventory.golden'
 def getroot(xml):
     with open(xml, 'r') as x:
         data = x.read()
-    root = ET.fromstring(data)
+    #old library
+    #root = ET.fromstring(data)
+    root = etree.fromstring(data)
     return root
+
 
 def getdata(xml,classname='', name=''):
     root = getroot(xml)
@@ -66,6 +68,38 @@ def getdata(xml,classname='', name=''):
     #collecting hwinventory items in case of configuration parsing detected
     #and building custom structure attribute-value pairs
     elif root.tag =='SystemConfiguration':
+
+        #Additionally parsing for commented raidconf attrs
+        raidconf= 'RAID conf n/a'
+        tree = etree.parse(xml)
+        def uncomment_child(tree):
+            for sc in tree.xpath('//SystemConfiguration'):
+                for compon in sc.xpath('//Component'):
+                    if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
+                        #print(compon.get('FQDD'))
+                        print()
+                        for ref in compon.getchildren():
+                            print('-'*40)
+                            #print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
+                            print(ref)
+                            #ref.getparent().replace(ref.getnext(), ref)
+                            # ref.getparent().append(etree.fromstring('<AppenderRef ref="STDOUT"/>'))
+            return tree
+
+
+            #return tree
+
+        newtree = uncomment_child(tree)
+        # for sc in newtree.xpath('//SystemConfiguration'):
+        #     for compon in sc.xpath('//Component'):
+        #         if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
+        #             print(compon.get('FQDD'))
+        #             for ref in compon.getchildren():
+        #                 print(ref.get('Name'))
+
+        #print("ETREE>>>>>",root, uncomment_child(tree, ''))
+
+
         confinventory=[]
         inst = root.findall('Component')
         for i in inst:
@@ -75,6 +109,7 @@ def getdata(xml,classname='', name=''):
                 val = prop.text
                 key = prop.attrib['Name']
                 confinventory.append({key: val})
+        #print("confinventory>>>>>>>>>>>>>",confinventory)
         return confinventory
 
 
@@ -89,30 +124,33 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
-
-    cleantemp(temp)
-    #get orig data via racadm:
-    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f", "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-
-    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-                    "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    files_processing(temp, arrived, step='arrived')
-    cleantemp(temp)
-    #applying golden template
-    #subprocess.run( config applly ......
-
-    #get golden data via racadm:
-    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-                   "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-                    "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-
-    #verifying against golden template
-    files_processing(temp, passed, step='golden')
-    cleantemp(temp)
     #
-
-    #files_processing(os.getcwd(), os.getcwd())
+    # cleantemp(temp)
+    # ##get orig data via racadm:
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    #
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    # files_processing(temp, arrived, step='arrived')
+    # cleantemp(temp)
+    # ##applying golden template
+    # print("Applying Golden configuration, please wait....")
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+    #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    #                 "graceful", "-w", "600", "-s", "on"])
+    #
+    # ##get golden data via racadm:
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    #
+    # #verifying against golden template
+    # files_processing(temp, passed, step='golden')
+    # cleantemp(temp)
+    #
+    files_processing(os.getcwd(), os.getcwd())
 
 def files_processing(inputdir, outputdir, step=None):
     counter = 0
@@ -122,7 +160,7 @@ def files_processing(inputdir, outputdir, step=None):
             #in case of arrived server checking - parsing xml and returning xml data
             if step == 'arrived':
                 print('Found  xml file for arrived server: {} Processing...'.format(fn + ext))
-                # report generation
+                # report generation for (naming purposes only)
                 cur_report = report(os.path.join(inputdir, inputfile))
                 service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
@@ -386,6 +424,10 @@ def report(xml):
             # by looping over xml data
             #getdata in key-value
             configitems=getdata(xml)
+            ###############################################
+            #point to insert missing RAID attributes
+            #or  maybe in getdata?
+
             for conf in configitems:
                 for param, value in conf.items():
                     results.append({param:[value]})
