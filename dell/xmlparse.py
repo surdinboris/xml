@@ -27,8 +27,29 @@ hardware_golden = 'HardwareInventory.golden'
 configuration_golden = 'ConfigurationInventory.golden'
 
 #additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
-dynamic_collect = {}
-dynamic_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1":['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
+additional_conf_collect = {}
+additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
+
+#harware collection constructor
+hw_collect=[]
+hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'Inventory date', 'classname': 'DCIM_SystemView', 'name': 'LastSystemInventoryTime', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'CPU model', 'classname': 'DCIM_CPUView', 'name': 'Model', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PCI device', 'classname': 'DCIM_PCIDeviceView', 'name': 'Description', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'System memory size', 'classname': 'DCIM_SystemView', 'name': 'SysMemTotalSize', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'Memory serial', 'classname': 'DCIM_MemoryView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'Memory module part number', 'classname': 'DCIM_MemoryView', 'name': 'PartNumber', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'Memory slot', 'classname': 'DCIM_MemoryView', 'name': 'FQDD', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'HDD serial', 'classname': 'DCIM_PhysicalDiskView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'HDD model', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Model', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'HDD fw', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Revision', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'HDD slot population', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Slot', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PSU part number', 'classname': 'DCIM_PowerSupplyView', 'name': 'PartNumber', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'PSU model', 'classname': 'DCIM_PowerSupplyView', 'name': 'Model', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
+
+
 #dynamic_collect.update({"Disk.Bay.6:Enclosure.Internal.0-1:RAID.Integrated.1-1": ["RAIDHotSpareStatus"]})
 
 #getroot helper for use directly from report (for configuration pasing)
@@ -105,8 +126,8 @@ def getdata(xml,classname='', name=''):
                             key = prop.attrib['Name']
                             if key in collect:
                                 confinventory.append({key: val})
-        for FQDD in dynamic_collect:
-            add_dynamic_attrs(FQDD, dynamic_collect[FQDD])
+        for FQDD in additional_conf_collect:
+            add_dynamic_attrs(FQDD, additional_conf_collect[FQDD])
 
         return confinventory
 
@@ -384,35 +405,10 @@ def report(xml):
         service_tag=service_tag[0]
         print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
         rep_type = 'hwinvent_report'
-
+        for hwrequest in hw_collect:
+            results.append({hwrequest['displayname']: getdata(xml, classname=hwrequest['classname'], name=hwrequest['name']),
+                            'excluded_for_validation': hwrequest['excluded_for_validation']})
         # compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
-        # xls - add data
-        results.append(
-            {'ServiceTag': getdata(xml, classname='DCIM_SystemView', name='ServiceTag'), 'excluded_for_validation': 1})
-        results.append({'Inventory date': getdata(xml, classname='DCIM_SystemView', name='LastSystemInventoryTime'),
-                        'excluded_for_validation': 1})
-        results.append({'CPU model': getdata(xml, classname='DCIM_CPUView', name='Model')})
-        # PCI
-        results.append({'PCI device': getdata(xml, classname='DCIM_PCIDeviceView', name='Description')})
-        # Memory
-        results.append({'System memory size': getdata(xml, classname='DCIM_SystemView', name='SysMemTotalSize')})
-        results.append({'Memory serial': getdata(xml, classname='DCIM_MemoryView', name='SerialNumber'),
-                        'excluded_for_validation': 1})
-        results.append({'Memory module part number': getdata(xml, classname='DCIM_MemoryView', name='PartNumber')})
-        results.append({'Memory slot': getdata(xml, classname='DCIM_MemoryView', name='FQDD')})
-        # HDD
-        results.append({'HDD serial': getdata(xml, classname='DCIM_PhysicalDiskView', name='SerialNumber'),
-                        'excluded_for_validation': 1})
-        results.append({'HDD model': getdata(xml, classname='DCIM_PhysicalDiskView', name='Model')})
-        results.append({'HDD fw': getdata(xml, classname='DCIM_PhysicalDiskView', name='Revision')})
-        results.append({'HDD slot population': getdata(xml, classname='DCIM_PhysicalDiskView', name='Slot')})
-        # PSU
-        results.append({'PSU part number': getdata(xml, classname='DCIM_PowerSupplyView', name='PartNumber')})
-        results.append({'PSU serial': getdata(xml, classname='DCIM_PowerSupplyView', name='SerialNumber'),
-                        'excluded_for_validation': 1})
-        results.append({'PSU model': getdata(xml, classname='DCIM_PowerSupplyView', name='Model')})
-        results.append({'PSU fw': getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion')})
-        #print(getdata(xml, classname='DCIM_PowerSupplyView', name='FirmwareVersion'))
     #probing for configuration data
     else:
         #checking for ServiceTag directly in root attribute

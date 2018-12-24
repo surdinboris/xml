@@ -8,8 +8,8 @@
  <Attribute Name="LCAttributes.1#PartFirmwareUpdate">Match firmware of replaced part</Attribute> 
  <!-- <Attribute Name="LCAttributes.1#LifecycleControllerState">Enabled</Attribute>--> 
  <Attribute Name="LCAttributes.1#IPChangeNotifyPS">Off</Attribute> 
- <Attribute Name="LCAttributes.1#VirtualAddressManagementApplication"></Attribute> 
- <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute> 
+ <Attribute Name="LCAttributes.1#VirtualAddressManagementApplication"></Attribute>
+ <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute>
  <Attribute Name="LCAttributes.1#BIOSRTDRequested">False</Attribute> 
  <Attribute Name="LCAttributes.1#AutoUpdate">Disabled</Attribute> 
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute> 
