@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TQ2S2" TimeStamp="Thu Dec 20 07:42:04 2018"> 
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TQ2S2" TimeStamp="Mon Dec 24 12:07:57 2018"> 
 <!--Export type is Normal,XML--> 
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.--> 
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!--> 
@@ -465,7 +465,7 @@
  <Attribute Name="SNMPAlert.8#Destination">::</Attribute> 
  <Attribute Name="SNMPAlert.8#State">Disabled</Attribute> 
  <Attribute Name="SNMPAlert.8#SNMPv3Username"></Attribute> 
- <Attribute Name="DefaultCredentialMitigationConfigGroup.1#DefaultCredentialMitigation">Disabled</Attribute> 
+ <Attribute Name="DefaultCredentialMitigationConfigGroup.1#DefaultCredentialMitigation">Enabled</Attribute> 
  <Attribute Name="NTPConfigGroup.1#NTP1"></Attribute> 
  <Attribute Name="NTPConfigGroup.1#NTP2"></Attribute> 
  <Attribute Name="NTPConfigGroup.1#NTP3"></Attribute> 
@@ -1648,7 +1648,6 @@
         <Attribute Name="RAIDaction">Update</Attribute> 
         <Attribute Name="LockStatus">Unlocked</Attribute> 
         <Attribute Name="RAIDinitOperation">None</Attribute> 
-        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute>--> 
         <Attribute Name="DiskCachePolicy">Default</Attribute> 
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute> 
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute> 
