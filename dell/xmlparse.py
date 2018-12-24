@@ -1,6 +1,6 @@
 #old xml library
 #import xml.etree.ElementTree as ET
-from lxml import etree
+from lxml import etree as ET
 import gzip
 import os
 import os.path
@@ -26,6 +26,11 @@ def colnum_string(n):
 hardware_golden = 'HardwareInventory.golden'
 configuration_golden = 'ConfigurationInventory.golden'
 
+#additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
+dynamic_collect = {}
+dynamic_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1":['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
+#dynamic_collect.update({"Disk.Bay.6:Enclosure.Internal.0-1:RAID.Integrated.1-1": ["RAIDHotSpareStatus"]})
+
 #getroot helper for use directly from report (for configuration pasing)
 #  and in getdata requests (for hw inventory parsing)
 def getroot(xml):
@@ -33,7 +38,7 @@ def getroot(xml):
         data = x.read()
     #old library
     #root = ET.fromstring(data)
-    root = etree.fromstring(data)
+    root = ET.fromstring(data)
     return root
 
 
@@ -80,22 +85,28 @@ def getdata(xml,classname='', name=''):
                 val = prop.text
                 key = prop.attrib['Name']
                 confinventory.append({key: val})
-        #adding RAID data
-        tree = etree.parse(xml)
-        for sc in tree.xpath('//SystemConfiguration'):
-            for compon in sc.xpath('//Component'):
-                if compon.get('FQDD') == "Disk.Virtual.0:RAID.Integrated.1-1":
-                    # print(compon.get('FQDD'))
+
+        #adding RAID data (from dynamic -commented- part
+        def add_dynamic_attrs(FQDD, collect):
+            #tree = ET.parse(xml)
+            tree = getroot(xml)
+            #for sc in tree.xpath('//SystemConfiguration'):
+                #for compon in sc.xpath('//Component'):
+            for compon in tree.iter():
+                if compon.get('FQDD') == FQDD:
                     for ref in compon.getchildren():
                         # print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
                         if ref.get('Name') == None:
                             # print('-' * 40)
                             ref = str(ref)
                             strref = ref.strip().replace('<!--', '').replace('-->', '').replace('ReadOnly', '')
-                            prop = etree.fromstring(strref)
+                            prop = ET.fromstring(strref)
                             val = prop.text
                             key = prop.attrib['Name']
-                            confinventory.append({key: val})
+                            if key in collect:
+                                confinventory.append({key: val})
+        for FQDD in dynamic_collect:
+            add_dynamic_attrs(FQDD, dynamic_collect[FQDD])
 
         return confinventory
 
@@ -114,6 +125,9 @@ def main(argv):
     #
     # cleantemp(temp)
     # ##get orig data via racadm:
+    # print(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    # os.system("racadm -r 192.168.0.120 -u root -p calvin hwinventory export -f {}".format(os.path.join(temp,"hw_orig_tmp.xml")))
     # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
     #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
     #
@@ -409,25 +423,13 @@ def report(xml):
             #possibly its configuration, trying to request ServiceTag via document root
             #implement same interface as for getdata with only difference that all data vill be invoked by
             # by looping over xml data
-            #getdata in key-value
             configitems=getdata(xml)
-            ###############################################
-            #point to insert missing RAID attributes
-            #or  maybe in getdata?
-
             for conf in configitems:
                 for param, value in conf.items():
                     results.append({param:[value]})
-            #?include some template\mask to determine validation?
-            #resData -> to build standard data object for report analyzing
-
-            #print('for refactoring', {
-            #'LCD.1#vConsoleIndication': getdata(xml, classname='System.Embedded.1', name='LCD.1#vConsoleIndication')})
-
         #in case of both requests failed - writing some error info
         except:
             return {'rep_type': 'error', 'service_tag': 'n/a', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
-
 
     #building data structure
     resData = {}
@@ -448,7 +450,6 @@ def report(xml):
                 resData[key] = {'data': r[key], 'valid': validated}
     resData = {'rep_type': rep_type, 'service_tag': service_tag, 'report':resData}
     return resData
-
 
 # def sendrep(sysserial):
 #     try:
