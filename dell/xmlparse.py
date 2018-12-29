@@ -14,6 +14,7 @@ import time
 # from email.mime.text import MIMEText
 # import datetime
 import xlsxwriter
+import nmap
 
 #generator for AB style excell cells
 def colnum_string(n):
@@ -29,7 +30,8 @@ configuration_golden = 'ConfigurationInventory.golden'
 #additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
 additional_conf_collect = {}
 additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
-
+# summary object init
+summary = {}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
@@ -143,36 +145,53 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
-    #
-    # cleantemp(temp)
-    # ##get orig data via racadm:
-    # print(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    # os.system("racadm -r 192.168.0.120 -u root -p calvin hwinventory export -f {}".format(os.path.join(temp,"hw_orig_tmp.xml")))
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    #
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    # files_processing(temp, arrived, step='arrived')
-    # cleantemp(temp)
-    # ##applying golden template
-    # print("Applying Golden configuration, please wait....")
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-    #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-    #                 "graceful", "-w", "600", "-s", "on"])
-    #
-    # ##get golden data via racadm:
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    # subprocess.run(["racadm", "-r", "192.168.0.120", "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    #
-    # #verifying against golden template
-    # files_processing(temp, passed, step='golden')
-    # cleantemp(temp)
-    #
-    files_processing(os.getcwd(), os.getcwd())
+    #retrieving hosts information
+    def nmapscan():
+        nm = nmap.PortScanner()
+        nm.scan('192.168.0.2-130', '22')
+        print("Found hosts:")
+        for host in nm.all_hosts():
+            print('----------------------------------------------------')
+            print('Host : %s' % host)
+            print('State : %s' % nm[host].state())
+        return nm.all_hosts()
+    active_hosts= nmapscan()
+    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    if not answer or answer[0].lower() != 'y':
+        print('Interrupting')
+        exit(1)
+
+    for host in active_hosts:
+        cleantemp(temp)
+        ##get orig data via racadm - disabled implemented at the earlier stage:
+        ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+        #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+        #
+        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+        #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+        # files_processing(temp, arrived, step='arrived')
+        #cleantemp(temp)
+
+
+        ##applying golden template
+        # print("Applying Golden configuration, please wait....")
+        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+        #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+        #                 "graceful", "-w", "600", "-s", "on"])
+
+        ##getting data after golden termplate enrollment:
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
+
+        #verifying against golden template
+
+        files_processing(temp, passed, step='golden')
+        cleantemp(temp)
+        #
+        #files_processing(os.getcwd(), os.getcwd())
 
 def files_processing(inputdir, outputdir, step=None):
     counter = 0
@@ -198,10 +217,16 @@ def files_processing(inputdir, outputdir, step=None):
                 cur_report = report(os.path.join(inputdir, inputfile))
                 service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
+
+                #summary entry appending
+                summary[service_tag]=cur_report
+
                 filename = os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn + ext))
                 shutil.copyfile(os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
                 # report analysing
+
                 cur_report = report_analyze(cur_report)
+
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report, geometry='columns')
                 counter += 1
                 print('Passed report for ST{} stored in {}'.format(service_tag, filename))
@@ -219,6 +244,8 @@ def files_processing(inputdir, outputdir, step=None):
 
 
     print('Done. Processed {}, files'.format(counter))
+    print('Summary', summary)
+    #implement whole report building from summary
             # reportfile.close()
             # sendrep(sysserial)
 
@@ -297,16 +324,14 @@ def unpack(latest_file):
 #columns
 #to be refactored accordingly new report structure
 def writetoxlsx(report_file, cur_report, geometry):
-
     rep_type = cur_report['rep_type']
     #overriding report type for
     if rep_type == 'config_report':
         geometry = 'rows'
     #remooving attribute
     cur_report=cur_report['report']
-
+    #for column wide calculation purpose
     maxwidth = {}
-
 
     #creating xls file
     workbook = xlsxwriter.Workbook(report_file)
