@@ -145,53 +145,53 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
-    # #retrieving hosts information
-    # def nmapscan():
-    #     nm = nmap.PortScanner()
-    #     nm.scan('192.168.0.2-130', '22')
-    #     print("Found hosts:")
-    #     for host in nm.all_hosts():
-    #         print('----------------------------------------------------')
-    #         print('Host : %s' % host)
-    #         print('State : %s' % nm[host].state())
-    #     return nm.all_hosts()
-    # active_hosts= nmapscan()
-    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    # if not answer or answer[0].lower() != 'y':
-    #     print('Interrupting')
-    #     exit(1)
-    #
-    # for host in active_hosts:
-    #     cleantemp(temp)
-    #                                                             ##get orig data via racadm - disabled implemented at the earlier stage:
-    #                                                             ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                                                             #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    #                                                             #
-    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                                                             #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    #                                                             # files_processing(temp, arrived, step='arrived')
-    #                                                             #cleantemp(temp)
-    #
-    #
-    #                                                             ##applying golden template
-    #                                                             # print("Applying Golden configuration, please wait....")
-    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-    #                                                             #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-    #                                                             #                 "graceful", "-w", "600", "-s", "on"])
-    #
-    # ##getting data after golden termplate enrollment:
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
-    #
-    #     #verifying against golden template
-    #
-    #     files_processing(temp, passed, step='golden')
-    #     cleantemp(temp)
+    #retrieving hosts information
+    def nmapscan():
+        nm = nmap.PortScanner()
+        nm.scan('192.168.0.2-130', '22')
+        print("Found hosts:")
+        for host in nm.all_hosts():
+            print('----------------------------------------------------')
+            print('Host : %s' % host)
+            print('State : %s' % nm[host].state())
+        return nm.all_hosts()
+    active_hosts= nmapscan()
+    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    if not answer or answer[0].lower() != 'y':
+        print('Interrupting')
+        exit(1)
 
-    files_processing(os.getcwd(), os.getcwd())
+    for host in active_hosts:
+        cleantemp(temp)
+            ##get orig data via racadm - disabled implemented at the earlier stage:
+            ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+            #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+            #
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+            #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+            # files_processing(temp, arrived, step='arrived')
+            #cleantemp(temp)
+
+
+            ##applying golden template
+            # print("Applying Golden configuration, please wait....")
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+            #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+            #                 "graceful", "-w", "600", "-s", "on"])
+
+    ##getting data after golden termplate enrollment:
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
+
+        #verifying against golden template
+
+        files_processing(temp, passed, step='golden')
+        cleantemp(temp)
+
+    #files_processing(os.getcwd(), os.getcwd())
 #per server files processing
 def files_processing(inputdir, outputdir, step=None):
     counter = 0
@@ -363,16 +363,16 @@ def writesummary(report_file_name, summary):
             val = ''
         try:
             curr = maxwidth[coord[0]]
-            if curr < len(val):
-                maxwidth[coord[0]] = len(val)
+            if curr < len(str(val)):
+                maxwidth[coord[0]] = len(str(val))
         except KeyError:
-            maxwidth[coord[0]] = len(val)
+            maxwidth[coord[0]] = len(str(val))
         return str(val)
 
     # print(summary)
 
-
-    for i, result in enumerate(summary, 1):
+    i = 1
+    for result in summary:
         print('Summary  detected for {}'.format(result))
         service_tag = result
         conf_passed = 0
@@ -382,13 +382,10 @@ def writesummary(report_file_name, summary):
 
         for res in summary[result]:
             #print('~'*30, '\n')
-            coords='{}1'.format(colnum_string(i))
-            worksheet.write(coords, toStr(result, coords), header_cell)
             #entering to report data
             if res['rep_type'] == 'config_report':
                 for ind, v in enumerate(res['report'], 0):
                 #coords = '{}{}'.format(colnum_string(i), ind)
-
                     #print(ind, v, )
                     conf_items=res['report'][v]
                     #print(ind,v ,hw_items)
@@ -403,7 +400,7 @@ def writesummary(report_file_name, summary):
                                     conf_error += 1
                                 elif confitem[key] == 2:
                                     pass
-                print("~"*100)
+
             if res['rep_type'] == 'hwinvent_report':
                 for ind, v in enumerate(res['report'], 0):
                     # coords = '{}{}'.format(colnum_string(i), ind)
@@ -421,7 +418,28 @@ def writesummary(report_file_name, summary):
                                     hw_error += 1
                                 elif hwitem[key] == 2:
                                     pass
-        print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
+        worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(service_tag, coords))
+        i += 1
+        worksheet.write('A{}'.format(i), toStr('conf_passed', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(conf_passed, coords))
+        i += 1
+        worksheet.write('A{}'.format(i), toStr('conf_error', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(conf_error, coords))
+        i += 1
+        worksheet.write('A{}'.format(i), toStr('hw_passed', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(hw_passed, coords))
+        i += 1
+        worksheet.write('A{}'.format(i), toStr('hw_error', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(hw_error, coords))
+        i += 2
+        print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, "
+                           "HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
 
                     # for data, valid in res['report'][v].items():
                     #     print(data)
@@ -523,7 +541,6 @@ def writetoxlsx(report_file_name, cur_report):
                 for ind, v in enumerate(res, 1):
                     for data, valid in v.items():
                         golden = v['golden']
-                        # need to enumerate with letters ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                         coords = '{}{}'.format(colnum_string(ind+1), i)
                         if valid == 0:
                             worksheet.write(coords, toStr('failed', coords), red_cell)
