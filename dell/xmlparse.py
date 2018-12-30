@@ -30,6 +30,7 @@ configuration_golden = 'ConfigurationInventory.golden'
 #additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
 additional_conf_collect = {}
 additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
+#additional_conf_collect.update({"iDRAC.Embedded.1": ["IPv4Static.1#Address"]})
 # summary object init
 summary = {}
 #harware collection constructor
@@ -64,6 +65,28 @@ def getroot(xml):
     root = ET.fromstring(data)
     return root
 
+
+# adding RAID data (from dynamic -commented- part
+def add_dynamic_attrs(FQDD, collect, xml):
+    result={}
+    # tree = ET.parse(xml)
+    tree = getroot(xml)
+    # for sc in tree.xpath('//SystemConfiguration'):
+    # for compon in sc.xpath('//Component'):
+    for compon in tree.iter():
+        if compon.get('FQDD') == FQDD:
+            for ref in compon.getchildren():
+                # print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
+                if ref.get('Name') == None:
+                    # print('-' * 40)
+                    ref = str(ref)
+                    strref = ref.strip().replace('<!--', '').replace('-->', '').replace('ReadOnly', '')
+                    prop = ET.fromstring(strref)
+                    val = prop.text
+                    key = prop.attrib['Name']
+                    if key in collect:
+                        result.update({key: val})
+    return result
 
 def getdata(xml,classname='', name=''):
     root = getroot(xml)
@@ -108,29 +131,8 @@ def getdata(xml,classname='', name=''):
                 val = prop.text
                 key = prop.attrib['Name']
                 confinventory.append({key: val})
-
-        #adding RAID data (from dynamic -commented- part
-        def add_dynamic_attrs(FQDD, collect):
-            #tree = ET.parse(xml)
-            tree = getroot(xml)
-            #for sc in tree.xpath('//SystemConfiguration'):
-                #for compon in sc.xpath('//Component'):
-            for compon in tree.iter():
-                if compon.get('FQDD') == FQDD:
-                    for ref in compon.getchildren():
-                        # print('par name', ref.items(), ref.get('Name'), ref.getparent().get('FQDD'))
-                        if ref.get('Name') == None:
-                            # print('-' * 40)
-                            ref = str(ref)
-                            strref = ref.strip().replace('<!--', '').replace('-->', '').replace('ReadOnly', '')
-                            prop = ET.fromstring(strref)
-                            val = prop.text
-                            key = prop.attrib['Name']
-                            if key in collect:
-                                confinventory.append({key: val})
         for FQDD in additional_conf_collect:
-            add_dynamic_attrs(FQDD, additional_conf_collect[FQDD])
-
+            confinventory.append(add_dynamic_attrs(FQDD, additional_conf_collect[FQDD],xml))
         return confinventory
 
 
@@ -146,54 +148,54 @@ def main(argv):
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
     #retrieving hosts information
-    def nmapscan():
-        nm = nmap.PortScanner()
-        nm.scan('192.168.0.2-130', '22')
-        print("Found hosts:")
-        for host in nm.all_hosts():
-            print('----------------------------------------------------')
-            print('Host : %s' % host)
-            print('State : %s' % nm[host].state())
-        return nm.all_hosts()
-    active_hosts= nmapscan()
-    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    if not answer or answer[0].lower() != 'y':
-        print('Interrupting')
-        exit(1)
+    # def nmapscan():
+    #     nm = nmap.PortScanner()
+    #     nm.scan('192.168.0.2-130', '22')
+    #     print("Found hosts:")
+    #     for host in nm.all_hosts():
+    #         print('----------------------------------------------------')
+    #         print('Host : %s' % host)
+    #         print('State : %s' % nm[host].state())
+    #     return nm.all_hosts()
+    # active_hosts= nmapscan()
+    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    # if not answer or answer[0].lower() != 'y':
+    #     print('Interrupting')
+    #     exit(1)
 
-    for host in active_hosts:
-        cleantemp(temp)
-            ##get orig data via racadm - disabled implemented at the earlier stage:
-            ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-            #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-            #
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-            #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-            # files_processing(temp, arrived, step='arrived')
-            #cleantemp(temp)
+    # for host in active_hosts:
+    # cleantemp(temp)
+    #         ##get orig data via racadm - disabled implemented at the earlier stage:
+    #         ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    #         #
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    #         # files_processing(temp, arrived, step='arrived')
+    #         #cleantemp(temp)
+    #
+    #
+    #         ##applying golden template
+    #         # print("Applying Golden configuration, please wait....")
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+    #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    #         #                 "graceful", "-w", "600", "-s", "on"])
+    #
+    # ##getting data after golden termplate enrollment:
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
+    #
+    #     #verifying against golden template
+    #
+    #     files_processing(temp, passed, step='golden', ip=host)
+    #     cleantemp(temp)
 
-
-            ##applying golden template
-            # print("Applying Golden configuration, please wait....")
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-            #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-            #                 "graceful", "-w", "600", "-s", "on"])
-
-    ##getting data after golden termplate enrollment:
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
-
-        #verifying against golden template
-
-        files_processing(temp, passed, step='golden')
-        cleantemp(temp)
-
-    #files_processing(os.getcwd(), os.getcwd())
+    files_processing(os.getcwd(), os.getcwd(), ip='1.1.1.1')
 #per server files processing
-def files_processing(inputdir, outputdir, step=None):
+def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
@@ -227,6 +229,7 @@ def files_processing(inputdir, outputdir, step=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
+                summary[service_tag].append(cur_report)
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
 
                 counter += 1
@@ -246,7 +249,7 @@ def files_processing(inputdir, outputdir, step=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-
+                summary[service_tag].append({'ip': ip})
                 writetoxlsx(report_file_name, cur_report)
 
                 counter += 1
@@ -383,58 +386,65 @@ def writesummary(report_file_name, summary):
         for res in summary[result]:
             #print('~'*30, '\n')
             #entering to report data
-            if res['rep_type'] == 'config_report':
-                for ind, v in enumerate(res['report'], 0):
-                #coords = '{}{}'.format(colnum_string(i), ind)
-                    #print(ind, v, )
-                    conf_items=res['report'][v]
-                    #print(ind,v ,hw_items)
-                    for confitem in conf_items:
-                        #print(hwitem)
-                        for key in confitem:
-                            if key != 'golden':
-                                #print(key,confitem[key])
-                                if confitem[key] == 1:
-                                    conf_passed += 1
-                                if confitem[key] == 0:
-                                    conf_error += 1
-                                elif confitem[key] == 2:
-                                    pass
+            try:
+                if res['rep_type'] == 'config_report':
+                    for ind, v in enumerate(res['report'], 0):
+                    #coords = '{}{}'.format(colnum_string(i), ind)
+                        #print(ind, v, )
+                        conf_items=res['report'][v]
+                        #print(ind,v ,hw_items)
+                        for confitem in conf_items:
+                            #print(hwitem)
+                            for key in confitem:
+                                if key != 'golden':
+                                    #print(key,confitem[key])
+                                    if confitem[key] == 1:
+                                        conf_passed += 1
+                                    if confitem[key] == 0:
+                                        conf_error += 1
+                                    elif confitem[key] == 2:
+                                        pass
 
-            if res['rep_type'] == 'hwinvent_report':
-                for ind, v in enumerate(res['report'], 0):
-                    # coords = '{}{}'.format(colnum_string(i), ind)
-                    #print(ind, v, )
-                    hw_items=res['report'][v]
-                    #print(ind,v ,hw_items)
-                    for hwitem in hw_items:
-                        #print(hwitem)
-                        for key in hwitem:
-                            if key != 'golden':
-                                #print(key, hwitem[key])
-                                if hwitem[key] == 1:
-                                    hw_passed += 1
-                                if hwitem[key] == 0:
-                                    hw_error += 1
-                                elif hwitem[key] == 2:
-                                    pass
+                if res['rep_type'] == 'hwinvent_report':
+                    for ind, v in enumerate(res['report'], 0):
+                        # coords = '{}{}'.format(colnum_string(i), ind)
+                        #print(ind, v, )
+                        hw_items=res['report'][v]
+                        #print(ind,v ,hw_items)
+                        for hwitem in hw_items:
+                            #print(hwitem)
+                            for key in hwitem:
+                                if key != 'golden':
+                                    #print(key, hwitem[key])
+                                    if hwitem[key] == 1:
+                                        hw_passed += 1
+                                    if hwitem[key] == 0:
+                                        hw_error += 1
+                                    elif hwitem[key] == 2:
+                                        pass
+            except KeyError:
+                ip = res['ip']
         worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(service_tag, coords))
         i += 1
-        worksheet.write('A{}'.format(i), toStr('conf_passed', 'A{}'.format(i)), header_cell)
+        worksheet.write('A{}'.format(i), toStr('IP addres', 'A{}'.format(i)), header_cell)
+        coords = 'B{}'.format(i)
+        worksheet.write(coords, toStr(ip, coords))
+        i += 1
+        worksheet.write('A{}'.format(i), toStr('Conf passed', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(conf_passed, coords))
         i += 1
-        worksheet.write('A{}'.format(i), toStr('conf_error', 'A{}'.format(i)), header_cell)
+        worksheet.write('A{}'.format(i), toStr('Conf error', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(conf_error, coords))
         i += 1
-        worksheet.write('A{}'.format(i), toStr('hw_passed', 'A{}'.format(i)), header_cell)
+        worksheet.write('A{}'.format(i), toStr('HW passed', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(hw_passed, coords))
         i += 1
-        worksheet.write('A{}'.format(i), toStr('hw_error', 'A{}'.format(i)), header_cell)
+        worksheet.write('A{}'.format(i), toStr('HW error', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(hw_error, coords))
         i += 2
