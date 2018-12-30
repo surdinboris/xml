@@ -145,54 +145,54 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
-    #retrieving hosts information
-    def nmapscan():
-        nm = nmap.PortScanner()
-        nm.scan('192.168.0.2-130', '22')
-        print("Found hosts:")
-        for host in nm.all_hosts():
-            print('----------------------------------------------------')
-            print('Host : %s' % host)
-            print('State : %s' % nm[host].state())
-        return nm.all_hosts()
-    active_hosts= nmapscan()
-    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    if not answer or answer[0].lower() != 'y':
-        print('Interrupting')
-        exit(1)
+    # #retrieving hosts information
+    # def nmapscan():
+    #     nm = nmap.PortScanner()
+    #     nm.scan('192.168.0.2-130', '22')
+    #     print("Found hosts:")
+    #     for host in nm.all_hosts():
+    #         print('----------------------------------------------------')
+    #         print('Host : %s' % host)
+    #         print('State : %s' % nm[host].state())
+    #     return nm.all_hosts()
+    # active_hosts= nmapscan()
+    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    # if not answer or answer[0].lower() != 'y':
+    #     print('Interrupting')
+    #     exit(1)
+    #
+    # for host in active_hosts:
+    #     cleantemp(temp)
+    #                                                             ##get orig data via racadm - disabled implemented at the earlier stage:
+    #                                                             ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                                                             #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    #                                                             #
+    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                                                             #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    #                                                             # files_processing(temp, arrived, step='arrived')
+    #                                                             #cleantemp(temp)
+    #
+    #
+    #                                                             ##applying golden template
+    #                                                             # print("Applying Golden configuration, please wait....")
+    #                                                             # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+    #                                                             #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    #                                                             #                 "graceful", "-w", "600", "-s", "on"])
+    #
+    # ##getting data after golden termplate enrollment:
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
+    #
+    #     #verifying against golden template
+    #
+    #     files_processing(temp, passed, step='golden')
+    #     cleantemp(temp)
 
-    for host in active_hosts:
-        cleantemp(temp)
-        ##get orig data via racadm - disabled implemented at the earlier stage:
-        ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-        #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-        #
-        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-        #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-        # files_processing(temp, arrived, step='arrived')
-        #cleantemp(temp)
-
-
-        ##applying golden template
-        # print("Applying Golden configuration, please wait....")
-        # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-        #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-        #                 "graceful", "-w", "600", "-s", "on"])
-
-        ##getting data after golden termplate enrollment:
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
-
-        #verifying against golden template
-
-        files_processing(temp, passed, step='golden')
-        cleantemp(temp)
-        #
-        #files_processing(os.getcwd(), os.getcwd())
-
+    files_processing(os.getcwd(), os.getcwd())
+#per server files processing
 def files_processing(inputdir, outputdir, step=None):
     counter = 0
     for inputfile in os.listdir(inputdir):
@@ -205,46 +205,57 @@ def files_processing(inputdir, outputdir, step=None):
                 cur_report = report(os.path.join(inputdir, inputfile))
                 service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
-                filename=os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+ext))
+                filename = os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+ext))
                 shutil.copyfile(os.path.join(inputdir,inputfile ), os.path.join(outputdir,filename))
                 print('Arrived report for ST{} stored in {}'.format(service_tag, filename))
                 counter += 1
 
             elif step == 'golden':
-                report_file = os.path.join(outputdir, os.path.join(inputdir, inputfile)) + '_report.xlsx'
+                report_file_name = os.path.join(outputdir, os.path.join(inputdir, inputfile)) + '_report.xlsx'
                 print('Found xml file for golden comparison: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
                 service_tag = cur_report['service_tag']
                 rep_type = cur_report['rep_type']
-
-                #summary entry appending
-                summary[service_tag]=cur_report
-
                 filename = os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn + ext))
                 shutil.copyfile(os.path.join(inputdir, inputfile), os.path.join(outputdir, filename))
                 # report analysing
-
                 cur_report = report_analyze(cur_report)
+                # summary entry appending
+                try:
+                    summary[service_tag]
+                except KeyError:
+                    summary[service_tag] = []
+                summary[service_tag].append(cur_report)
+                writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
 
-                writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report, geometry='columns')
                 counter += 1
                 print('Passed report for ST{} stored in {}'.format(service_tag, filename))
 
-            #default behavior
+            #default behavior - for testing only
             else:
-                report_file = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
+                report_file_name = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
                 print('Found xml file: {} Processing...'.format(fn+ext))
                 #report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
+                service_tag = cur_report['service_tag']
                 #report analysing
                 cur_report = report_analyze(cur_report)
-                writetoxlsx(report_file, cur_report, geometry='columns')
+                try:
+                    summary[service_tag]
+                except KeyError:
+                    summary[service_tag] = []
+                summary[service_tag].append(cur_report)
+
+                writetoxlsx(report_file_name, cur_report)
+
                 counter += 1
 
+    #last execution block
+    writesummary(os.path.join(os.getcwd(),'summary_report.xlsx'), summary)
 
     print('Done. Processed {}, files'.format(counter))
-    print('Summary', summary)
+    #print('Summary', summary)
     #implement whole report building from summary
             # reportfile.close()
             # sendrep(sysserial)
@@ -321,20 +332,130 @@ def unpack(latest_file):
                 #fn, ext = (os.path.splitext(f))
                 if os.path.splitext(f)[1] == '.xml':
                     return(os.path.join(epath,f))
-#columns
-#to be refactored accordingly new report structure
-def writetoxlsx(report_file, cur_report, geometry):
+
+def writesummary(report_file_name, summary):
+
+    maxwidth = {}
+    # creating xls file
+    workbook = xlsxwriter.Workbook(report_file_name)
+    # header
+    header_cell = workbook.add_format()
+    header_cell.set_bold()
+    # green cell - passed validation against master file
+    green_cell = workbook.add_format()
+    green_cell.set_font_color('green')
+    # red cell - failed validation against master file
+    red_cell = workbook.add_format()
+    red_cell.set_font_color('red')
+    # black_cell - dynamic data such as SN that non need to be validated
+    # ( added 'excluded_for_validation': 1 to results in report constructor)
+    black_cell = workbook.add_format()
+    black_cell.set_font_color('gray')
+    # yellow cell in case of result is not found in master file
+    orange_cell = workbook.add_format()
+    orange_cell.set_font_color('orange')
+    # create worksheet
+    worksheet = workbook.add_worksheet()
+
+    # helper to calculate and update width for column
+    def toStr(val, coord):
+        if val == None:
+            val = ''
+        try:
+            curr = maxwidth[coord[0]]
+            if curr < len(val):
+                maxwidth[coord[0]] = len(val)
+        except KeyError:
+            maxwidth[coord[0]] = len(val)
+        return str(val)
+
+    # print(summary)
+
+
+    for i, result in enumerate(summary, 1):
+        print('Summary  detected for {}'.format(result))
+        service_tag = result
+        conf_passed = 0
+        conf_error = 0
+        hw_passed = 0
+        hw_error = 0
+
+        for res in summary[result]:
+            #print('~'*30, '\n')
+            coords='{}1'.format(colnum_string(i))
+            worksheet.write(coords, toStr(result, coords), header_cell)
+            #entering to report data
+            if res['rep_type'] == 'config_report':
+                for ind, v in enumerate(res['report'], 0):
+                #coords = '{}{}'.format(colnum_string(i), ind)
+
+                    #print(ind, v, )
+                    conf_items=res['report'][v]
+                    #print(ind,v ,hw_items)
+                    for confitem in conf_items:
+                        #print(hwitem)
+                        for key in confitem:
+                            if key != 'golden':
+                                #print(key,confitem[key])
+                                if confitem[key] == 1:
+                                    conf_passed += 1
+                                if confitem[key] == 0:
+                                    conf_error += 1
+                                elif confitem[key] == 2:
+                                    pass
+                print("~"*100)
+            if res['rep_type'] == 'hwinvent_report':
+                for ind, v in enumerate(res['report'], 0):
+                    # coords = '{}{}'.format(colnum_string(i), ind)
+                    #print(ind, v, )
+                    hw_items=res['report'][v]
+                    #print(ind,v ,hw_items)
+                    for hwitem in hw_items:
+                        #print(hwitem)
+                        for key in hwitem:
+                            if key != 'golden':
+                                #print(key, hwitem[key])
+                                if hwitem[key] == 1:
+                                    hw_passed += 1
+                                if hwitem[key] == 0:
+                                    hw_error += 1
+                                elif hwitem[key] == 2:
+                                    pass
+        print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
+
+                    # for data, valid in res['report'][v].items():
+                    #     print(data)
+                        #golden = v['golden']
+                        # #cell coloring based on value
+                        # if valid == 0:
+                        #     worksheet.write(coords, toStr('fail', coords), red_cell)
+                        #     worksheet.write_comment(coords, '\"{}\" not equal golden setting \"{}\" '.format(data,golden))
+                        # elif valid == 1:
+                        #     worksheet.write(coords, toStr('pass', coords), green_cell)
+                        # elif valid == 2:
+                        #     worksheet.write(coords, toStr(data, coords), black_cell)
+                        # elif valid == 5:
+                        #     worksheet.write(coords, toStr(data, coords), orange_cell)
+                        #     worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
+    for m in maxwidth:
+        worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+    workbook.close()
+
+def writetoxlsx(report_file_name, cur_report):
     rep_type = cur_report['rep_type']
     #overriding report type for
+    geometry='rows'
     if rep_type == 'config_report':
         geometry = 'rows'
+    if rep_type == 'hwinvent_report':
+        geometry = 'columns'
     #remooving attribute
     cur_report=cur_report['report']
     #for column wide calculation purpose
     maxwidth = {}
 
     #creating xls file
-    workbook = xlsxwriter.Workbook(report_file)
+    workbook = xlsxwriter.Workbook(report_file_name)
     #header
     header_cell = workbook.add_format()
     header_cell.set_bold()
@@ -372,7 +493,6 @@ def writetoxlsx(report_file, cur_report, geometry):
             res = cur_report[result]
             # #header
             coords='{}1'.format(colnum_string(i))
-
             worksheet.write(coords, toStr(result, coords), header_cell)
             for ind, v in enumerate(res, 2):
                 coords = '{}{}'.format(colnum_string(i), ind)
