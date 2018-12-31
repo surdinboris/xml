@@ -148,52 +148,54 @@ def main(argv):
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
     #retrieving hosts information
-    # def nmapscan():
-    #     nm = nmap.PortScanner()
-    #     nm.scan('192.168.0.2-130', '22')
-    #     print("Found hosts:")
-    #     for host in nm.all_hosts():
-    #         print('----------------------------------------------------')
-    #         print('Host : %s' % host)
-    #         print('State : %s' % nm[host].state())
-    #     return nm.all_hosts()
-    # active_hosts= nmapscan()
-    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    # if not answer or answer[0].lower() != 'y':
-    #     print('Interrupting')
-    #     exit(1)
+    def nmapscan():
+        nm = nmap.PortScanner()
+        nm.scan('10.48.228.1-40', '22')
+        print("Found hosts:")
+        for host in nm.all_hosts():
+            print('-'*100)
+            print('Host : %s' % host)
+            print('State : %s' % nm[host].state())
+        return nm.all_hosts()
+    active_hosts= nmapscan()
+    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    if not answer or answer[0].lower() != 'y':
+        print('Interrupting')
+        exit(1)
 
-    # for host in active_hosts:
-    # cleantemp(temp)
-    #         ##get orig data via racadm - disabled implemented at the earlier stage:
-    #         ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    #         #
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    #         # files_processing(temp, arrived, step='arrived')
-    #         #cleantemp(temp)
-    #
-    #
-    #         ##applying golden template
-    #         # print("Applying Golden configuration, please wait....")
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-    #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-    #         #                 "graceful", "-w", "600", "-s", "on"])
-    #
-    # ##getting data after golden termplate enrollment:
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
-    #
-    #     #verifying against golden template
-    #
-    #     files_processing(temp, passed, step='golden', ip=host)
-    #     cleantemp(temp)
+    for host in active_hosts:
+        print('\n'*2)
+        print("Connecting to host {}".format(host))
+        cleantemp(temp)
+            ##get orig data via racadm - disabled implemented at the earlier stage:
+            ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+            #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+            #
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+            #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+            # files_processing(temp, arrived, step='arrived')
+            #cleantemp(temp)
+            ##applying golden template
+            # print("Applying Golden configuration, please wait....")
+            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+            #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+            #                 "graceful", "-w", "600", "-s", "on"])
 
-    files_processing(os.getcwd(), os.getcwd(), ip='1.1.1.1')
+    ##getting data after golden termplate enrollment:
+
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
+        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
+
+        #verifying against golden template
+
+        files_processing(temp, passed, step='golden', ip=host)
+        cleantemp(temp)
+    writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+
+    #files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
 #per server files processing
 def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
@@ -233,7 +235,7 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
 
                 counter += 1
-                print('Passed report for ST{} stored in {}'.format(service_tag, filename))
+                print('Passed report for {} stored in {}'.format(service_tag, filename))
 
             #default behavior - for testing only
             else:
@@ -255,9 +257,7 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 counter += 1
 
     #last execution block
-    writesummary(os.path.join(os.getcwd(),'summary_report.xlsx'), summary)
-
-    print('Done. Processed {}, files'.format(counter))
+                print('{} done. Processed {}, files'.format(service_tag, counter))
     #print('Summary', summary)
     #implement whole report building from summary
             # reportfile.close()
@@ -382,7 +382,6 @@ def writesummary(report_file_name, summary):
         conf_error = 0
         hw_passed = 0
         hw_error = 0
-
         for res in summary[result]:
             #print('~'*30, '\n')
             #entering to report data
@@ -451,20 +450,6 @@ def writesummary(report_file_name, summary):
         print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, "
                            "HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
 
-                    # for data, valid in res['report'][v].items():
-                    #     print(data)
-                        #golden = v['golden']
-                        # #cell coloring based on value
-                        # if valid == 0:
-                        #     worksheet.write(coords, toStr('fail', coords), red_cell)
-                        #     worksheet.write_comment(coords, '\"{}\" not equal golden setting \"{}\" '.format(data,golden))
-                        # elif valid == 1:
-                        #     worksheet.write(coords, toStr('pass', coords), green_cell)
-                        # elif valid == 2:
-                        #     worksheet.write(coords, toStr(data, coords), black_cell)
-                        # elif valid == 5:
-                        #     worksheet.write(coords, toStr(data, coords), orange_cell)
-                        #     worksheet.write_comment(coords, 'data not found in master, should be {}'.format(golden))
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     workbook.close()
@@ -575,7 +560,7 @@ def report(xml):
     service_tag = getdata(xml, classname='DCIM_SystemView', name='ServiceTag')
     if len(service_tag) == 1 and len(service_tag[0]) == 7:
         service_tag=service_tag[0]
-        print('hwinventory configuration data for {} discovered {}'.format(service_tag[0], xml))
+        print('hwinventory configuration data for {} discovered {}'.format(service_tag, xml))
         rep_type = 'hwinvent_report'
         for hwrequest in hw_collect:
             results.append({hwrequest['displayname']: getdata(xml, classname=hwrequest['classname'], name=hwrequest['name']),
