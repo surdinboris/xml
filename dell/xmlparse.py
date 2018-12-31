@@ -163,7 +163,7 @@ def main(argv):
         print('Interrupting')
         exit(1)
 
-    for host in active_hosts:
+    for host in [active_hosts[0]]:
         print('\n'*2)
         print("Connecting to host {}".format(host))
         cleantemp(temp)
@@ -375,6 +375,7 @@ def writesummary(report_file_name, summary):
     # print(summary)
 
     i = 1
+    print(summary)
     for result in summary:
         print('Summary  detected for {}'.format(result))
         service_tag = result
@@ -382,7 +383,9 @@ def writesummary(report_file_name, summary):
         conf_error = 0
         hw_passed = 0
         hw_error = 0
+        ip="not found"
         for res in summary[result]:
+            #ip = summary[result]['ip']
             #print('~'*30, '\n')
             #entering to report data
             try:
@@ -421,8 +424,13 @@ def writesummary(report_file_name, summary):
                                         hw_error += 1
                                     elif hwitem[key] == 2:
                                         pass
+                if res['ip']:
+                    ip=res['ip']
+
             except KeyError:
-                ip = res['ip']
+                pass
+
+
         worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
         worksheet.write(coords, toStr(service_tag, coords))
