@@ -148,58 +148,60 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
+    ##########Network run
     #retrieving hosts information
-    def nmapscan():
-        nm = nmap.PortScanner()
-        nm.scan('10.48.228.1-40', '22')
-        print("Found hosts:")
-        for host in nm.all_hosts():
-            print('-'*100)
-            print('Host : %s' % host)
-            print('State : %s' % nm[host].state())
-        return nm.all_hosts()
-    active_hosts= nmapscan()
-    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    if not answer or answer[0].lower() != 'y':
-        print('Interrupting')
-        exit(1)
+    # def nmapscan():
+    #     nm = nmap.PortScanner()
+    #     nm.scan('10.48.228.1-40', '22')
+    #     print("Found hosts:")
+    #     for host in nm.all_hosts():
+    #         print('-'*100)
+    #         print('Host : %s' % host)
+    #         print('State : %s' % nm[host].state())
+    #     return nm.all_hosts()
+    # active_hosts= nmapscan()
+    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    # if not answer or answer[0].lower() != 'y':
+    #     print('Interrupting')
+    #     exit(1)
+    #
+    # for host in [active_hosts[9]]:
+    #     print('\n'*2)
+    #     print('-_'*30)
+    #     print("Connecting to host {}".format(host))
+    #     cleantemp(temp)
+    #     ####first part - disabled performed via operator's script
+    #         #get orig data via racadm - disabled implemented at the earlier stage:
+    #         ##os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    #         #
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    #         # files_processing(temp, arrived, step='arrived')
+    #         # cleantemp(temp)
+    #         # #applying golden template
+    #         # print("Applying Golden configuration, please wait....")
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
+    #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    #         #                 "graceful", "-w", "600", "-s", "on"])
+    #
+    #     #getting data after golden termplate enrollment:
+    #
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
+    #
+    #     #verifying against golden template
+    #
+    #     files_processing(temp, passed, step='golden', ip=host)
+    #     cleantemp(temp)
+    # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 
-    for host in active_hosts:
-        print('\n'*2)
-        print("Connecting to host {}".format(host))
-        cleantemp(temp)
-        ##first part - disabled
-            ##get orig data via racadm - disabled implemented at the earlier stage:
-            ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-            #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-            #
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-            #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-            # files_processing(temp, arrived, step='arrived')
-            #cleantemp(temp)
-            ##applying golden template
-            # print("Applying Golden configuration, please wait....")
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-            #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-            #                 "graceful", "-w", "600", "-s", "on"])
-
-        ##getting data after golden termplate enrollment:
-
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
-                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
-                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
-
-        #verifying against golden template
-
-        files_processing(temp, passed, step='golden', ip=host)
-        cleantemp(temp)
-    writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
-
-    #offline run
-    #files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
-    #writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+    ############offline run
+    # files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
+    # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 #per server files processing
 def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
@@ -235,7 +237,7 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-                summary[service_tag].append(cur_report)
+                summary[service_tag].append({'ip': ip})
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
 
                 counter += 1
@@ -389,48 +391,49 @@ def writesummary(report_file_name, summary):
         conf_error = 0
         hw_passed = 0
         hw_error = 0
-        ip = 'not found'
+        # entering to report data
         for res in summary[result]:
-            # entering to report data
             try:
-                if res['rep_type'] == 'config_report':
-                    for ind, v in enumerate(res['report'], 0):
-                    #coords = '{}{}'.format(colnum_string(i), ind)
-                        #print(ind, v, )
-                        conf_items=res['report'][v]
-                        #print(ind,v ,hw_items)
-                        for confitem in conf_items:
-                            #print(hwitem)
-                            for key in confitem:
-                                if key != 'golden':
-                                    #print(key,confitem[key])
-                                    if confitem[key] == 1:
-                                        conf_passed += 1
-                                    if confitem[key] == 0:
-                                        conf_error += 1
-                                    elif confitem[key] == 2:
-                                        pass
-
-                if res['rep_type'] == 'hwinvent_report':
-                    for ind, v in enumerate(res['report'], 0):
-                        # coords = '{}{}'.format(colnum_string(i), ind)
-                        #print(ind, v, )
-                        hw_items=res['report'][v]
-                        #print(ind,v ,hw_items)
-                        for hwitem in hw_items:
-                            #print(hwitem)
-                            for key in hwitem:
-                                if key != 'golden':
-                                    #print(key, hwitem[key])
-                                    if hwitem[key] == 1:
-                                        hw_passed += 1
-                                    if hwitem[key] == 0:
-                                        hw_error += 1
-                                    elif hwitem[key] == 2:
-                                        pass
+                rep_type= res['rep_type']
             except KeyError:
                 if res['ip']:
-                    ip = res['ip']
+                    ip= res['ip']
+                    rep_type = 'ip'
+
+            if rep_type == 'config_report':
+                for ind, v in enumerate(res['report'], 0):
+                #coords = '{}{}'.format(colnum_string(i), ind)
+                    #print(ind, v, )
+                    conf_items=res['report'][v]
+                    #print(ind,v ,hw_items)
+                    for confitem in conf_items:
+                        for key, value in confitem.items():
+
+                            if key != 'golden':
+                                #print(key,confitem[value])
+                                if value == 1:
+                                    conf_passed += 1
+                                elif value == 0:
+                                    conf_error += 1
+                                elif value == 2:
+                                    pass
+
+            elif rep_type == 'hwinvent_report':
+                for ind, v in enumerate(res['report'], 0):
+                    hw_items=res['report'][v]
+                    #print(ind,v ,hw_items)
+                    for hwitem in hw_items:
+                        #print(hwitem)
+                        for key,value in hwitem.items():
+                            if key != 'golden':
+                                #print(key, hwitem[value])
+                                if value == 1:
+                                    hw_passed += 1
+                                elif value == 0:
+                                    hw_error += 1
+                                elif value == 2:
+                                    pass
+
 
         worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
         coords = 'B{}'.format(i)
@@ -585,7 +588,7 @@ def report(xml):
             #possibly its configuration, trying to request ServiceTag via document root
             #implement same interface as for getdata with only difference that all data vill be invoked by
             # by looping over xml data
-            configitems=getdata(xml)
+            configitems = getdata(xml)
             for conf in configitems:
                 for param, value in conf.items():
                     #print('>>>>>',param ,value)
