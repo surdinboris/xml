@@ -164,7 +164,7 @@ def main(argv):
         print('Interrupting')
         exit(1)
 
-    for host in [active_hosts[4]]:
+    for host in active_hosts:
         print('\n'*2)
         print("Connecting to host {}".format(host))
         cleantemp(temp)
