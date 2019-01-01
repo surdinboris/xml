@@ -125,11 +125,12 @@ def getdata(xml,classname='', name=''):
 
         inst = root.findall('Component')
         for i in inst:
+            FQDD=i.attrib['FQDD']
             # gathering results examle: FQDD="LifecycleController.Embedded.1
             props = i.findall('Attribute')
             for prop in props:
                 val = prop.text
-                key = prop.attrib['Name']
+                key = FQDD+' '+prop.attrib['Name']
                 confinventory.append({key: val})
         for FQDD in additional_conf_collect:
             confinventory.append(add_dynamic_attrs(FQDD, additional_conf_collect[FQDD],xml))
@@ -148,54 +149,54 @@ def main(argv):
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
     #retrieving hosts information
-    def nmapscan():
-        nm = nmap.PortScanner()
-        nm.scan('10.48.228.1-40', '22')
-        print("Found hosts:")
-        for host in nm.all_hosts():
-            print('-'*100)
-            print('Host : %s' % host)
-            print('State : %s' % nm[host].state())
-        return nm.all_hosts()
-    active_hosts= nmapscan()
-    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    if not answer or answer[0].lower() != 'y':
-        print('Interrupting')
-        exit(1)
+    # def nmapscan():
+    #     nm = nmap.PortScanner()
+    #     nm.scan('10.48.228.1-40', '22')
+    #     print("Found hosts:")
+    #     for host in nm.all_hosts():
+    #         print('-'*100)
+    #         print('Host : %s' % host)
+    #         print('State : %s' % nm[host].state())
+    #     return nm.all_hosts()
+    # active_hosts= nmapscan()
+    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    # if not answer or answer[0].lower() != 'y':
+    #     print('Interrupting')
+    #     exit(1)
+    #
+    # for host in [active_hosts[0]]:
+    #     print('\n'*2)
+    #     print("Connecting to host {}".format(host))
+    #     cleantemp(temp)
+    #         ##get orig data via racadm - disabled implemented at the earlier stage:
+    #         ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    #         #
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    #         # files_processing(temp, arrived, step='arrived')
+    #         #cleantemp(temp)
+    #         ##applying golden template
+    #         # print("Applying Golden configuration, please wait....")
+    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
+    #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    #         #                 "graceful", "-w", "600", "-s", "on"])
+    #
+    # ##getting data after golden termplate enrollment:
+    #
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
+    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
+    #
+    #     #verifying against golden template
+    #
+    #     files_processing(temp, passed, step='golden', ip=host)
+    #     cleantemp(temp)
+    # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 
-    for host in [active_hosts[0]]:
-        print('\n'*2)
-        print("Connecting to host {}".format(host))
-        cleantemp(temp)
-            ##get orig data via racadm - disabled implemented at the earlier stage:
-            ###os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-            #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-            #
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-            #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-            # files_processing(temp, arrived, step='arrived')
-            #cleantemp(temp)
-            ##applying golden template
-            # print("Applying Golden configuration, please wait....")
-            # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "set", "-f",
-            #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-            #                 "graceful", "-w", "600", "-s", "on"])
-
-    ##getting data after golden termplate enrollment:
-
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
-                       "{}".format(os.path.join(temp,"hw_passed.xml"))])
-        subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
-                        "{}".format(os.path.join(temp,"conf_passed.xml"))])
-
-        #verifying against golden template
-
-        files_processing(temp, passed, step='golden', ip=host)
-        cleantemp(temp)
-    writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
-
-    #files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
+    files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
 #per server files processing
 def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
@@ -282,6 +283,7 @@ def report_analyze(currep):
     #extracting report
     currep = currep['report']
     for record in currep:
+
         #in case of record availalable in master file
         data_per = []
         if currep[record]['valid'] == 2:
@@ -291,6 +293,8 @@ def report_analyze(currep):
             continue
         try:
             master_record = master[record]
+            #print(record,'>>>>>>>m', master_record, '>>>>>>>c', currep[record])
+
             data_per = []
             for i, data_item in enumerate(currep[record]['data']):
                 try:
@@ -424,8 +428,9 @@ def writesummary(report_file_name, summary):
                                         hw_error += 1
                                     elif hwitem[key] == 2:
                                         pass
+                print("res>>>>>>>>>", res)
                 if res['ip']:
-                    ip=res['ip']
+                    ip = res['ip']
 
             except KeyError:
                 pass
@@ -587,6 +592,7 @@ def report(xml):
             configitems=getdata(xml)
             for conf in configitems:
                 for param, value in conf.items():
+                    #print('>>>>>',param ,value)
                     results.append({param:[value]})
         #in case of both requests failed - writing some error info
         except:
