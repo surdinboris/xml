@@ -2759,24 +2759,24 @@
 	     <DisplayValue>1U</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="NodeID" TYPE="string">
-	     <VALUE>C1VM2S2</VALUE>
-	     <DisplayValue>C1VM2S2</DisplayValue>
+	     <VALUE>C1VM3S2</VALUE>
+	     <DisplayValue>C1VM3S2</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ChassisModel" TYPE="string">
 	     <VALUE/>
 	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="ChassisServiceTag" TYPE="string">
-	     <VALUE>C1VM2S2</VALUE>
-	     <DisplayValue>C1VM2S2</DisplayValue>
+	     <VALUE>C1VM3S2</VALUE>
+	     <DisplayValue>C1VM3S2</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ExpressServiceCode" TYPE="string">
 	     <VALUE>26234952338</VALUE>
 	     <DisplayValue>26234952338</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ServiceTag" TYPE="string">
-	     <VALUE>C1VM2S2</VALUE>
-	     <DisplayValue>C1VM2S2</DisplayValue>
+	     <VALUE>C1VM3S2</VALUE>
+	     <DisplayValue>C1VM3S2</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Manufacturer" TYPE="string">
 	     <VALUE>Dell Inc.</VALUE>
@@ -3956,16 +3956,16 @@
 	     <DisplayValue>WFK1K6YF</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Revision" TYPE="string">
-	     <VALUE>ST32</VALUE>
-	     <DisplayValue>ST32</DisplayValue>
+	     <VALUE>ST31</VALUE>
+	     <DisplayValue>ST31</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufacturingYear" TYPE="uint32">
 	     <VALUE>2018</VALUE>
 	     <DisplayValue>2018</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufacturingWeek" TYPE="uint16">
-	     <VALUE>32</VALUE>
-	     <DisplayValue>32</DisplayValue>
+	     <VALUE>31</VALUE>
+	     <DisplayValue>31</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufacturingDay" TYPE="uint16">
 	     <VALUE>7</VALUE>

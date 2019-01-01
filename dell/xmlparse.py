@@ -383,7 +383,7 @@ def writesummary(report_file_name, summary):
 
     # print(summary)
 
-    i = 1
+    mainind = 2
     for result in summary:
         print('Summary  detected for {}'.format(result))
         service_tag = result
@@ -391,6 +391,7 @@ def writesummary(report_file_name, summary):
         conf_error = []
         hw_passed = []
         hw_error = []
+        maxcoords=mainind
         # entering to report data
         for res in summary[result]:
             try:
@@ -410,59 +411,92 @@ def writesummary(report_file_name, summary):
                             if key != 'golden':
 
                                 if value == 1:
-                                    conf_passed.append()
+                                    conf_passed.append('')
                                 elif value == 0:
-                                    print('conf error',confitem, key,value)
-                                    conf_error += 1
+                                    #print('conf error',confitem, key,value)
+                                    conf_error.append('hw error {},{},{},{},{}'.format(ind, v, confitem, key, value))
                                 elif value == 2:
                                     pass
 
             elif rep_type == 'hwinvent_report':
-                for ind, v in enumerate(res['report'], 0):
-                    hw_items=res['report'][v]
+                correction=0
+                for ind, hwfamily in enumerate(res['report'],1):
+                    ind = ind+correction
+                    #writing head
+                    hw_items=res['report'][hwfamily]
                     #print(ind,v ,hw_items)
-                    for hwitem in hw_items:
-                        #print(hwitem)
-                        for key,value in hwitem.items():
+                    hwfamily_pass = 1
+                    for i, hwitem in enumerate(hw_items,mainind+2):
+                        corrflag = False
+                        for key, value in hwitem.items():
                             if key != 'golden':
                                 if value == 1:
-                                    hw_passed += 1
-
+                                    # writing head
+                                    if mainind == 2:
+                                        coords = '{}1'.format(colnum_string(ind))
+                                        worksheet.write(coords, toStr(hwfamily, coords), header_cell)
                                 elif value == 0:
-                                    hw_error += 1
+                                    hwfamily_pass=0
+                                    if mainind == 2:
+                                        coords = '{}1'.format(colnum_string(ind))
+                                        worksheet.write(coords, toStr(hwfamily, coords), header_cell)
+                                    # writing value
+
+                                    coords = '{}{}'.format(colnum_string(ind),i-1)
+                                    worksheet.write(coords, toStr(key, coords), red_cell)
+                                    maxcoords=max(i,maxcoords)
+
                                     #print(ind,v ,hw_items)
-                                    hw_error.append('hw error {},{},{},{},{}'.format(ind, v, hwitem, key, value))
+                                    hw_error.append('hw error {},{},{}'.format(hwfamily, key, value))
                                 elif value == 2:
-                                    pass
+                                    hwfamily_pass = 2
+                                    if hwfamily == "ServiceTag":
+                                        # writing head
+                                        if mainind == 2:
+                                            coords = '{}1'.format(colnum_string(ind))
+                                            worksheet.write(coords, toStr(hwfamily, coords), header_cell)                                        #writing value
+                                        coords = '{}{}'.format(colnum_string(ind),mainind)
+                                        worksheet.write(coords, toStr(key, coords), black_cell)
+                                        corrflag=False
+                                    else:
+                                        corrflag=True
 
-
-        worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(service_tag, coords))
-        i += 1
-        worksheet.write('A{}'.format(i), toStr('IP addres', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(ip, coords))
-        i += 1
-        worksheet.write('A{}'.format(i), toStr('Conf passed', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(conf_passed, coords))
-        i += 1
-        worksheet.write('A{}'.format(i), toStr('Conf error', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(conf_error, coords))
-        i += 1
-        worksheet.write('A{}'.format(i), toStr('HW passed', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(hw_passed, coords))
-        i += 1
-        worksheet.write('A{}'.format(i), toStr('HW error', 'A{}'.format(i)), header_cell)
-        coords = 'B{}'.format(i)
-        worksheet.write(coords, toStr(hw_error, coords))
-        i += 2
-        print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, "
-                           "HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
-
+                    if hwfamily_pass == 1:
+                        coords = '{}{}'.format(colnum_string(ind),mainind)
+                        worksheet.write(coords, toStr('pass', coords), green_cell)
+                    if hwfamily_pass == 0:
+                        coords = '{}{}'.format(colnum_string(ind),mainind)
+                        worksheet.write(coords, toStr('fail', coords), red_cell)
+                    if corrflag:
+                        correction = correction-1
+        # worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(service_tag, coords))
+        # i += 1
+        # worksheet.write('A{}'.format(i), toStr('IP addres', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(ip, coords))
+        # i += 1
+        # worksheet.write('A{}'.format(i), toStr('Conf passed', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(conf_passed, coords))
+        # i += 1
+        # worksheet.write('A{}'.format(i), toStr('Conf error', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(conf_error, coords))
+        # i += 1
+        # worksheet.write('A{}'.format(i), toStr('HW passed', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(hw_passed, coords))
+        # i += 1
+        # worksheet.write('A{}'.format(i), toStr('HW error', 'A{}'.format(i)), header_cell)
+        # coords = 'B{}'.format(i)
+        # worksheet.write(coords, toStr(hw_error, coords))
+        # i += 2
+        # print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, "
+        #                    "HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
+        mainind = maxcoords
+    print('mainind',mainind)
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     workbook.close()
