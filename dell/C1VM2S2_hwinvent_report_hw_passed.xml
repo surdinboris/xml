@@ -3624,8 +3624,8 @@
 	     <DisplayValue>CNDED0088K96Q3</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Model" TYPE="string">
-	     <VALUE>PWR SPLY,750W,RDNT,DELTA      </VALUE>
-	     <DisplayValue>PWR SPLY,750W,RDNT,DELTA      </DisplayValue>
+	     <VALUE>PWR SPLY,850W,RDNT,DELTA      </VALUE>
+	     <DisplayValue>PWR SPLY,850W,RDNT,DELTA      </DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Power Supply 1</VALUE>
@@ -3812,8 +3812,8 @@
 	     <DisplayValue>WFK1G1TD</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Revision" TYPE="string">
-	     <VALUE>ST31</VALUE>
-	     <DisplayValue>ST31</DisplayValue>
+	     <VALUE>ST32</VALUE>
+	     <DisplayValue>ST32</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufacturingYear" TYPE="uint32">
 	     <VALUE>2018</VALUE>

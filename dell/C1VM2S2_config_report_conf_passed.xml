@@ -10,13 +10,13 @@
  <Attribute Name="LCAttributes.1#VirtualAddressManagementApplication"></Attribute>
  <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute>
  <Attribute Name="LCAttributes.1#BIOSRTDRequested">False</Attribute>
- <Attribute Name="LCAttributes.1#AutoUpdate">Disabled</Attribute>
+ <Attribute Name="LCAttributes.1#AutoUpdate">Enabled</Attribute>
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
 <Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
- <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
+ <Attribute Name="LCD.1#vConsoleIndication">Enabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
  <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>

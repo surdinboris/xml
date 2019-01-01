@@ -200,8 +200,8 @@ def main(argv):
     # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 
     ############offline run
-    # files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
-    # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+    files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
+    writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 #per server files processing
 def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
@@ -387,10 +387,10 @@ def writesummary(report_file_name, summary):
     for result in summary:
         print('Summary  detected for {}'.format(result))
         service_tag = result
-        conf_passed = 0
-        conf_error = 0
-        hw_passed = 0
-        hw_error = 0
+        conf_passed = []
+        conf_error = []
+        hw_passed = []
+        hw_error = []
         # entering to report data
         for res in summary[result]:
             try:
@@ -405,15 +405,14 @@ def writesummary(report_file_name, summary):
                 #coords = '{}{}'.format(colnum_string(i), ind)
                     #print(ind, v, )
                     conf_items=res['report'][v]
-                    #print(ind,v ,hw_items)
                     for confitem in conf_items:
                         for key, value in confitem.items():
-
                             if key != 'golden':
-                                #print(key,confitem[value])
+
                                 if value == 1:
-                                    conf_passed += 1
+                                    conf_passed.append()
                                 elif value == 0:
+                                    print('conf error',confitem, key,value)
                                     conf_error += 1
                                 elif value == 2:
                                     pass
@@ -426,11 +425,13 @@ def writesummary(report_file_name, summary):
                         #print(hwitem)
                         for key,value in hwitem.items():
                             if key != 'golden':
-                                #print(key, hwitem[value])
                                 if value == 1:
                                     hw_passed += 1
+
                                 elif value == 0:
                                     hw_error += 1
+                                    #print(ind,v ,hw_items)
+                                    hw_error.append('hw error {},{},{},{},{}'.format(ind, v, hwitem, key, value))
                                 elif value == 2:
                                     pass
 
