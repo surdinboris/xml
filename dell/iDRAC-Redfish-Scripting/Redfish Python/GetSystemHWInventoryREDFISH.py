@@ -44,13 +44,13 @@ idrac_username=args["u"]
 idrac_password=args["p"]
 
 try:
-    os.remove("hw_inventory.txt")
+    os.remove(os.path.join('temp','hw_inventory.txt'))
 except:
     pass
 
 
 
-f=open("hw_inventory.txt","a")
+f=open(os.path.join('temp','hw_inventory.txt'),"a")
 d=datetime.now()
 current_date_time="- Data collection timestamp: %s-%s-%s  %s:%s:%s\n" % (d.month,d.day,d.year, d.hour,d.minute,d.second)
 f.writelines(current_date_time)
@@ -74,7 +74,7 @@ def check_supported_idrac_version():
 
 
 def get_system_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -116,7 +116,7 @@ def get_system_information():
     
 
 def get_memory_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1/Memory' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -165,7 +165,7 @@ def get_memory_information():
     
 
 def get_cpu_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1/Processors' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -209,7 +209,7 @@ def get_cpu_information():
     
 
 def get_fan_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -255,7 +255,7 @@ def get_fan_information():
     f.close()
 
 def get_ps_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -310,7 +310,7 @@ def get_ps_information():
     f.close()
 
 def get_storage_controller_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     global controller_list
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1/Storage' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
@@ -355,7 +355,7 @@ def get_storage_controller_information():
      
 
 def get_storage_disks_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     for i in controller_list:
         response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1/Storage/%s' % (idrac_ip, i),verify=False,auth=(idrac_username, idrac_password))
         data = response.json()
@@ -410,7 +410,7 @@ def get_storage_disks_information():
     
                 
 def get_backplane_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Chassis' % (idrac_ip),verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -450,7 +450,7 @@ def get_backplane_information():
     
 
 def get_network_information():
-    f=open("hw_inventory.txt","a")
+    f = open(os.path.join('temp', 'hw_inventory.txt'), "a")
     response = requests.get('https://%s/redfish/v1/Systems/System.Embedded.1/NetworkInterfaces' % idrac_ip,verify=False,auth=(idrac_username, idrac_password))
     data = response.json()
     if response.status_code != 200:
@@ -576,7 +576,7 @@ if __name__ == "__main__":
         get_storage_disks_information()
         get_backplane_information()
         get_network_information()
-    print("\n- WARNING, output also captured in \"%s\hw_inventory.txt\" file" % os.getcwd())
+    print("\n- WARNING, output also captured in \"%s\ temp\hw_inventory.txt\" file" % os.getcwd())
         
         
         

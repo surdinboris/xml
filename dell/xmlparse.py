@@ -8,6 +8,7 @@ import glob
 import sys, getopt
 import subprocess
 import shutil
+import re
 import time
 # import smtplib
 # from email.mime.multipart import MIMEMultipart
@@ -36,6 +37,7 @@ summary = {}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
+hw_collect.append({'displayname': 'HostName', 'classname': 'DCIM_SystemView', 'name': 'HostName', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'Inventory date', 'classname': 'DCIM_SystemView', 'name': 'LastSystemInventoryTime', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'CPU model', 'classname': 'DCIM_CPUView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PCI device', 'classname': 'DCIM_PCIDeviceView', 'name': 'Description', 'excluded_for_validation': 0})
@@ -148,28 +150,28 @@ def main(argv):
             os.remove(os.path.join(temp,inputfile))
         if len(os.listdir(temp)) !=0:
            raise FileExistsError('Clearing of temporary dir failed, please check!')
-    ##########Network run
+    #########Network run
     #retrieving hosts information
-    # def nmapscan():
-    #     nm = nmap.PortScanner()
-    #     nm.scan('10.48.228.1-40', '22')
-    #     print("Found hosts:")
-    #     for host in nm.all_hosts():
-    #         print('-'*100)
-    #         print('Host : %s' % host)
-    #         print('State : %s' % nm[host].state())
-    #     return nm.all_hosts()
-    # active_hosts= nmapscan()
-    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    # if not answer or answer[0].lower() != 'y':
-    #     print('Interrupting')
-    #     exit(1)
-    #
-    # for host in [active_hosts[9]]:
-    #     print('\n'*2)
-    #     print('-_'*30)
-    #     print("Connecting to host {}".format(host))
-    #     cleantemp(temp)
+    def nmapscan():
+        nm = nmap.PortScanner()
+        nm.scan('10.48.228.1-40', '22')
+        print("Found hosts:")
+        for host in nm.all_hosts():
+            print('-'*100)
+            print('Host : %s' % host)
+            print('State : %s' % nm[host].state())
+        return nm.all_hosts()
+    active_hosts= nmapscan()
+    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    if not answer or answer[0].lower() != 'y':
+        print('Interrupting')
+        exit(1)
+
+    for host in active_hosts:
+        print('\n'*2)
+        print('-_'*30)
+        print("Connecting to host {}".format(host))
+        cleantemp(temp)
     #     ####first part - disabled performed via operator's script
     #         #get orig data via racadm - disabled implemented at the earlier stage:
     #         ##os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
@@ -192,6 +194,29 @@ def main(argv):
     #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
     #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
     #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
+
+        ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
+        hwinfo= subprocess.run(["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1","-s", "y"], stdout=subprocess.PIPE)
+        hwinfo=hwinfo.stdout.decode().split("\n")
+        server_status={'Health': None,'PowerState': None}
+        for h in hwinfo:
+            health=re.search("Status: {'Health': '(\w+)'.*}", h)
+            if health:
+                server_status.update({'Health':health[1]})
+            power_on=re.search("PowerState: (\w+)", h)
+            if power_on:
+                server_status.update({'PowerState': power_on[1]})
+
+            ##{'Health': 'OK', 'PowerState': 'Off'}
+    # t= ['', '---- System Information ----', '', 'AssetTag: ', 'BiosVersion: 2.8.0', 'HostName: R33-L11',
+    #  'Id: System.Embedded.1', 'IndicatorLED: Off', 'Manufacturer: Dell Inc.',
+    #  "MemorySummary: {'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}, 'TotalSystemMemoryGiB': 256.0}",
+    #  'Model: PowerEdge R630', 'Name: System', 'PartNumber: 02C2CPA08', 'PowerState: Off',
+    #  "ProcessorSummary: {'Count': 2, 'Model': 'Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz', 'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}}",
+    #  'SKU: C1XM2S2', 'SerialNumber: CNIVC0086A0111',
+    #  "Status: {'Health': 'OK', 'HealthRollup': 'OK', 'State': 'StandbyOffline'}", 'SystemType: Physical',
+    #  'UUID: 4c4c4544-0031-5810-804d-c3c04f325332', '',
+    #  '- WARNING, output also captured in "/root/dell/r630\\ temp\\hw_inventory.txt" file', '']
     #
     #     #verifying against golden template
     #
@@ -199,7 +224,7 @@ def main(argv):
     #     cleantemp(temp)
     # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 
-    ############offline run
+    ###########offline run
     files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
     writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 #per server files processing
@@ -239,7 +264,6 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 summary[service_tag].append(cur_report)
                 summary[service_tag].append({'ip': ip})
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
-
                 counter += 1
                 print('Passed report for {} stored in {}'.format(service_tag, filename))
 
@@ -259,7 +283,6 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 summary[service_tag].append(cur_report)
                 summary[service_tag].append({'ip': ip})
                 writetoxlsx(report_file_name, cur_report)
-
                 counter += 1
 
     #last execution block
@@ -383,120 +406,137 @@ def writesummary(report_file_name, summary):
 
     # print(summary)
 
-    mainind = 2
+    maxheight = 2
     for result in summary:
         print('Summary  detected for {}'.format(result))
         service_tag = result
-        conf_passed = []
+        conf_passed = 1
         conf_error = []
-        hw_passed = []
         hw_error = []
-        maxcoords=mainind
+        currheight = maxheight
         # entering to report data
+        reps={}
+        ip=''
         for res in summary[result]:
             try:
                 rep_type= res['rep_type']
+                if rep_type == 'config_report':
+                    reps.update({rep_type:res['report']})
+                if rep_type == 'hwinvent_report':
+                    reps.update({rep_type: res['report']})
             except KeyError:
                 if res['ip']:
                     ip= res['ip']
-                    rep_type = 'ip'
+    # #if rep_type == 'config_report':
+        for ind, confsingle in enumerate(reps['config_report'], 0):
+        #coords = '{}{}'.format(colnum_string(i), ind)
+            #print(ind, v, )
+            conf_items=reps['config_report'][confsingle]
+            for confitem in conf_items:
+                for key, value in confitem.items():
+                    if key != 'golden':
+                        if value == 1:
+                            pass
+                            # conf_passed.append('')
+                        elif value == 0:
+                            #print('conf error',confitem, key,value)
+                            conf_passed=0
+                            conf_error.append('Wrong value: of {},got {}  should be  {}'.format(confsingle, key, confitem['golden']))
+                        elif value == 2:
+                            pass
 
-            if rep_type == 'config_report':
-                for ind, v in enumerate(res['report'], 0):
-                #coords = '{}{}'.format(colnum_string(i), ind)
-                    #print(ind, v, )
-                    conf_items=res['report'][v]
-                    for confitem in conf_items:
-                        for key, value in confitem.items():
-                            if key != 'golden':
+    #elif rep_type == 'hwinvent_report':
+        correction=0
+        for ind, hwfamily in enumerate(reps['hwinvent_report'],1):
+            ind = ind+correction
+            #writing head
+            hw_items=reps['hwinvent_report'][hwfamily]
+            hwfamily_pass = 1
+            for i, hwitem in enumerate(hw_items,maxheight):
+                corrflag = False
+                for key, value in hwitem.items():
+                    if key != 'golden':
+                        if value == 1:
+                            # writing head
+                            if maxheight == 2:
+                                coords = '{}1'.format(colnum_string(ind))
+                                worksheet.write(coords, toStr(hwfamily, coords), header_cell)
+                        elif value == 0:
+                            hwfamily_pass=0
+                            if maxheight == 2:
+                                coords = '{}1'.format(colnum_string(ind))
+                                worksheet.write(coords, toStr(hwfamily, coords), header_cell)
 
-                                if value == 1:
-                                    conf_passed.append('')
-                                elif value == 0:
-                                    #print('conf error',confitem, key,value)
-                                    conf_error.append('hw error {},{},{},{},{}'.format(ind, v, confitem, key, value))
-                                elif value == 2:
-                                    pass
-
-            elif rep_type == 'hwinvent_report':
-                correction=0
-                for ind, hwfamily in enumerate(res['report'],1):
-                    ind = ind+correction
-                    #writing head
-                    hw_items=res['report'][hwfamily]
-                    #print(ind,v ,hw_items)
-                    hwfamily_pass = 1
-                    for i, hwitem in enumerate(hw_items,mainind+2):
-                        corrflag = False
-                        for key, value in hwitem.items():
-                            if key != 'golden':
-                                if value == 1:
-                                    # writing head
-                                    if mainind == 2:
-                                        coords = '{}1'.format(colnum_string(ind))
-                                        worksheet.write(coords, toStr(hwfamily, coords), header_cell)
-                                elif value == 0:
-                                    hwfamily_pass=0
-                                    if mainind == 2:
-                                        coords = '{}1'.format(colnum_string(ind))
-                                        worksheet.write(coords, toStr(hwfamily, coords), header_cell)
+                            #print(ind,v ,hw_items)
+                            hw_error.append('Wrong value: of {},got {}  should be  {} '.format(hwfamily, key, hwitem['golden']))
+                        elif value == 2:
+                            hwfamily_pass = 2
+                            if hwfamily == "ServiceTag":
+                                correction= correction+1
+                                # writing head
+                                if maxheight == 2:
                                     # writing value
+                                    coords = '{}1'.format(colnum_string(ind))
+                                    worksheet.write(coords, toStr(hwfamily, coords), header_cell)
+                                coords = '{}{}'.format(colnum_string(ind),maxheight)
+                                worksheet.write(coords, toStr(key, coords), black_cell)
+                                worksheet.write_comment(coords, ip)
+                                #making space for dynamic attr insertion
+                                corrflag = False
+                            elif hwfamily == "HostName":
+                                correction = correction+1
+                                # writing head
+                                if maxheight == 2:
+                                    # writing value
+                                    coords = '{}1'.format(colnum_string(ind))
+                                    worksheet.write(coords, toStr(hwfamily, coords), header_cell)
+                                coords = '{}{}'.format(colnum_string(ind),maxheight)
+                                worksheet.write(coords, toStr(key, coords), black_cell)
+                                #making space for dynamic attr insertion
+                                corrflag=False
+                            else:
+                                corrflag=True
+            if corrflag:
+                correction = correction - 1
+            if hwfamily_pass == 1:
+                coords = '{}{}'.format(colnum_string(ind),maxheight)
+                worksheet.write(coords, toStr('pass', coords), green_cell)
+            if hwfamily_pass == 0:
+                coords = '{}{}'.format(colnum_string(ind),maxheight)
+                worksheet.write(coords, toStr('fail', coords), red_cell)
+                worksheet.write_comment(coords, str(hw_error))
+                hw_error=[]
 
-                                    coords = '{}{}'.format(colnum_string(ind),i-1)
-                                    worksheet.write(coords, toStr(key, coords), red_cell)
-                                    maxcoords=max(i,maxcoords)
 
-                                    #print(ind,v ,hw_items)
-                                    hw_error.append('hw error {},{},{}'.format(hwfamily, key, value))
-                                elif value == 2:
-                                    hwfamily_pass = 2
-                                    if hwfamily == "ServiceTag":
-                                        # writing head
-                                        if mainind == 2:
-                                            coords = '{}1'.format(colnum_string(ind))
-                                            worksheet.write(coords, toStr(hwfamily, coords), header_cell)                                        #writing value
-                                        coords = '{}{}'.format(colnum_string(ind),mainind)
-                                        worksheet.write(coords, toStr(key, coords), black_cell)
-                                        corrflag=False
-                                    else:
-                                        corrflag=True
 
-                    if hwfamily_pass == 1:
-                        coords = '{}{}'.format(colnum_string(ind),mainind)
-                        worksheet.write(coords, toStr('pass', coords), green_cell)
-                    if hwfamily_pass == 0:
-                        coords = '{}{}'.format(colnum_string(ind),mainind)
-                        worksheet.write(coords, toStr('fail', coords), red_cell)
-                    if corrflag:
-                        correction = correction-1
-        # worksheet.write('A{}'.format(i), toStr('Service Tag', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(service_tag, coords))
-        # i += 1
-        # worksheet.write('A{}'.format(i), toStr('IP addres', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(ip, coords))
-        # i += 1
-        # worksheet.write('A{}'.format(i), toStr('Conf passed', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(conf_passed, coords))
-        # i += 1
-        # worksheet.write('A{}'.format(i), toStr('Conf error', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(conf_error, coords))
-        # i += 1
-        # worksheet.write('A{}'.format(i), toStr('HW passed', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(hw_passed, coords))
-        # i += 1
-        # worksheet.write('A{}'.format(i), toStr('HW error', 'A{}'.format(i)), header_cell)
-        # coords = 'B{}'.format(i)
-        # worksheet.write(coords, toStr(hw_error, coords))
-        # i += 2
-        # print(service_tag, "Config items pass: {}, Config errors:{} , HW items passed: {}, "
-        #                    "HW errors: {}".format(conf_passed, conf_error, hw_passed, hw_error))
-        mainind = maxcoords
-    print('mainind',mainind)
+        #manual index correction before configuration appending
+        ind = ind+1
+        if conf_passed == 1:
+            if maxheight == 2:
+                coords = '{}1'.format(colnum_string(ind))
+                worksheet.write(coords, toStr('Configuration', coords), header_cell)
+            coords = '{}{}'.format(colnum_string(ind), maxheight)
+            worksheet.write(coords, toStr('conf. pass', coords), green_cell)
+
+        if conf_passed == 0:
+            if maxheight == 2:
+                coords = '{}1'.format(colnum_string(ind))
+                worksheet.write(coords, toStr('Configuration', coords), header_cell)
+            coords = '{}{}'.format(colnum_string(ind), maxheight)
+            worksheet.write(coords, toStr('conf. fail', coords), red_cell)
+            worksheet.write_comment(coords, str(conf_error))
+
+        # # manual index correction before ip appending
+        # ind = ind + 1
+        # if maxheight == 2:
+        #     coords = '{}1'.format(colnum_string(ind))
+        #     worksheet.write(coords, toStr('IP', coords), header_cell)
+        # coords = '{}{}'.format(colnum_string(ind), maxheight)
+        # worksheet.write(coords, toStr(ip, coords), black_cell)
+
+
+        maxheight = currheight+1
+    #print('maxcoords track',maxheight, ind)
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     workbook.close()

@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VM2S2" TimeStamp="Tue Jan  1 08:10:03 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VM2S2" TimeStamp="Wed Jan  2 06:44:53 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -10,13 +10,13 @@
  <Attribute Name="LCAttributes.1#VirtualAddressManagementApplication"></Attribute>
  <Attribute Name="LCAttributes.1#ProvisioningServer"></Attribute>
  <Attribute Name="LCAttributes.1#BIOSRTDRequested">False</Attribute>
- <Attribute Name="LCAttributes.1#AutoUpdate">Enabled</Attribute>
+ <Attribute Name="LCAttributes.1#AutoUpdate">Disabled</Attribute>
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
 <Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
- <Attribute Name="LCD.1#vConsoleIndication">Enabled</Attribute>
+ <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
  <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
@@ -39,7 +39,7 @@
  <!-- <Attribute Name="ServerTopology.1#RoomName"></Attribute> -->
  <!-- <Attribute Name="ServerOS.1#HostName">R33-L10</Attribute> -->
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute> -->
- <Attribute Name="ChassisPwrState.1#ChassisLEDState">Blinking</Attribute>
+ <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute>
  <Attribute Name="RepositoryUpdate"></Attribute>
 </Component>
 
@@ -1649,7 +1649,6 @@
         <Attribute Name="RAIDaction">Update</Attribute>
         <Attribute Name="LockStatus">Unlocked</Attribute>
         <Attribute Name="RAIDinitOperation">None</Attribute>
-        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute> -->
         <Attribute Name="DiskCachePolicy">Default</Attribute>
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute>
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute>
@@ -1755,7 +1754,7 @@
     <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:06:EB</Attribute> -->
     <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:06:EB</Attribute> -->
     <Attribute Name="VirtualizationMode">SRIOV</Attribute>
-    <Attribute Name="LegacyBootProto">NONE</Attribute>
+    <Attribute Name="LegacyBootProto">PXE</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
     <!-- <Attribute Name="VLanId">0</Attribute> -->
     <Attribute Name="NumberVFAdvertised">64</Attribute>
