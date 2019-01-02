@@ -10,6 +10,10 @@ import subprocess
 import shutil
 import re
 import time
+import tkinter as tk
+import tkinter.scrolledtext as tkst
+from tkinter import *
+from PIL import ImageTk, Image
 # import smtplib
 # from email.mime.multipart import MIMEMultipart
 # from email.mime.text import MIMEText
@@ -140,6 +144,38 @@ def getdata(xml,classname='', name=''):
 
 
 def main(argv):
+    _root=Tk()
+    _mainframe = tk.Frame(_root)
+    _logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
+    _root.title('Liveperson dell inventory tool')
+    panel = Label(_root, image=_logo)
+    panel.grid(row=1, padx=5, pady=5, column=1, sticky=(W, N))
+
+    # output part
+    _textboxframe = tk.LabelFrame(_mainframe, text='Work log')
+    _textboxframe.grid(row=0, padx=5, pady=5, column=1, rowspan=3, sticky=(W, N))
+    _textboxframe.columnconfigure(0, weight=1)
+    _textboxframe.rowconfigure(0, weight=1)
+    _texbox = tkst.ScrolledText(_textboxframe, wrap='word', width=35, height=20, state='disabled')
+    _texbox.grid(row=0, column=1, sticky=(W, N))
+    _testingframe = tk.LabelFrame(_mainframe, text='Testing')
+    _testingframe.grid(row=1, padx=5, pady=5, column=0, sticky=(W, N))
+    _testingframe.columnconfigure(0, weight=1)
+    _testingframe.rowconfigure(0, weight=1)
+    _root.mainloop()
+
+    def print_to_gui(self, txtstr):
+        _texbox.config(state='normal')
+        _texbox.insert('end', '%s\n' %txtstr)
+        _texbox.config(state="disabled")
+        _texbox.see('end')
+        _root.update()
+    def texboxclear(self):
+        _texbox.config(state='normal')
+        _texbox.delete('1.0', END)
+        _texbox.config(state="disabled")
+        _root.update()
+
     # fallbacks - to current workdir
     temp = os.path.join(os.getcwd(), 'temp')
     arrived = os.path.join(os.getcwd(), 'arrived')
