@@ -41,15 +41,15 @@ hw_collect.append({'displayname': 'HostName', 'classname': 'DCIM_SystemView', 'n
 hw_collect.append({'displayname': 'Inventory date', 'classname': 'DCIM_SystemView', 'name': 'LastSystemInventoryTime', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'CPU model', 'classname': 'DCIM_CPUView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PCI device', 'classname': 'DCIM_PCIDeviceView', 'name': 'Description', 'excluded_for_validation': 0})
-hw_collect.append({'displayname': 'System memory size', 'classname': 'DCIM_SystemView', 'name': 'SysMemTotalSize', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'Memory tot.size', 'classname': 'DCIM_SystemView', 'name': 'SysMemTotalSize', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'Memory serial', 'classname': 'DCIM_MemoryView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
-hw_collect.append({'displayname': 'Memory module part number', 'classname': 'DCIM_MemoryView', 'name': 'PartNumber', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'Memory P/Ns', 'classname': 'DCIM_MemoryView', 'name': 'PartNumber', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'Memory slot', 'classname': 'DCIM_MemoryView', 'name': 'FQDD', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'HDD serial', 'classname': 'DCIM_PhysicalDiskView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'HDD model', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'HDD fw', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Revision', 'excluded_for_validation': 0})
-hw_collect.append({'displayname': 'HDD slot population', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Slot', 'excluded_for_validation': 0})
-hw_collect.append({'displayname': 'PSU part number', 'classname': 'DCIM_PowerSupplyView', 'name': 'PartNumber', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'HDD slot pop.', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Slot', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PSU P/Ns', 'classname': 'DCIM_PowerSupplyView', 'name': 'PartNumber', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'PSU model', 'classname': 'DCIM_PowerSupplyView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
@@ -152,71 +152,62 @@ def main(argv):
            raise FileExistsError('Clearing of temporary dir failed, please check!')
     #########Network run
     #retrieving hosts information
-    def nmapscan():
-        nm = nmap.PortScanner()
-        nm.scan('10.48.228.1-40', '22')
-        print("Found hosts:")
-        for host in nm.all_hosts():
-            print('-'*100)
-            print('Host : %s' % host)
-            print('State : %s' % nm[host].state())
-        return nm.all_hosts()
-    active_hosts= nmapscan()
-    answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    if not answer or answer[0].lower() != 'y':
-        print('Interrupting')
-        exit(1)
-
-    for host in active_hosts:
-        print('\n'*2)
-        print('-_'*30)
-        print("Connecting to host {}".format(host))
-        cleantemp(temp)
-    #     ####first part - disabled performed via operator's script
-    #         #get orig data via racadm - disabled implemented at the earlier stage:
-    #         ##os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    #         #
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    #         # files_processing(temp, arrived, step='arrived')
-    #         # cleantemp(temp)
-    #         # #applying golden template
-    #         # print("Applying Golden configuration, please wait....")
-    #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
-    #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-    #         #                 "graceful", "-w", "600", "-s", "on"])
+    # def nmapscan():
+    #     nm = nmap.PortScanner()
+    #     nm.scan('10.48.228.1-40', '22')
+    #     print("Found hosts:")
+    #     for host in nm.all_hosts():
+    #         print('-'*100)
+    #         print('Host : %s' % host)
+    #         print('State : %s' % nm[host].state())
+    #     return nm.all_hosts()
+    # active_hosts= nmapscan()
+    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+    # if not answer or answer[0].lower() != 'y':
+    #     print('Interrupting')
+    #     exit(1)
     #
-    #     #getting data after golden termplate enrollment:
+    # for host in active_hosts:
+    #     print('\n'*2)
+    #     print('-_'*30)
+    #     print("Connecting to host {}".format(host))
+    #     cleantemp(temp)
+    # #     ####first part - disabled performed via operator's script
+    # #         #get orig data via racadm - disabled implemented at the earlier stage:
+    # #         ##os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+    # #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+    # #         #
+    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+    # #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+    # #         # files_processing(temp, arrived, step='arrived')
+    # #         # cleantemp(temp)
+    # #         # #applying golden template
+    # #         # print("Applying Golden configuration, please wait....")
+    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
+    # #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+    # #         #                 "graceful", "-w", "600", "-s", "on"])
+    # #
+    # #     #getting data after golden termplate enrollment:
+    # #
+    # #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+    # #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
+    # #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+    # #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
     #
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
-    #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
-    #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
-    #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
-
-        ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
-        hwinfo= subprocess.run(["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1","-s", "y"], stdout=subprocess.PIPE)
-        hwinfo=hwinfo.stdout.decode().split("\n")
-        server_status={'Health': None,'PowerState': None}
-        for h in hwinfo:
-            health=re.search("Status: {'Health': '(\w+)'.*}", h)
-            if health:
-                server_status.update({'Health':health[1]})
-            power_on=re.search("PowerState: (\w+)", h)
-            if power_on:
-                server_status.update({'PowerState': power_on[1]})
-
-            ##{'Health': 'OK', 'PowerState': 'Off'}
-    # t= ['', '---- System Information ----', '', 'AssetTag: ', 'BiosVersion: 2.8.0', 'HostName: R33-L11',
-    #  'Id: System.Embedded.1', 'IndicatorLED: Off', 'Manufacturer: Dell Inc.',
-    #  "MemorySummary: {'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}, 'TotalSystemMemoryGiB': 256.0}",
-    #  'Model: PowerEdge R630', 'Name: System', 'PartNumber: 02C2CPA08', 'PowerState: Off',
-    #  "ProcessorSummary: {'Count': 2, 'Model': 'Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz', 'Status': {'Health': None, 'HealthRollup': None, 'State': 'Enabled'}}",
-    #  'SKU: C1XM2S2', 'SerialNumber: CNIVC0086A0111',
-    #  "Status: {'Health': 'OK', 'HealthRollup': 'OK', 'State': 'StandbyOffline'}", 'SystemType: Physical',
-    #  'UUID: 4c4c4544-0031-5810-804d-c3c04f325332', '',
-    #  '- WARNING, output also captured in "/root/dell/r630\\ temp\\hw_inventory.txt" file', '']
+    #     ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
+    #     hwinfo= subprocess.run(["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1","-s", "y"], stdout=subprocess.PIPE)
+    #     hwinfo=hwinfo.stdout.decode().split("\n")
+    #     server_status={'Health': None,'PowerState': None}
+    #     for h in hwinfo:
+    #         health=re.search("Status: {'Health': '(\w+)'.*}", h)
+    #         if health:
+    #             server_status.update({'Health':health[1]})
+    #         power_on=re.search("PowerState: (\w+)", h)
+    #         if power_on:
+    #             server_status.update({'PowerState': power_on[1]})
+    #
+    #         ##{'Health': 'OK', 'PowerState': 'Off'}
     #
     #     #verifying against golden template
     #
@@ -225,10 +216,11 @@ def main(argv):
     # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 
     ###########offline run
-    files_processing(os.getcwd(), os.getcwd(), ip='0.0.0.0')
+    server_status={'Health': 'OK', 'PowerState': 'Off'}
+    files_processing(os.getcwd(), os.getcwd(), server_status, ip='0.0.0.0')
     writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
 #per server files processing
-def files_processing(inputdir, outputdir, step=None, ip=None):
+def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
@@ -262,7 +254,7 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-                summary[service_tag].append({'ip': ip})
+                summary[service_tag].append({'ip': ip, 'server_status': server_status})
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
                 counter += 1
                 print('Passed report for {} stored in {}'.format(service_tag, filename))
@@ -281,10 +273,9 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-                summary[service_tag].append({'ip': ip})
+                summary[service_tag].append({'ip': ip, 'server_status': server_status})
                 writetoxlsx(report_file_name, cur_report)
                 counter += 1
-
     #last execution block
                 print('{} done. Processed {}, files'.format(service_tag, counter))
     #print('Summary', summary)
@@ -416,7 +407,6 @@ def writesummary(report_file_name, summary):
         currheight = maxheight
         # entering to report data
         reps={}
-        ip=''
         for res in summary[result]:
             try:
                 rep_type= res['rep_type']
@@ -425,8 +415,9 @@ def writesummary(report_file_name, summary):
                 if rep_type == 'hwinvent_report':
                     reps.update({rep_type: res['report']})
             except KeyError:
-                if res['ip']:
-                    ip= res['ip']
+                ip = res['ip']
+                server_status = res['server_status']
+
     # #if rep_type == 'config_report':
         for ind, confsingle in enumerate(reps['config_report'], 0):
         #coords = '{}{}'.format(colnum_string(i), ind)
@@ -472,7 +463,7 @@ def writesummary(report_file_name, summary):
                         elif value == 2:
                             hwfamily_pass = 2
                             if hwfamily == "ServiceTag":
-                                correction= correction+1
+                                #correction= correction+1
                                 # writing head
                                 if maxheight == 2:
                                     # writing value
@@ -484,7 +475,6 @@ def writesummary(report_file_name, summary):
                                 #making space for dynamic attr insertion
                                 corrflag = False
                             elif hwfamily == "HostName":
-                                correction = correction+1
                                 # writing head
                                 if maxheight == 2:
                                     # writing value
@@ -510,7 +500,7 @@ def writesummary(report_file_name, summary):
 
 
         #manual index correction before configuration appending
-        ind = ind+1
+        ind = ind + 1
         if conf_passed == 1:
             if maxheight == 2:
                 coords = '{}1'.format(colnum_string(ind))
@@ -525,6 +515,26 @@ def writesummary(report_file_name, summary):
             coords = '{}{}'.format(colnum_string(ind), maxheight)
             worksheet.write(coords, toStr('conf. fail', coords), red_cell)
             worksheet.write_comment(coords, str(conf_error))
+        #appending server_status
+        ind = ind + 1
+        if maxheight == 2:
+            coords = '{}1'.format(colnum_string(ind))
+            worksheet.write(coords, toStr('Health status', coords), header_cell)
+        coords = '{}{}'.format(colnum_string(ind), maxheight)
+        if server_status["Health"] == 'OK':
+            worksheet.write(coords, toStr(server_status["Health"], coords), green_cell)
+        else:
+            worksheet.write(coords, toStr(server_status["Health"], coords), red_cell)
+        #appending power status
+        ind = ind + 1
+        if maxheight == 2:
+            coords = '{}1'.format(colnum_string(ind))
+            worksheet.write(coords, toStr('Power status', coords), header_cell)
+        coords = '{}{}'.format(colnum_string(ind), maxheight)
+        if server_status["PowerState"] == 'On':
+            worksheet.write(coords, toStr(server_status["PowerState"], coords), green_cell)
+        else:
+            worksheet.write(coords, toStr(server_status["PowerState"], coords), red_cell)
 
         # # manual index correction before ip appending
         # ind = ind + 1
@@ -578,7 +588,7 @@ def writetoxlsx(report_file_name, cur_report):
     #helper to calculate and update width for column
     def toStr(val, coord):
         if val == None:
-            val=''
+            val = ''
         try:
             curr = maxwidth[coord[0]]
             if curr < len(val):
@@ -637,7 +647,7 @@ def writetoxlsx(report_file_name, cur_report):
 
     #sheet setup for better look
     for m in maxwidth:
-        worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+        worksheet.set_column('{}:{}'.format(m, m), maxwidth[m])
     workbook.close()
 
 #report constructor
@@ -667,7 +677,7 @@ def report(xml):
             for conf in configitems:
                 for param, value in conf.items():
                     #print('>>>>>',param ,value)
-                    results.append({param:[value]})
+                    results.append({param: [value]})
         #in case of both requests failed - writing some error info
         except:
             return {'rep_type': 'error', 'service_tag': 'n/a', 'report': {'error: unsupported file:'+xml: {'data': [0], 'valid': 0}}}
@@ -689,7 +699,7 @@ def report(xml):
                 else:
                     validated = 0
                 resData[key] = {'data': r[key], 'valid': validated}
-    resData = {'rep_type': rep_type, 'service_tag': service_tag, 'report':resData}
+    resData = {'rep_type': rep_type, 'service_tag': service_tag, 'report' : resData}
     return resData
 
 # def sendrep(sysserial):
