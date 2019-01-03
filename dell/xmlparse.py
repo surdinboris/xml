@@ -169,7 +169,7 @@ def main(argv):
     retrieveinitial = IntVar(value=0)
     applygolden = IntVar(value=0)
     collectfinal = IntVar(value=1)
-    spec_ip= None
+    spec_ip = StringVar()
     #telad_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
     liveperson_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "liveperson.gif")))
     _root.title('Liveperson dell inventory tool')
@@ -188,33 +188,38 @@ def main(argv):
     _texbox = tkst.ScrolledText(_textboxframe, wrap='word', width=35, height=20, state='disabled')
     _texbox.grid(row=0, column=1, sticky=(W, N))
     #options
+
     _optionsframe = tk.LabelFrame(_mainframe, text='Network run options')
     _optionsframe.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
-    #_ip = Text(_optionsframe, textvariable = spec_ip, height=2, width=10, text='Specific ip (optional)')
+
+    _ipText = Label(_optionsframe, text='IP:')
+    _ipText.grid(row=0, padx=3, pady=3, column=0, sticky=(E, N))
+
+    _ipaddress = Entry(_optionsframe, textvariable= spec_ip)
+    _ipaddress.grid(row=0, padx=3, pady=3, column=1, sticky=(E, N))
 
     _retrieveinitial = Checkbutton(_optionsframe, text="Initial inventory", variable=retrieveinitial)
-    _retrieveinitial.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
+    _retrieveinitial.grid(row=1, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
     _applygolden = Checkbutton(_optionsframe, text="Apply golden settings", variable=applygolden)
-    _applygolden.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
+    _applygolden.grid(row=2, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
     _collectfinal= Checkbutton(_optionsframe, text="Collect final report", variable=collectfinal)
-    _collectfinal.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
+    _collectfinal.grid(row=3, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
+
     # testing part
     _testingframe = tk.LabelFrame(_mainframe, text='Testing')
     _testingframe.grid(row=2, padx=3, pady=3, column=0,  sticky=(W,  N))
+
     # _testingframe.columnconfigure(1, weight=10)
     # _testingframe.rowconfigure(1, weight=10)
     #control
-
-    # _userframe = tk.LabelFrame(_testingframe, text='Execution')
-    # _userframe.grid(row=1, padx=1, pady=(1, 10), column=0, sticky=(W, N))
     # test buttons - start stop test
-    _startnetbutton = tk.Button(_testingframe, text='Start nework',width=20, height=2,
+    _startnetbutton = tk.Button(_testingframe, text='Start (nework)',width=20, height=2,
                                 command = lambda: start('network'))
     _startnetbutton.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
 
-    _startofflinebutton = tk.Button(_testingframe, text='Start offline', width=20, height=2,
+    _startofflinebutton = tk.Button(_testingframe, text='Start (offline)', width=20, height=2,
                                     command = lambda: start('offline'))
     _startofflinebutton.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
 
@@ -243,27 +248,30 @@ def main(argv):
         if mode == 'network':
             #########Network run
             # retrieving hosts information
-            if spec_ip:
-                print_to_gui('Special ip {}'.format(spec_ip))
-            def nmapscan():
-                nm = nmap.PortScanner()
-                nm.scan('10.48.228.1-40', '22')
-                print("Found hosts:")
-                for host in nm.all_hosts():
-                    print('-' * 100)
-                    print('Host : %s' % host)
-                    print('State : %s' % nm[host].state())
-                return nm.all_hosts()
+            if len(spec_ip.get()) > 0:
+                print_to_gui('Special ip {}'.format(spec_ip.get()))
+                active_hosts=[spec_ip.get()]
+            else:
+                def nmapscan():
+                    nm = nmap.PortScanner()
+                    nm.scan('10.48.228.1-40', '22')
+                    print("Found hosts:")
+                    for host in nm.all_hosts():
+                        print('-' * 100)
+                        print('Host : %s' % host)
+                        print('State : %s' % nm[host].state())
+                    return nm.all_hosts()
 
-            active_hosts = nmapscan()
+                active_hosts = nmapscan()
 
-            def sort_ip_list(ip_list):
-                """Sort an IP address list."""
-                ipl = [(IP(ip).int(), ip) for ip in ip_list]
-                ipl.sort()
-                return [ip[1] for ip in ipl]
+                def sort_ip_list(ip_list):
+                    """Sort an IP address list."""
+                    ipl = [(IP(ip).int(), ip) for ip in ip_list]
+                    ipl.sort()
+                    return [ip[1] for ip in ipl]
 
-            active_hosts = sort_ip_list(active_hosts)
+                active_hosts = sort_ip_list(active_hosts)
+
             print_to_gui('Found {} active hosts'.format(len(active_hosts)))
             #cli part
             # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
