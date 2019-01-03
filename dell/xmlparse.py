@@ -334,11 +334,11 @@ def main(argv):
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
 
         elif mode == 'offline':
+            # offline run
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
-            #offline run
             server_status={'Health': 'OK', 'PowerState': 'Off'}
-            files_processing(os.getcwd(), os.getcwd(), server_status, ip='0.0.0.0')
-            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+            files_processing(os.path.join(os.getcwd(),"offline"), os.path.join(os.getcwd(),"offline"), server_status, ip='0.0.0.0')
+            writesummary(os.path.join(os.getcwd(),"offline", 'summary_report.xlsx'), summary)
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
 
         disbutt('normal')
