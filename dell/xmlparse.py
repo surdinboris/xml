@@ -14,6 +14,7 @@ import tkinter as tk
 import tkinter.scrolledtext as tkst
 from tkinter import *
 from PIL import ImageTk, Image
+from IPy import IP
 # import smtplib
 # from email.mime.multipart import MIMEMultipart
 # from email.mime.text import MIMEText
@@ -28,7 +29,7 @@ def colnum_string(n):
         n, remainder = divmod(n - 1, 26)
         string = chr(65 + remainder) + string
     return string
-
+running = True
 hardware_golden = 'HardwareInventory.golden'
 configuration_golden = 'ConfigurationInventory.golden'
 
@@ -144,13 +145,40 @@ def getdata(xml,classname='', name=''):
 
 
 def main(argv):
-    _root=Tk()
-    _mainframe = tk.Frame(_root)
-    _logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
-    _root.title('Liveperson dell inventory tool')
-    panel = Label(_root, image=_logo)
-    panel.grid(row=1, padx=5, pady=5, column=1, sticky=(W, N))
+    cancel_id = None
+    #helpers
+    def print_to_gui( txtstr):
+        _texbox.config(state='normal')
+        _texbox.insert('end', '%s\n' %txtstr)
+        _texbox.config(state="disabled")
+        _texbox.see('end')
+        _root.update()
+    def texboxclear():
+        _texbox.config(state='normal')
+        _texbox.delete('1.0', END)
+        _texbox.config(state="disabled")
+        _root.update()
 
+    def stop():
+       pass
+    def disbutt(opt):
+        for bu in buttons:
+            bu['state'] = opt
+
+    _root=Tk()
+    retrieveinitial = IntVar(value=0)
+    applygolden = IntVar(value=0)
+    collectfinal = IntVar(value=1)
+    #telad_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
+    liveperson_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "liveperson.gif")))
+    _root.title('Liveperson dell inventory tool')
+    _root.resizable(width=False, height=False)
+    _mainframe = tk.Frame(_root)
+    _mainframe.grid(row=0, column=0, sticky=(E, W, N, S))
+    #_telad_logo = Label(_mainframe, image=telad_logo)
+    #_telad_logo.grid(row=0, padx=5, pady=5, column=0, sticky=(W, N))
+    _liveperson_logo = Label(_mainframe, image=liveperson_logo)
+    _liveperson_logo.grid(row=0, padx=5, pady=5, column=0, sticky=(W, N))
     # output part
     _textboxframe = tk.LabelFrame(_mainframe, text='Work log')
     _textboxframe.grid(row=0, padx=5, pady=5, column=1, rowspan=3, sticky=(W, N))
@@ -158,104 +186,147 @@ def main(argv):
     _textboxframe.rowconfigure(0, weight=1)
     _texbox = tkst.ScrolledText(_textboxframe, wrap='word', width=35, height=20, state='disabled')
     _texbox.grid(row=0, column=1, sticky=(W, N))
+    #options
+    _optionsframe = tk.LabelFrame(_mainframe, text='Network run options')
+    _optionsframe.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
+
+    _retrieveinitial = Checkbutton(_optionsframe, text="Initial inventory", variable=retrieveinitial)
+    _retrieveinitial.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
+
+    _applygolden = Checkbutton(_optionsframe, text="Apply golden settings", variable=applygolden)
+    _applygolden.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
+
+    _collectfinal= Checkbutton(_optionsframe, text="Collect final report", variable=collectfinal)
+    _collectfinal.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
+    # testing part
     _testingframe = tk.LabelFrame(_mainframe, text='Testing')
-    _testingframe.grid(row=1, padx=5, pady=5, column=0, sticky=(W, N))
-    _testingframe.columnconfigure(0, weight=1)
-    _testingframe.rowconfigure(0, weight=1)
+    _testingframe.grid(row=2, padx=3, pady=3, column=0,  sticky=(W,  N))
+    # _testingframe.columnconfigure(1, weight=10)
+    # _testingframe.rowconfigure(1, weight=10)
+    #control
+
+    # _userframe = tk.LabelFrame(_testingframe, text='Execution')
+    # _userframe.grid(row=1, padx=1, pady=(1, 10), column=0, sticky=(W, N))
+    # test buttons - start stop test
+    _startnetbutton = tk.Button(_testingframe, text='Start nework',width=20, height=2,
+                                command = lambda: start('network'))
+    _startnetbutton.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
+
+    _startofflinebutton = tk.Button(_testingframe, text='Start offline', width=20, height=2,
+                                    command = lambda: start('offline'))
+    _startofflinebutton.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
+
+    _stopbutton = tk.Button(_testingframe, text='Stop execution', width=20, height=2,
+                                    command=lambda: start('stop'))
+    _stopbutton.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
+
+    buttons = [_startnetbutton,_startofflinebutton]
+
+
+
+    def start(mode):
+        disbutt('disabled')
+        print_to_gui('Test started in {}'.format(mode))
+        # fallbacks - to current workdir
+        temp = os.path.join(os.getcwd(), 'temp')
+        arrived = os.path.join(os.getcwd(), 'arrived')
+        passed = os.path.join(os.getcwd(), 'passed')
+        def cleantemp(temp):
+            for inputfile in os.listdir(temp):
+                print('clearing', os.path.join(temp, inputfile))
+                os.remove(os.path.join(temp, inputfile))
+            if len(os.listdir(temp)) != 0:
+                raise FileExistsError('Clearing of temporary dir failed, please check!')
+        if mode == 'network':
+            #########Network run
+            # retrieving hosts information
+            def nmapscan():
+                nm = nmap.PortScanner()
+                nm.scan('10.48.228.1-40', '22').sort(key=lambda x: x[-2])
+                print("Found hosts:")
+                for host in nm.all_hosts():
+                    print('-' * 100)
+                    print('Host : %s' % host)
+                    print('State : %s' % nm[host].state())
+                return nm.all_hosts()
+
+            active_hosts = nmapscan()
+
+            def sort_ip_list(ip_list):
+                """Sort an IP address list."""
+                ipl = [(IP(ip).int(), ip) for ip in ip_list]
+                ipl.sort()
+                return [ip[1] for ip in ipl]
+
+            active_hosts = sort_ip_list(active_hosts)
+            print_to_gui('Found {} active hosts'.format(len(active_hosts)))
+            #cli part
+            # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
+            # if not answer or answer[0].lower() != 'y':
+            #     print('Interrupting')
+            #     exit(1)
+
+            for host in active_hosts:
+                print('\n' * 2)
+                print('-_' * 30)
+                print_to_gui("Connecting to host {}".format(host))
+                print("Connecting to host {}".format(host))
+                cleantemp(temp)
+                ####first part - disabled performed via operator's script
+                if retrieveinitial:
+                    #get orig data via racadm - disabled implemented at the earlier stage:
+                    #os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+                                    "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
+
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                                    "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
+                    files_processing(temp, arrived, step='arrived')
+                    cleantemp(temp)
+                if applygolden:
+                    #applying golden template
+                    print("Applying Golden configuration, please wait....")
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
+                                    "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
+                                    "graceful", "-w", "600", "-s", "on"])
+                if collectfinal:
+                    # getting data after golden termplate enrollment:
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+                                    "{}".format(os.path.join(temp, "hw_passed.xml"))])
+                    subprocess.run(
+                        ["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+                         "{}".format(os.path.join(temp, "conf_passed.xml"))])
+
+                ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
+                hwinfo = subprocess.run(
+                    ["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1", "-s", "y"],
+                    stdout=subprocess.PIPE)
+                hwinfo = hwinfo.stdout.decode().split("\n")
+                server_status = {'Health': None, 'PowerState': None}
+                for h in hwinfo:
+                    health = re.search("Status: {'Health': '(\w+)'.*}", h)
+                    if health:
+                        server_status.update({'Health': health[1]})
+                    power_on = re.search("PowerState: (\w+)", h)
+                    if power_on:
+                        server_status.update({'PowerState': power_on[1]})
+                # verifying against golden template
+                files_processing(temp, passed, server_status, step='golden', ip=host)
+                cleantemp(temp)
+            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+            print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+
+        elif mode == 'offline':
+            print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
+            #offline run
+            server_status={'Health': 'OK', 'PowerState': 'Off'}
+            files_processing(os.getcwd(), os.getcwd(), server_status, ip='0.0.0.0')
+            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+            print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+
+        disbutt('normal')
     _root.mainloop()
 
-    def print_to_gui(self, txtstr):
-        _texbox.config(state='normal')
-        _texbox.insert('end', '%s\n' %txtstr)
-        _texbox.config(state="disabled")
-        _texbox.see('end')
-        _root.update()
-    def texboxclear(self):
-        _texbox.config(state='normal')
-        _texbox.delete('1.0', END)
-        _texbox.config(state="disabled")
-        _root.update()
-
-    # fallbacks - to current workdir
-    temp = os.path.join(os.getcwd(), 'temp')
-    arrived = os.path.join(os.getcwd(), 'arrived')
-    passed = os.path.join(os.getcwd(), 'passed')
-    def cleantemp(temp):
-        for inputfile in os.listdir(temp):
-            print('clearing',os.path.join(temp,inputfile))
-            os.remove(os.path.join(temp,inputfile))
-        if len(os.listdir(temp)) !=0:
-           raise FileExistsError('Clearing of temporary dir failed, please check!')
-    #########Network run
-    #retrieving hosts information
-    # def nmapscan():
-    #     nm = nmap.PortScanner()
-    #     nm.scan('10.48.228.1-40', '22')
-    #     print("Found hosts:")
-    #     for host in nm.all_hosts():
-    #         print('-'*100)
-    #         print('Host : %s' % host)
-    #         print('State : %s' % nm[host].state())
-    #     return nm.all_hosts()
-    # active_hosts= nmapscan()
-    # answer = input("Found {} hosts. Do you want to proceed?[y/n]".format(len(active_hosts)))
-    # if not answer or answer[0].lower() != 'y':
-    #     print('Interrupting')
-    #     exit(1)
-    #
-    # for host in active_hosts:
-    #     print('\n'*2)
-    #     print('-_'*30)
-    #     print("Connecting to host {}".format(host))
-    #     cleantemp(temp)
-    # #     ####first part - disabled performed via operator's script
-    # #         #get orig data via racadm - disabled implemented at the earlier stage:
-    # #         ##os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
-    # #         #                 "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-    # #         #
-    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
-    # #         #                 "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-    # #         # files_processing(temp, arrived, step='arrived')
-    # #         # cleantemp(temp)
-    # #         # #applying golden template
-    # #         # print("Applying Golden configuration, please wait....")
-    # #         # subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
-    # #         #                 "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
-    # #         #                 "graceful", "-w", "600", "-s", "on"])
-    # #
-    # #     #getting data after golden termplate enrollment:
-    # #
-    # #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
-    # #                    "{}".format(os.path.join(temp,"hw_passed.xml"))])
-    # #     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
-    # #                     "{}".format(os.path.join(temp,"conf_passed.xml"))])
-    #
-    #     ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
-    #     hwinfo= subprocess.run(["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1","-s", "y"], stdout=subprocess.PIPE)
-    #     hwinfo=hwinfo.stdout.decode().split("\n")
-    #     server_status={'Health': None,'PowerState': None}
-    #     for h in hwinfo:
-    #         health=re.search("Status: {'Health': '(\w+)'.*}", h)
-    #         if health:
-    #             server_status.update({'Health':health[1]})
-    #         power_on=re.search("PowerState: (\w+)", h)
-    #         if power_on:
-    #             server_status.update({'PowerState': power_on[1]})
-    #
-    #         ##{'Health': 'OK', 'PowerState': 'Off'}
-    #
-    #     #verifying against golden template
-    #
-    #     files_processing(temp, passed, step='golden', ip=host)
-    #     cleantemp(temp)
-    # writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
-
-    ###########offline run
-    server_status={'Health': 'OK', 'PowerState': 'Off'}
-    files_processing(os.getcwd(), os.getcwd(), server_status, ip='0.0.0.0')
-    writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
-#per server files processing
 def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
     counter = 0
     for inputfile in os.listdir(inputdir):
@@ -314,10 +385,6 @@ def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
                 counter += 1
     #last execution block
                 print('{} done. Processed {}, files'.format(service_tag, counter))
-    #print('Summary', summary)
-    #implement whole report building from summary
-            # reportfile.close()
-            # sendrep(sysserial)
 
 def report_analyze(currep):
     result = {}
