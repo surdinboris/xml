@@ -145,7 +145,7 @@ def getdata(xml,classname='', name=''):
 
 
 def main(argv):
-    cancel_id = None
+
     #helpers
     def print_to_gui( txtstr):
         _texbox.config(state='normal')
@@ -169,6 +169,7 @@ def main(argv):
     retrieveinitial = IntVar(value=0)
     applygolden = IntVar(value=0)
     collectfinal = IntVar(value=1)
+    spec_ip= None
     #telad_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
     liveperson_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "liveperson.gif")))
     _root.title('Liveperson dell inventory tool')
@@ -189,6 +190,7 @@ def main(argv):
     #options
     _optionsframe = tk.LabelFrame(_mainframe, text='Network run options')
     _optionsframe.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
+    #_ip = Text(_optionsframe, textvariable = spec_ip, height=2, width=10, text='Specific ip (optional)')
 
     _retrieveinitial = Checkbutton(_optionsframe, text="Initial inventory", variable=retrieveinitial)
     _retrieveinitial.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
@@ -216,9 +218,10 @@ def main(argv):
                                     command = lambda: start('offline'))
     _startofflinebutton.grid(row=1, padx=3, pady=3, column=0, sticky=(W, N))
 
-    _stopbutton = tk.Button(_testingframe, text='Stop execution', width=20, height=2,
-                                    command=lambda: start('stop'))
-    _stopbutton.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
+    #to be implemented
+    # _stopbutton = tk.Button(_testingframe, text='Stop execution', width=20, height=2,
+    #                                 command=lambda: start('stop'))
+    # _stopbutton.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
 
     buttons = [_startnetbutton,_startofflinebutton]
 
@@ -226,7 +229,7 @@ def main(argv):
 
     def start(mode):
         disbutt('disabled')
-        print_to_gui('Test started in {}'.format(mode))
+        print_to_gui('Test started in {} mode '.format(mode))
         # fallbacks - to current workdir
         temp = os.path.join(os.getcwd(), 'temp')
         arrived = os.path.join(os.getcwd(), 'arrived')
@@ -240,9 +243,11 @@ def main(argv):
         if mode == 'network':
             #########Network run
             # retrieving hosts information
+            if spec_ip:
+                print_to_gui('Special ip {}'.format(spec_ip))
             def nmapscan():
                 nm = nmap.PortScanner()
-                nm.scan('10.48.228.1-40', '22').sort(key=lambda x: x[-2])
+                nm.scan('10.48.228.1-40', '22')
                 print("Found hosts:")
                 for host in nm.all_hosts():
                     print('-' * 100)
@@ -273,26 +278,30 @@ def main(argv):
                 print("Connecting to host {}".format(host))
                 cleantemp(temp)
                 ####first part - disabled performed via operator's script
-                if retrieveinitial:
+                if retrieveinitial.get() == 1:
+                    print_to_gui('- Collect arrived inventory')
                     #get orig data via racadm - disabled implemented at the earlier stage:
                     #os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
                                     "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
-
+                    print_to_gui('- Collect arrived configuration')
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
                                     "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
                     files_processing(temp, arrived, step='arrived')
                     cleantemp(temp)
-                if applygolden:
+                if applygolden.get()  == 1:
+                    print_to_gui('- Applying Golden configuration')
                     #applying golden template
                     print("Applying Golden configuration, please wait....")
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
                                     "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
                                     "graceful", "-w", "600", "-s", "on"])
-                if collectfinal:
+                if collectfinal.get()  == 1:
+                    print_to_gui('- Collect final inventory')
                     # getting data after golden termplate enrollment:
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
                                     "{}".format(os.path.join(temp, "hw_passed.xml"))])
+                    print_to_gui('- Collect final configuration')
                     subprocess.run(
                         ["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
                          "{}".format(os.path.join(temp, "conf_passed.xml"))])
