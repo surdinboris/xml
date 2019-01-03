@@ -170,6 +170,7 @@ def main(argv):
     applygolden = IntVar(value=0)
     collectfinal = IntVar(value=1)
     spec_ip = StringVar()
+    spec_pwd = StringVar()
     #telad_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
     liveperson_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "liveperson.gif")))
     _root.title('Liveperson dell inventory tool')
@@ -198,14 +199,20 @@ def main(argv):
     _ipaddress = Entry(_optionsframe, textvariable= spec_ip)
     _ipaddress.grid(row=0, padx=3, pady=3, column=1, sticky=(E, N))
 
+    _pwdText = Label(_optionsframe, text='Pass:')
+    _pwdText.grid(row=1, padx=3, pady=3, column=0, sticky=(E, N))
+
+    _password = Entry(_optionsframe, textvariable=spec_pwd)
+    _password.grid(row=1, padx=3, pady=3, column=1, sticky=(E, N))
+
     _retrieveinitial = Checkbutton(_optionsframe, text="Initial inventory", variable=retrieveinitial)
-    _retrieveinitial.grid(row=1, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
+    _retrieveinitial.grid(row=2, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
     _applygolden = Checkbutton(_optionsframe, text="Apply golden settings", variable=applygolden)
-    _applygolden.grid(row=2, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
+    _applygolden.grid(row=3, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
     _collectfinal= Checkbutton(_optionsframe, text="Collect final report", variable=collectfinal)
-    _collectfinal.grid(row=3, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
+    _collectfinal.grid(row=4, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
     # testing part
     _testingframe = tk.LabelFrame(_mainframe, text='Testing')
@@ -286,37 +293,49 @@ def main(argv):
                 print("Connecting to host {}".format(host))
                 cleantemp(temp)
                 ####first part - disabled performed via operator's script
+                password = "wildcat1"
+                if len(spec_pwd.get()) > 0:
+                    password = spec_pwd.get()
+
                 if retrieveinitial.get() == 1:
+                    #changing default password tio calvin to collect arrived inv
+                    password= "calvin"
+                    if len(spec_pwd.get()) > 0:
+                        password = spec_pwd.get()
+
                     print_to_gui('- Collect arrived inventory')
                     #get orig data via racadm - disabled implemented at the earlier stage:
                     #os.system("racadm -r {host} -u root -p calvin hwinventory export -f {fn}".format(host,os.path.join(temp,"hw_orig_tmp.xml")))
-                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "hwinventory", "export", "-f",
+
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "hwinventory", "export", "-f",
                                     "{}".format(os.path.join(temp,"hw_orig_tmp.xml"))])
                     print_to_gui('- Collect arrived configuration')
-                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "calvin", "--nocertwarn", "get", "-t", "xml", "-f",
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "get", "-t", "xml", "-f",
                                     "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
                     files_processing(temp, arrived, step='arrived')
                     cleantemp(temp)
-                if applygolden.get()  == 1:
+
+                if applygolden.get() == 1:
                     print_to_gui('- Applying Golden configuration')
                     #applying golden template
                     print("Applying Golden configuration, please wait....")
-                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "set", "-f",
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "set", "-f",
                                     "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
                                     "graceful", "-w", "600", "-s", "on"])
                 if collectfinal.get()  == 1:
+
                     print_to_gui('- Collect final inventory')
                     # getting data after golden termplate enrollment:
-                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "hwinventory", "export", "-f",
+                    subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "hwinventory", "export", "-f",
                                     "{}".format(os.path.join(temp, "hw_passed.xml"))])
                     print_to_gui('- Collect final configuration')
                     subprocess.run(
-                        ["racadm", "-r", host, "-u", "root", "-p", "wildcat1", "--nocertwarn", "get", "-t", "xml", "-f",
+                        ["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "get", "-t", "xml", "-f",
                          "{}".format(os.path.join(temp, "conf_passed.xml"))])
 
                 ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
                 hwinfo = subprocess.run(
-                    ["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", "wildcat1", "-s", "y"],
+                    ["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", password, "-s", "y"],
                     stdout=subprocess.PIPE)
                 hwinfo = hwinfo.stdout.decode().split("\n")
                 server_status = {'Health': None, 'PowerState': None}
