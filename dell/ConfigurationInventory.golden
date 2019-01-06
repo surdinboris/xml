@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WN2S2" TimeStamp="Mon Dec 31 07:09:26 2018">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VP2S2" TimeStamp="Sun Jan  6 14:54:05 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -14,13 +14,13 @@
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
-<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
+<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">OS System Name</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
- <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
+ <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute>
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute>
  <Attribute Name="ThermalSettings.1#FanSpeedOffset">Max Fan Speed</Attribute>
@@ -30,16 +30,16 @@
  <!-- <Attribute Name="ServerPwr.1#PowerCapValue">484</Attribute> -->
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute>
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute>
- <Attribute Name="ServerPwr.1#PSRapidOn">Enabled</Attribute>
+ <Attribute Name="ServerPwr.1#PSRapidOn">Disabled</Attribute>
  <Attribute Name="ServerPwr.1#RapidOnPrimaryPSU">PSU1</Attribute>
  <!-- <Attribute Name="ServerTopology.1#DataCenterName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#AisleName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#RackName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#RackSlot">1</Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#RoomName"></Attribute> -->
- <!-- <Attribute Name="ServerOS.1#HostName">123456</Attribute> -->
+ <!-- <Attribute Name="ServerOS.1#HostName">R33-L2</Attribute> -->
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute> -->
- <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute>
+ <Attribute Name="ChassisPwrState.1#ChassisLEDState">Blinking</Attribute>
  <Attribute Name="RepositoryUpdate"></Attribute>
 </Component>
 
@@ -412,7 +412,7 @@
  <Attribute Name="NIC.1#Speed">1000</Attribute>
  <Attribute Name="NIC.1#Duplex">Full</Attribute>
  <Attribute Name="NIC.1#MTU">1500</Attribute>
- <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1WN2S2</Attribute> -->
+ <!-- <Attribute Name="NIC.1#DNSRacName">R33-L2</Attribute> -->
  <Attribute Name="NIC.1#DNSRegister">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanEnable">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanPriority">0</Attribute>
@@ -429,8 +429,8 @@
  <Attribute Name="IPv6.1#AutoConfig">Enabled</Attribute>
  <!-- <Attribute Name="NICStatic.1#DNSDomainName"></Attribute> -->
  <Attribute Name="NICStatic.1#DNSDomainFromDHCP">Disabled</Attribute>
- <!-- <Attribute Name="IPv4Static.1#Address">192.168.0.120</Attribute> -->
- <Attribute Name="IPv4Static.1#Netmask">255.255.255.0</Attribute>
+ <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.2</Attribute> -->
+ <Attribute Name="IPv4Static.1#Netmask">255.255.224.0</Attribute>
  <Attribute Name="IPv4Static.1#Gateway">10.48.228.254</Attribute>
  <Attribute Name="IPv4Static.1#DNS1">0.0.0.0</Attribute>
  <Attribute Name="IPv4Static.1#DNS2">0.0.0.0</Attribute>
@@ -444,8 +444,8 @@
  <Attribute Name="SNMPAlert.1#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.1#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.1#SNMPv3Username"></Attribute>
- <Attribute Name="SNMPAlert.2#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.2#SNMPv3Username"></Attribute>
+ <Attribute Name="SNMPAlert.2#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.2#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.3#SNMPv3Username"></Attribute>
  <Attribute Name="SNMPAlert.3#Destination">0.0.0.0</Attribute>
@@ -1709,8 +1709,8 @@
     <Attribute Name="BlnkLeds">0</Attribute>
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
     <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:31</Attribute> -->
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:31</Attribute> -->
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:1C:09</Attribute> -->
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:1C:09</Attribute> -->
     <Attribute Name="VirtualizationMode">SRIOV</Attribute>
     <Attribute Name="LegacyBootProto">PXE</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
@@ -1752,8 +1752,8 @@
     <Attribute Name="BlnkLeds">0</Attribute>
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
     <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:33</Attribute> -->
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:33</Attribute> -->
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:1C:0B</Attribute> -->
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:1C:0B</Attribute> -->
     <Attribute Name="VirtualizationMode">SRIOV</Attribute>
     <Attribute Name="LegacyBootProto">PXE</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
@@ -2039,7 +2039,7 @@
     <Attribute Name="NmiButton">Disabled</Attribute>
     <Attribute Name="AcPwrRcvry">Last</Attribute>
     <Attribute Name="AcPwrRcvryDelay">Immediate</Attribute>
-    <!-- <Attribute Name="AcPwrRcvryUserDelay">240</Attribute> -->
+    <!-- <Attribute Name="AcPwrRcvryUserDelay">30462</Attribute> -->
     <Attribute Name="UefiVariableAccess">Standard</Attribute>
     <Attribute Name="SecureBoot">Disabled</Attribute>
     <Attribute Name="SecureBootPolicy">Standard</Attribute>

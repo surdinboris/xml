@@ -349,15 +349,16 @@ def main(argv):
                 # verifying against golden template
                 files_processing(temp, passed, server_status, step='golden', ip=host)
                 cleantemp(temp)
-            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'), summary)
+            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'))
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+
 
         elif mode == 'offline':
             # offline run
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
             server_status={'Health': 'OK', 'PowerState': 'Off'}
             files_processing(os.path.join(os.getcwd(),"offline"), os.path.join(os.getcwd(),"offline"), server_status, ip='0.0.0.0')
-            writesummary(os.path.join(os.getcwd(),"offline", 'summary_report.xlsx'), summary)
+            writesummary(os.path.join(os.getcwd(),"offline", 'summary_report.xlsx'))
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
 
         disbutt('normal')
@@ -498,7 +499,8 @@ def unpack(latest_file):
                 if os.path.splitext(f)[1] == '.xml':
                     return(os.path.join(epath,f))
 
-def writesummary(report_file_name, summary):
+def writesummary(report_file_name):
+    global summary
 
     maxwidth = {}
     # creating xls file
@@ -688,6 +690,7 @@ def writesummary(report_file_name, summary):
     #print('maxcoords track',maxheight, ind)
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+    summary={}
     workbook.close()
 
 def writetoxlsx(report_file_name, cur_report):
