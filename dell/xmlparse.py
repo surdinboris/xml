@@ -58,7 +58,7 @@ hw_collect.append({'displayname': 'PSU P/Ns', 'classname': 'DCIM_PowerSupplyView
 hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'PSU model', 'classname': 'DCIM_PowerSupplyView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
-
+hw_collect.append({'displayname': 'NIC status', 'classname': 'DCIM_NICView', 'name': 'LinkSpeed', 'excluded_for_validation': 0})
 
 #dynamic_collect.update({"Disk.Bay.6:Enclosure.Internal.0-1:RAID.Integrated.1-1": ["RAIDHotSpareStatus"]})
 
