@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VT2S2" TimeStamp="Thu Jan  3 14:05:49 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VT2S2" TimeStamp="Tue Jan 15 14:09:40 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -14,7 +14,7 @@
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
-<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
+<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">OS System Name</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
@@ -27,10 +27,10 @@
  <Attribute Name="ThermalSettings.1#MinimumFanSpeed">255</Attribute>
  <Attribute Name="ThermalSettings.1#ThirdPartyPCIFanResponse">Enabled</Attribute>
  <Attribute Name="ServerPwr.1#PowerCapSetting">Disabled</Attribute>
- <!-- <Attribute Name="ServerPwr.1#PowerCapValue">185</Attribute> -->
+ <!-- <Attribute Name="ServerPwr.1#PowerCapValue">484</Attribute> -->
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute>
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute>
- <Attribute Name="ServerPwr.1#PSRapidOn">Enabled</Attribute>
+ <Attribute Name="ServerPwr.1#PSRapidOn">Disabled</Attribute>
  <Attribute Name="ServerPwr.1#RapidOnPrimaryPSU">PSU1</Attribute>
  <!-- <Attribute Name="ServerTopology.1#DataCenterName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#AisleName"></Attribute> -->
@@ -412,7 +412,7 @@
  <Attribute Name="NIC.1#Speed">1000</Attribute>
  <Attribute Name="NIC.1#Duplex">Full</Attribute>
  <Attribute Name="NIC.1#MTU">1500</Attribute>
- <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1VT2S2</Attribute> -->
+ <!-- <Attribute Name="NIC.1#DNSRacName">R33-L18</Attribute> -->
  <Attribute Name="NIC.1#DNSRegister">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanEnable">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanPriority">0</Attribute>
@@ -430,7 +430,7 @@
  <!-- <Attribute Name="NICStatic.1#DNSDomainName"></Attribute> -->
  <Attribute Name="NICStatic.1#DNSDomainFromDHCP">Disabled</Attribute>
  <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.18</Attribute> -->
- <Attribute Name="IPv4Static.1#Netmask">255.255.255.0</Attribute>
+ <Attribute Name="IPv4Static.1#Netmask">255.255.224.0</Attribute>
  <Attribute Name="IPv4Static.1#Gateway">10.48.228.254</Attribute>
  <Attribute Name="IPv4Static.1#DNS1">0.0.0.0</Attribute>
  <Attribute Name="IPv4Static.1#DNS2">0.0.0.0</Attribute>
@@ -444,8 +444,8 @@
  <Attribute Name="SNMPAlert.1#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.1#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.1#SNMPv3Username"></Attribute>
- <Attribute Name="SNMPAlert.2#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.2#SNMPv3Username"></Attribute>
+ <Attribute Name="SNMPAlert.2#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.2#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.3#SNMPv3Username"></Attribute>
  <Attribute Name="SNMPAlert.3#Destination">0.0.0.0</Attribute>
@@ -1649,7 +1649,6 @@
         <Attribute Name="RAIDaction">Update</Attribute>
         <Attribute Name="LockStatus">Unlocked</Attribute>
         <Attribute Name="RAIDinitOperation">None</Attribute>
-        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute> -->
         <Attribute Name="DiskCachePolicy">Default</Attribute>
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute>
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute>
@@ -1748,6 +1747,49 @@
     <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
     <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
 </Component>
+<Component FQDD="NIC.Integrated.1-2-1">
+    <Attribute Name="BlnkLeds">0</Attribute>
+    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:94:83</Attribute> -->
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:94:83</Attribute> -->
+    <Attribute Name="VirtualizationMode">SRIOV</Attribute>
+    <Attribute Name="LegacyBootProto">PXE</Attribute>
+    <Attribute Name="WakeOnLan">Disabled</Attribute>
+    <!-- <Attribute Name="VLanId">0</Attribute> -->
+    <Attribute Name="NumberVFAdvertised">64</Attribute>
+    <!-- <Attribute Name="FirstFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="FirstFCoEBootTargetLUN">0</Attribute> -->
+    <!-- <Attribute Name="FirstFCoEFCFVLANID">1</Attribute> -->
+    <Attribute Name="BootOrderFirstFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderSecondFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderThirdFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderFourthFCoETarget">0</Attribute>
+    <Attribute Name="INTEL_SecondFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_SecondFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_SecondFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="INTEL_FourthFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_FourthFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_FourthFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
+    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
+    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
+    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
+    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
+</Component>
 <Component FQDD="NIC.Integrated.1-3-1">
     <Attribute Name="BlnkLeds">0</Attribute>
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
@@ -1778,49 +1820,6 @@
     <Attribute Name="LnkSpeed">AutoNeg</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
     <!-- <Attribute Name="VLanId">0</Attribute> -->
-    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
-    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
-    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
-    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
-    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
-</Component>
-<Component FQDD="NIC.Integrated.1-2-1">
-    <Attribute Name="BlnkLeds">0</Attribute>
-    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:94:83</Attribute> -->
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:94:83</Attribute> -->
-    <Attribute Name="VirtualizationMode">SRIOV</Attribute>
-    <Attribute Name="LegacyBootProto">PXE</Attribute>
-    <Attribute Name="WakeOnLan">Disabled</Attribute>
-    <!-- <Attribute Name="VLanId">0</Attribute> -->
-    <Attribute Name="NumberVFAdvertised">64</Attribute>
-    <!-- <Attribute Name="FirstFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="FirstFCoEBootTargetLUN">0</Attribute> -->
-    <!-- <Attribute Name="FirstFCoEFCFVLANID">1</Attribute> -->
-    <Attribute Name="BootOrderFirstFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderSecondFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderThirdFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderFourthFCoETarget">0</Attribute>
-    <Attribute Name="INTEL_SecondFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_SecondFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_SecondFCoEFCFVLANID">1</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEFCFVLANID">1</Attribute>
-    <Attribute Name="INTEL_FourthFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_FourthFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_FourthFCoEFCFVLANID">1</Attribute>
     <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
     <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
     <Attribute Name="ChapAuthEnable">Disabled</Attribute>
@@ -2039,7 +2038,7 @@
     <Attribute Name="NmiButton">Disabled</Attribute>
     <Attribute Name="AcPwrRcvry">Last</Attribute>
     <Attribute Name="AcPwrRcvryDelay">Immediate</Attribute>
-    <!-- <Attribute Name="AcPwrRcvryUserDelay">0</Attribute> -->
+    <!-- <Attribute Name="AcPwrRcvryUserDelay">30462</Attribute> -->
     <Attribute Name="UefiVariableAccess">Standard</Attribute>
     <Attribute Name="SecureBoot">Disabled</Attribute>
     <Attribute Name="SecureBootPolicy">Standard</Attribute>

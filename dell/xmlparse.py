@@ -356,7 +356,7 @@ def main(argv):
         elif mode == 'offline':
             # offline run
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
-            server_status={'Health': 'OK', 'PowerState': 'Off'}
+            server_status={'Health': 'N/A', 'PowerState': 'N/A'}
             files_processing(os.path.join(os.getcwd(),"offline"), os.path.join(os.getcwd(),"offline"), server_status, ip='0.0.0.0')
             writesummary(os.path.join(os.getcwd(),"offline", 'summary_report.xlsx'))
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
@@ -604,7 +604,6 @@ def writesummary(report_file_name):
                         elif value == 2:
                             hwfamily_pass = 2
                             if hwfamily == "ServiceTag":
-                                #correction= correction+1
                                 # writing head
                                 if maxheight == 2:
                                     # writing value
@@ -612,7 +611,18 @@ def writesummary(report_file_name):
                                     worksheet.write(coords, toStr(hwfamily, coords), header_cell)
                                 coords = '{}{}'.format(colnum_string(ind),maxheight)
                                 worksheet.write(coords, toStr(key, coords), black_cell)
-                                worksheet.write_comment(coords, ip)
+
+                                #appending ip - making one more column
+                                # worksheet.write_comment(coords, ip)
+                                ind = ind+1
+                                correction = correction+1
+                                if maxheight == 2:
+                                    # writing value
+                                    coords = '{}1'.format(colnum_string(ind))
+                                    worksheet.write(coords, toStr('System IP', coords), header_cell)
+                                coords = '{}{}'.format(colnum_string(ind), maxheight)
+                                worksheet.write(coords, toStr(ip,coords),black_cell)
+
                                 #making space for dynamic attr insertion
                                 corrflag = False
                             elif hwfamily == "HostName":

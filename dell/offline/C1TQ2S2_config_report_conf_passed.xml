@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TQ2S2" TimeStamp="Thu Jan  3 14:18:32 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TQ2S2" TimeStamp="Tue Jan 15 14:26:41 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -14,13 +14,13 @@
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
-<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
+<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">OS System Name</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
- <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
+ <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute>
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute>
  <Attribute Name="ThermalSettings.1#FanSpeedOffset">Max Fan Speed</Attribute>
@@ -30,7 +30,7 @@
  <!-- <Attribute Name="ServerPwr.1#PowerCapValue">484</Attribute> -->
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute>
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute>
- <Attribute Name="ServerPwr.1#PSRapidOn">Enabled</Attribute>
+ <Attribute Name="ServerPwr.1#PSRapidOn">Disabled</Attribute>
  <Attribute Name="ServerPwr.1#RapidOnPrimaryPSU">PSU1</Attribute>
  <!-- <Attribute Name="ServerTopology.1#DataCenterName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#AisleName"></Attribute> -->
@@ -412,7 +412,7 @@
  <Attribute Name="NIC.1#Speed">1000</Attribute>
  <Attribute Name="NIC.1#Duplex">Full</Attribute>
  <Attribute Name="NIC.1#MTU">1500</Attribute>
- <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1TQ2S2</Attribute> -->
+ <!-- <Attribute Name="NIC.1#DNSRacName">R33-L25</Attribute> -->
  <Attribute Name="NIC.1#DNSRegister">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanEnable">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanPriority">0</Attribute>
@@ -430,7 +430,7 @@
  <!-- <Attribute Name="NICStatic.1#DNSDomainName"></Attribute> -->
  <Attribute Name="NICStatic.1#DNSDomainFromDHCP">Disabled</Attribute>
  <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.25</Attribute> -->
- <Attribute Name="IPv4Static.1#Netmask">255.255.255.0</Attribute>
+ <Attribute Name="IPv4Static.1#Netmask">255.255.224.0</Attribute>
  <Attribute Name="IPv4Static.1#Gateway">10.48.228.254</Attribute>
  <Attribute Name="IPv4Static.1#DNS1">0.0.0.0</Attribute>
  <Attribute Name="IPv4Static.1#DNS2">0.0.0.0</Attribute>
@@ -1649,7 +1649,6 @@
         <Attribute Name="RAIDaction">Update</Attribute>
         <Attribute Name="LockStatus">Unlocked</Attribute>
         <Attribute Name="RAIDinitOperation">None</Attribute>
-        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute> -->
         <Attribute Name="DiskCachePolicy">Default</Attribute>
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute>
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute>
@@ -1705,52 +1704,6 @@
     <Attribute Name="RAIDremoveControllerKey">False</Attribute>
 </Component>
 
-<Component FQDD="NIC.Integrated.1-3-1">
-    <Attribute Name="BlnkLeds">0</Attribute>
-    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
-    <Attribute Name="LegacyBootProto">NONE</Attribute>
-    <Attribute Name="LnkSpeed">AutoNeg</Attribute>
-    <Attribute Name="WakeOnLan">Disabled</Attribute>
-    <!-- <Attribute Name="VLanId">0</Attribute> -->
-    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
-    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
-    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
-    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
-    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
-</Component>
-<Component FQDD="NIC.Integrated.1-4-1">
-    <Attribute Name="BlnkLeds">0</Attribute>
-    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
-    <Attribute Name="LegacyBootProto">NONE</Attribute>
-    <Attribute Name="LnkSpeed">AutoNeg</Attribute>
-    <Attribute Name="WakeOnLan">Disabled</Attribute>
-    <!-- <Attribute Name="VLanId">0</Attribute> -->
-    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
-    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
-    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
-    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
-    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
-</Component>
 <Component FQDD="NIC.Integrated.1-1-1">
     <Attribute Name="BlnkLeds">0</Attribute>
     <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
@@ -1821,6 +1774,52 @@
     <Attribute Name="INTEL_FourthFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
     <Attribute Name="INTEL_FourthFCoEBootTargetLUN">0</Attribute>
     <Attribute Name="INTEL_FourthFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
+    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
+    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
+    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
+    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
+</Component>
+<Component FQDD="NIC.Integrated.1-3-1">
+    <Attribute Name="BlnkLeds">0</Attribute>
+    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
+    <Attribute Name="LegacyBootProto">NONE</Attribute>
+    <Attribute Name="LnkSpeed">AutoNeg</Attribute>
+    <Attribute Name="WakeOnLan">Disabled</Attribute>
+    <!-- <Attribute Name="VLanId">0</Attribute> -->
+    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
+    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
+    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
+    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
+    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
+</Component>
+<Component FQDD="NIC.Integrated.1-4-1">
+    <Attribute Name="BlnkLeds">0</Attribute>
+    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
+    <Attribute Name="LegacyBootProto">NONE</Attribute>
+    <Attribute Name="LnkSpeed">AutoNeg</Attribute>
+    <Attribute Name="WakeOnLan">Disabled</Attribute>
+    <!-- <Attribute Name="VLanId">0</Attribute> -->
     <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
     <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
     <Attribute Name="ChapAuthEnable">Disabled</Attribute>

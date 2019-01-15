@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WV2S2" TimeStamp="Thu Jan  3 14:11:58 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WV2S2" TimeStamp="Tue Jan 15 14:18:24 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -14,7 +14,7 @@
  <Attribute Name="LCAttributes.1#AutoBackup">Disabled</Attribute>
 </Component>
 
-<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">Service Tag</Attribute>
+<Component FQDD="System.Embedded.1"> <Attribute Name="LCD.1#Configuration">OS System Name</Attribute>
  <!-- <Attribute Name="LCD.1#UserDefinedString"></Attribute> -->
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
@@ -27,10 +27,10 @@
  <Attribute Name="ThermalSettings.1#MinimumFanSpeed">255</Attribute>
  <Attribute Name="ThermalSettings.1#ThirdPartyPCIFanResponse">Enabled</Attribute>
  <Attribute Name="ServerPwr.1#PowerCapSetting">Disabled</Attribute>
- <!-- <Attribute Name="ServerPwr.1#PowerCapValue">185</Attribute> -->
+ <!-- <Attribute Name="ServerPwr.1#PowerCapValue">484</Attribute> -->
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute>
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute>
- <Attribute Name="ServerPwr.1#PSRapidOn">Enabled</Attribute>
+ <Attribute Name="ServerPwr.1#PSRapidOn">Disabled</Attribute>
  <Attribute Name="ServerPwr.1#RapidOnPrimaryPSU">PSU1</Attribute>
  <!-- <Attribute Name="ServerTopology.1#DataCenterName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#AisleName"></Attribute> -->
@@ -412,7 +412,7 @@
  <Attribute Name="NIC.1#Speed">1000</Attribute>
  <Attribute Name="NIC.1#Duplex">Full</Attribute>
  <Attribute Name="NIC.1#MTU">1500</Attribute>
- <!-- <Attribute Name="NIC.1#DNSRacName">idrac-C1WV2S2</Attribute> -->
+ <!-- <Attribute Name="NIC.1#DNSRacName">R33-L22</Attribute> -->
  <Attribute Name="NIC.1#DNSRegister">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanEnable">Disabled</Attribute>
  <Attribute Name="NIC.1#VLanPriority">0</Attribute>
@@ -430,7 +430,7 @@
  <!-- <Attribute Name="NICStatic.1#DNSDomainName"></Attribute> -->
  <Attribute Name="NICStatic.1#DNSDomainFromDHCP">Disabled</Attribute>
  <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.22</Attribute> -->
- <Attribute Name="IPv4Static.1#Netmask">255.255.255.0</Attribute>
+ <Attribute Name="IPv4Static.1#Netmask">255.255.224.0</Attribute>
  <Attribute Name="IPv4Static.1#Gateway">10.48.228.254</Attribute>
  <Attribute Name="IPv4Static.1#DNS1">0.0.0.0</Attribute>
  <Attribute Name="IPv4Static.1#DNS2">0.0.0.0</Attribute>
@@ -2038,7 +2038,7 @@
     <Attribute Name="NmiButton">Disabled</Attribute>
     <Attribute Name="AcPwrRcvry">Last</Attribute>
     <Attribute Name="AcPwrRcvryDelay">Immediate</Attribute>
-    <!-- <Attribute Name="AcPwrRcvryUserDelay">0</Attribute> -->
+    <!-- <Attribute Name="AcPwrRcvryUserDelay">30462</Attribute> -->
     <Attribute Name="UefiVariableAccess">Standard</Attribute>
     <Attribute Name="SecureBoot">Disabled</Attribute>
     <Attribute Name="SecureBootPolicy">Standard</Attribute>
