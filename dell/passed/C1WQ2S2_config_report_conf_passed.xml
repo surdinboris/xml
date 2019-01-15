@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WQ2S2" TimeStamp="Wed Jan  2 06:44:34 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WQ2S2" TimeStamp="Thu Jan  3 14:46:12 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -37,9 +37,9 @@
  <!-- <Attribute Name="ServerTopology.1#RackName"></Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#RackSlot">1</Attribute> -->
  <!-- <Attribute Name="ServerTopology.1#RoomName"></Attribute> -->
- <!-- <Attribute Name="ServerOS.1#HostName">R33-L1</Attribute> -->
+ <!-- <Attribute Name="ServerOS.1#HostName">R33-L3</Attribute> -->
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute> -->
- <Attribute Name="ChassisPwrState.1#ChassisLEDState">Blinking</Attribute>
+ <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute>
  <Attribute Name="RepositoryUpdate"></Attribute>
 </Component>
 
@@ -429,7 +429,7 @@
  <Attribute Name="IPv6.1#AutoConfig">Enabled</Attribute>
  <!-- <Attribute Name="NICStatic.1#DNSDomainName"></Attribute> -->
  <Attribute Name="NICStatic.1#DNSDomainFromDHCP">Disabled</Attribute>
- <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.1</Attribute> -->
+ <!-- <Attribute Name="IPv4Static.1#Address">10.48.228.3</Attribute> -->
  <Attribute Name="IPv4Static.1#Netmask">255.255.255.0</Attribute>
  <Attribute Name="IPv4Static.1#Gateway">10.48.228.254</Attribute>
  <Attribute Name="IPv4Static.1#DNS1">0.0.0.0</Attribute>
@@ -2038,7 +2038,7 @@
     <Attribute Name="NmiButton">Disabled</Attribute>
     <Attribute Name="AcPwrRcvry">Last</Attribute>
     <Attribute Name="AcPwrRcvryDelay">Immediate</Attribute>
-    <!-- <Attribute Name="AcPwrRcvryUserDelay">0</Attribute> -->
+    <!-- <Attribute Name="AcPwrRcvryUserDelay">34558</Attribute> -->
     <Attribute Name="UefiVariableAccess">Standard</Attribute>
     <Attribute Name="SecureBoot">Disabled</Attribute>
     <Attribute Name="SecureBootPolicy">Standard</Attribute>

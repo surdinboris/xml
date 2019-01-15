@@ -350,7 +350,7 @@ def main(argv):
                 files_processing(temp, passed, server_status, step='golden', ip=host)
                 cleantemp(temp)
             writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'))
-            print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+            print_to_gui(' - Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
 
 
         elif mode == 'offline':

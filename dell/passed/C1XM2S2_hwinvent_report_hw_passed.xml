@@ -3552,8 +3552,8 @@
 	</Component>
 	<Component Classname="DCIM_PowerSupplyView" Key="PSU.Slot.1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190102124527.000000+000</VALUE>
-	     <DisplayValue>2019-01-02T12:45:27</DisplayValue>
+	     <VALUE>20190103195111.000000+000</VALUE>
+	     <DisplayValue>2019-01-03T19:51:11</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
 	     <VALUE>20190101170413.000000+000</VALUE>
@@ -3640,8 +3640,8 @@
 	</Component>
 	<Component Classname="DCIM_PowerSupplyView" Key="PSU.Slot.2">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190102124528.000000+000</VALUE>
-	     <DisplayValue>2019-01-02T12:45:28</DisplayValue>
+	     <VALUE>20190103195111.000000+000</VALUE>
+	     <DisplayValue>2019-01-03T19:51:11</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
 	     <VALUE>20190101170413.000000+000</VALUE>
@@ -4880,8 +4880,8 @@
 	</Component>
 	<Component Classname="DCIM_iDRACCardView" Key="iDRAC.Embedded.1-1#IDRACinfo">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190102124528.000000+000</VALUE>
-	     <DisplayValue>2019-01-02T12:45:28</DisplayValue>
+	     <VALUE>20190103195112.000000+000</VALUE>
+	     <DisplayValue>2019-01-03T19:51:12</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
 	     <VALUE>20190101170413.000000+000</VALUE>
