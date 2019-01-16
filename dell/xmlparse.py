@@ -5,10 +5,10 @@ import gzip
 import os
 import os.path
 import glob
-import sys, getopt
+#import sys, getopt
 import subprocess
 import shutil
-import re
+#import re
 import time
 import tkinter as tk
 import tkinter.scrolledtext as tkst
@@ -20,8 +20,6 @@ from IPy import IP
 # from email.mime.text import MIMEText
 # import datetime
 import xlsxwriter
-import xlrd, xlwt
-from xlutils.copy import copy as xl_copy
 
 import nmap
 #generator for AB style excell cells
@@ -236,9 +234,6 @@ def main(argv):
     # _stopbutton.grid(row=2, padx=3, pady=3, column=0, sticky=(W, N))
 
     buttons = [_startnetbutton,_startofflinebutton]
-
-
-
     def start(mode):
         disbutt('disabled')
         print_to_gui('Test started in {} mode '.format(mode))
@@ -252,6 +247,10 @@ def main(argv):
                 os.remove(os.path.join(temp, inputfile))
             if len(os.listdir(temp)) != 0:
                 raise FileExistsError('Clearing of temporary dir failed, please check!')
+        repname=os.path.join(os.getcwd(),'summary_'+time.strftime("%d%m%Y_%H-%M-%S", time.gmtime(time.time()))+'.xlsx')
+        workbook = xlsxwriter.Workbook(repname)
+        #prepairing summary report first
+        summary_report=workbook.add_worksheet('summary_report')
         if mode == 'network':
             #########Network run
             # retrieving hosts information
@@ -312,7 +311,7 @@ def main(argv):
                     print_to_gui('- Collect arrived configuration')
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "get", "-t", "xml", "-f",
                                     "{}".format(os.path.join(temp,"conf_orig.tmp.xml"))])
-                    files_processing(temp, arrived, step='arrived')
+                    files_processing(temp, arrived,workbook, step='arrived')
                     cleantemp(temp)
 
                 if applygolden.get() == 1:
@@ -348,11 +347,12 @@ def main(argv):
                 #         server_status.update({'PowerState': power_on[1]})
 
                 # verifying against golden template
-                files_processing(temp, passed, step='golden', ip=host)
+                files_processing(temp, passed, workbook, step='golden', ip=host)
                 cleantemp(temp)
-            writesummary(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
+
+            writesummary(workbook,summary_report)
             # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
-            print_to_gui(' - Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+            print_to_gui(' - Process finished. Please inspect {}'.format(repname))
 
 
         elif mode == 'offline':
@@ -360,15 +360,17 @@ def main(argv):
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
             #server_status={'Health': 'N/A', 'PowerState': 'N/A'}
             repsdir=os.path.join(os.getcwd(), "offline", "passed")
-            files_processing(repsdir, repsdir, ip= '0.0.0.0')
-            writesummary(os.path.join(repsdir, 'summary_report.xlsx'))
+            files_processing(repsdir, repsdir, workbook, ip= '0.0.0.0')
+            writesummary(workbook, summary_report)
             #
             # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
-            print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
+            print_to_gui('Process finished. Please inspect {}'.format(repname))
+        workbook.close()
         disbutt('normal')
     _root.mainloop()
 
-def files_processing(inputdir, outputdir, step=None, ip=None):
+def files_processing(inputdir, outputdir, workbook, step=None, ip=None):
+
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
@@ -403,7 +405,9 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
                 summary[service_tag].append({'ip': ip})
-                writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
+                # writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx',workbook)), cur_report)
+                writetoxlsx("{}_{}".format(service_tag, rep_type), cur_report, workbook)
+
                 counter += 1
                 print('Passed report for {} stored in {}'.format(service_tag, filename))
 
@@ -416,13 +420,15 @@ def files_processing(inputdir, outputdir, step=None, ip=None):
                 service_tag = cur_report['service_tag']
                 #report analysing
                 cur_report = report_analyze(cur_report)
+                rep_type = cur_report['rep_type']
                 try:
                     summary[service_tag]
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
                 summary[service_tag].append({'ip': ip})
-                writetoxlsx(report_file_name, cur_report)
+                #writetoxlsx(report_file_name, cur_report, workbook)
+                writetoxlsx("{}_{}".format(service_tag, rep_type), cur_report, workbook)
                 counter += 1
     #last execution block
                 print('{} done. Processed {}, files'.format(service_tag, counter))
@@ -503,12 +509,12 @@ def unpack(latest_file):
                 if os.path.splitext(f)[1] == '.xml':
                     return(os.path.join(epath,f))
 
-def writesummary(report_file_name):
+def writesummary(workbook,worksheet):
     global summary
 
     maxwidth = {}
     # creating xls file
-    workbook = xlsxwriter.Workbook(report_file_name)
+    #workbook = xlsxwriter.Workbook(report_file_name)
     # header
     header_cell = workbook.add_format()
     header_cell.set_bold()
@@ -526,7 +532,7 @@ def writesummary(report_file_name):
     orange_cell = workbook.add_format()
     orange_cell.set_font_color('orange')
     # create worksheet
-    worksheet = workbook.add_worksheet()
+    #worksheet = workbook.add_worksheet('summary_report')
 
     # helper to calculate and update width for column
     def toStr(val, coord):
@@ -545,7 +551,7 @@ def writesummary(report_file_name):
     maxheight = 2
     for result in summary:
         print('Summary  detected for {}'.format(result))
-        service_tag = result
+        ServiceTag = result
         conf_passed = 1
         conf_error = []
         hw_error = []
@@ -652,8 +658,6 @@ def writesummary(report_file_name):
                 worksheet.write_comment(coords, str(hw_error))
                 hw_error=[]
 
-
-
         #manual index correction before configuration appending
         ind = ind + 1
         if conf_passed == 1:
@@ -670,6 +674,21 @@ def writesummary(report_file_name):
             coords = '{}{}'.format(colnum_string(ind), maxheight)
             worksheet.write(coords, toStr('conf. fail', coords), red_cell)
             worksheet.write_comment(coords, str(conf_error))
+        #writing link to Hardware report
+        ind = ind + 1
+        if maxheight == 2:
+            coords = '{}1'.format(colnum_string(ind))
+            worksheet.write(coords, toStr('Hardware report', coords), header_cell)
+        coords = '{}{}'.format(colnum_string(ind), maxheight)
+        worksheet.write(coords, 'internal:\'{}_hwinvent_report\'!A1'.format(ServiceTag))
+        #writing link to Config report
+        ind = ind + 1
+        if maxheight == 2:
+            coords = '{}1'.format(colnum_string(ind))
+            worksheet.write(coords, toStr('Config report', coords), header_cell)
+        coords = '{}{}'.format(colnum_string(ind), maxheight)
+        worksheet.write(coords, 'internal:\'{}_config_report\'!A1'.format(ServiceTag))
+
         #appending server_status from Redfish
         # ind = ind + 1
         # if maxheight == 2:
@@ -705,9 +724,9 @@ def writesummary(report_file_name):
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     summary={}
-    workbook.close()
+    #workbook.close()
 
-def writetoxlsx(report_file_name, cur_report):
+def writetoxlsx(report_file_name, cur_report, workbook):
     rep_type = cur_report['rep_type']
     #overriding report type for
     geometry='rows'
@@ -721,7 +740,7 @@ def writetoxlsx(report_file_name, cur_report):
     maxwidth = {}
 
     #creating xls file
-    workbook = xlsxwriter.Workbook(report_file_name)
+
     #header
     header_cell = workbook.add_format()
     header_cell.set_bold()
@@ -739,7 +758,7 @@ def writetoxlsx(report_file_name, cur_report):
     orange_cell = workbook.add_format()
     orange_cell.set_font_color('orange')
     #create worksheet
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(report_file_name)
 
     #helper to calculate and update width for column
     def toStr(val, coord):
@@ -804,7 +823,7 @@ def writetoxlsx(report_file_name, cur_report):
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m, m), maxwidth[m])
-    workbook.close()
+    #workbook.close()
 
 #report constructor
 def report(xml):
