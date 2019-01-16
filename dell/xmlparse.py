@@ -20,8 +20,10 @@ from IPy import IP
 # from email.mime.text import MIMEText
 # import datetime
 import xlsxwriter
-import nmap
+import xlrd, xlwt
+from xlutils.copy import copy as xl_copy
 
+import nmap
 #generator for AB style excell cells
 def colnum_string(n):
     string = ""
@@ -56,10 +58,11 @@ hw_collect.append({'displayname': 'HDD fw', 'classname': 'DCIM_PhysicalDiskView'
 hw_collect.append({'displayname': 'HDD slot pop.', 'classname': 'DCIM_PhysicalDiskView', 'name': 'Slot', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU P/Ns', 'classname': 'DCIM_PowerSupplyView', 'name': 'PartNumber', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
-hw_collect.append({'displayname': 'PSU model', 'classname': 'DCIM_PowerSupplyView', 'name': 'Model', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PSU status', 'classname': 'DCIM_PowerSupplyView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'NIC status', 'classname': 'DCIM_NICView', 'name': 'LinkSpeed', 'excluded_for_validation': 0})
-
+hw_collect.append({'displayname': 'HealthStatus', 'classname': 'DCIM_SystemView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PowerState', 'classname': 'DCIM_SystemView', 'name': 'PowerState', 'excluded_for_validation': 0})
 #dynamic_collect.update({"Disk.Bay.6:Enclosure.Internal.0-1:RAID.Integrated.1-1": ["RAIDHotSpareStatus"]})
 
 #getroot helper for use directly from report (for configuration pasing)
@@ -76,10 +79,7 @@ def getroot(xml):
 # adding RAID data (from dynamic -commented- part
 def add_dynamic_attrs(FQDD, collect, xml):
     result={}
-    # tree = ET.parse(xml)
     tree = getroot(xml)
-    # for sc in tree.xpath('//SystemConfiguration'):
-    # for compon in sc.xpath('//Component'):
     for compon in tree.iter():
         if compon.get('FQDD') == FQDD:
             for ref in compon.getchildren():
@@ -101,7 +101,7 @@ def getdata(xml,classname='', name=''):
     def collect(inst, classnameattr):
         hwinventory = []
         for i in inst:
-            # gathering results example: Component Classname="DCIM_ControllerView
+            # gathering results. example: Component Classname="DCIM_ControllerView
             if i.attrib[classnameattr] == classname:
                 props = i.findall('PROPERTY')
                 for prop in props:
@@ -132,7 +132,7 @@ def getdata(xml,classname='', name=''):
 
         inst = root.findall('Component')
         for i in inst:
-            FQDD=i.attrib['FQDD']
+            FQDD = i.attrib['FQDD']
             # gathering results examle: FQDD="LifecycleController.Embedded.1
             props = i.findall('Attribute')
             for prop in props:
@@ -333,38 +333,42 @@ def main(argv):
                         ["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "get", "-t", "xml", "-f",
                          "{}".format(os.path.join(temp, "conf_passed.xml"))])
 
-                ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
-                hwinfo = subprocess.run(
-                    ["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", password, "-s", "y"],
-                    stdout=subprocess.PIPE)
-                hwinfo = hwinfo.stdout.decode().split("\n")
-                server_status = {'Health': None, 'PowerState': None}
-                for h in hwinfo:
-                    health = re.search("Status: {'Health': '(\w+)'.*}", h)
-                    if health:
-                        server_status.update({'Health': health[1]})
-                    power_on = re.search("PowerState: (\w+)", h)
-                    if power_on:
-                        server_status.update({'PowerState': power_on[1]})
+                # ##{'Health': 'OK', 'PowerState': 'Off'} or {'Health': None,'PowerState': None}
+                # hwinfo = subprocess.run(
+                #     ["python3.6", "GetSystemHWInventoryREDFISH.py", "-ip", host, "-u", "root", "-p", password, "-s", "y"],
+                #     stdout=subprocess.PIPE)
+                # hwinfo = hwinfo.stdout.decode().split("\n")
+                # server_status = {'Health': None, 'PowerState': None}
+                # for h in hwinfo:
+                #     health = re.search("Status: {'Health': '(\w+)'.*}", h)
+                #     if health:
+                #         server_status.update({'Health': health[1]})
+                #     power_on = re.search("PowerState: (\w+)", h)
+                #     if power_on:
+                #         server_status.update({'PowerState': power_on[1]})
+
                 # verifying against golden template
-                files_processing(temp, passed, server_status, step='golden', ip=host)
+                files_processing(temp, passed, step='golden', ip=host)
                 cleantemp(temp)
-            writesummary(os.path.join(os.getcwd(), 'summary_report.xlsx'))
+            writesummary(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
+            # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
             print_to_gui(' - Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
 
 
         elif mode == 'offline':
             # offline run
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
-            server_status={'Health': 'N/A', 'PowerState': 'N/A'}
-            files_processing(os.path.join(os.getcwd(),"offline"), os.path.join(os.getcwd(),"offline"), server_status, ip='0.0.0.0')
-            writesummary(os.path.join(os.getcwd(),"offline", 'summary_report.xlsx'))
+            #server_status={'Health': 'N/A', 'PowerState': 'N/A'}
+            repsdir=os.path.join(os.getcwd(), "offline", "passed")
+            files_processing(repsdir, repsdir, ip= '0.0.0.0')
+            writesummary(os.path.join(repsdir, 'summary_report.xlsx'))
+            #
+            # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
             print_to_gui('Process finished. Please inspect {}'.format(os.path.join(os.getcwd(), 'summary_report.xlsx')))
-
         disbutt('normal')
     _root.mainloop()
 
-def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
+def files_processing(inputdir, outputdir, step=None, ip=None):
     counter = 0
     for inputfile in os.listdir(inputdir):
         fn, ext = (os.path.splitext(inputfile))
@@ -398,7 +402,7 @@ def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-                summary[service_tag].append({'ip': ip, 'server_status': server_status})
+                summary[service_tag].append({'ip': ip})
                 writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx')), cur_report)
                 counter += 1
                 print('Passed report for {} stored in {}'.format(service_tag, filename))
@@ -417,7 +421,7 @@ def files_processing(inputdir, outputdir, server_status, step=None, ip=None):
                 except KeyError:
                     summary[service_tag] = []
                 summary[service_tag].append(cur_report)
-                summary[service_tag].append({'ip': ip, 'server_status': server_status})
+                summary[service_tag].append({'ip': ip})
                 writetoxlsx(report_file_name, cur_report)
                 counter += 1
     #last execution block
@@ -557,7 +561,7 @@ def writesummary(report_file_name):
                     reps.update({rep_type: res['report']})
             except KeyError:
                 ip = res['ip']
-                server_status = res['server_status']
+                # server_status = res['server_status']
 
     # #if rep_type == 'config_report':
         for ind, confsingle in enumerate(reps['config_report'], 0):
@@ -666,26 +670,26 @@ def writesummary(report_file_name):
             coords = '{}{}'.format(colnum_string(ind), maxheight)
             worksheet.write(coords, toStr('conf. fail', coords), red_cell)
             worksheet.write_comment(coords, str(conf_error))
-        #appending server_status
-        ind = ind + 1
-        if maxheight == 2:
-            coords = '{}1'.format(colnum_string(ind))
-            worksheet.write(coords, toStr('Health status', coords), header_cell)
-        coords = '{}{}'.format(colnum_string(ind), maxheight)
-        if server_status["Health"] == 'OK':
-            worksheet.write(coords, toStr(server_status["Health"], coords), green_cell)
-        else:
-            worksheet.write(coords, toStr(server_status["Health"], coords), red_cell)
-        #appending power status
-        ind = ind + 1
-        if maxheight == 2:
-            coords = '{}1'.format(colnum_string(ind))
-            worksheet.write(coords, toStr('Power status', coords), header_cell)
-        coords = '{}{}'.format(colnum_string(ind), maxheight)
-        if server_status["PowerState"] == 'On':
-            worksheet.write(coords, toStr(server_status["PowerState"], coords), green_cell)
-        else:
-            worksheet.write(coords, toStr(server_status["PowerState"], coords), red_cell)
+        #appending server_status from Redfish
+        # ind = ind + 1
+        # if maxheight == 2:
+        #     coords = '{}1'.format(colnum_string(ind))
+        #     worksheet.write(coords, toStr('Health status', coords), header_cell)
+        # coords = '{}{}'.format(colnum_string(ind), maxheight)
+        # if server_status["Health"] == 'OK':
+        #     worksheet.write(coords, toStr(server_status["Health"], coords), green_cell)
+        # else:
+        #     worksheet.write(coords, toStr(server_status["Health"], coords), red_cell)
+        # #appending power status
+        # ind = ind + 1
+        # if maxheight == 2:
+        #     coords = '{}1'.format(colnum_string(ind))
+        #     worksheet.write(coords, toStr('Power status', coords), header_cell)
+        # coords = '{}{}'.format(colnum_string(ind), maxheight)
+        # if server_status["PowerState"] == 'On':
+        #     worksheet.write(coords, toStr(server_status["PowerState"], coords), green_cell)
+        # else:
+        #     worksheet.write(coords, toStr(server_status["PowerState"], coords), red_cell)
 
         # # manual index correction before ip appending
         # ind = ind + 1
