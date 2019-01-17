@@ -240,7 +240,9 @@ def main(argv):
         # fallbacks - to current workdir
         temp = os.path.join(os.getcwd(), 'temp')
         arrived = os.path.join(os.getcwd(), 'arrived')
-        passed = os.path.join(os.getcwd(), 'passed')
+        xmldatadir=os.path.join(os.getcwd(), 'passed','testresults_'+time.strftime("%d%m%Y_%H-%M-%S", time.gmtime(time.time())))
+        os.mkdir(xmldatadir)
+        #xmldatadir  = os.path.join(repdirname,'summary_'+time.strftime("%d%m%Y_%H-%M-%S", time.gmtime(time.time())))
         def cleantemp(temp):
             for inputfile in os.listdir(temp):
                 print('clearing', os.path.join(temp, inputfile))
@@ -347,7 +349,7 @@ def main(argv):
                 #         server_status.update({'PowerState': power_on[1]})
 
                 # verifying against golden template
-                files_processing(temp, passed, workbook, step='golden', ip=host)
+                files_processing(temp, xmldatadir, workbook, step='golden', ip=host)
                 cleantemp(temp)
 
             writesummary(workbook,summary_report)
@@ -359,12 +361,12 @@ def main(argv):
             # offline run
             print_to_gui('Processing files in {}...'.format(os.path.abspath(os.getcwd())))
             #server_status={'Health': 'N/A', 'PowerState': 'N/A'}
-            repsdir=os.path.join(os.getcwd(), "offline", "passed")
+            repsdir=os.path.join(os.getcwd(), "offline")
             files_processing(repsdir, repsdir, workbook, ip= '0.0.0.0')
             writesummary(workbook, summary_report)
             #
             # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
-            print_to_gui('Process finished. Please inspect {}'.format(repname))
+            print_to_gui('Process finished. Servers raw data was saved in {}. Please inspect report {}'.format(repsdir, repname))
         workbook.close()
         disbutt('normal')
     _root.mainloop()
@@ -388,7 +390,7 @@ def files_processing(inputdir, outputdir, workbook, step=None, ip=None):
                 counter += 1
 
             elif step == 'golden':
-                report_file_name = os.path.join(outputdir, os.path.join(inputdir, inputfile)) + '_report.xlsx'
+                #report_file_name = os.path.join(outputdir, os.path.join(inputdir, inputfile)) + '_report.xlsx'
                 print('Found xml file for golden comparison: {} Processing...'.format(fn + ext))
                 # report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
@@ -413,7 +415,7 @@ def files_processing(inputdir, outputdir, workbook, step=None, ip=None):
 
             #default behavior - for testing only
             else:
-                report_file_name = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
+                #report_file_name = os.path.join(outputdir, os.path.join(inputdir,inputfile)) + '_report.xlsx'
                 print('Found xml file: {} Processing...'.format(fn+ext))
                 #report generation
                 cur_report = report(os.path.join(inputdir, inputfile))
