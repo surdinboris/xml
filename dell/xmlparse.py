@@ -97,16 +97,22 @@ def getdata(xml,classname='', name=''):
     root = getroot(xml)
     #hwinventory collect helper
     def collect(inst, classnameattr):
-        hwinventory = []
+        hwinventory = {}
         for i in inst:
             # gathering results. example: Component Classname="DCIM_ControllerView
             if i.attrib[classnameattr] == classname:
                 props = i.findall('PROPERTY')
+                fqdd= ''
+                val=''
                 for prop in props:
                     if prop.attrib['NAME'] == name:
                         val = prop.find('VALUE').text
-                        hwinventory.append(val)
-        return hwinventory
+                    elif prop.attrib['NAME'] == "FQDD":
+                        fqdd = prop.find('VALUE').text
+
+                hwinventory[fqdd] = val
+        hwinventory=dict(sorted(hwinventory.items()))
+        return list(hwinventory.values())
     #router to use both two types of hwinventory retrieved via web interface or
     #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
 
