@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VV2S2" TimeStamp="Wed Jan 16 07:52:49 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VV2S2" TimeStamp="Mon Feb  4 15:26:07 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -19,8 +19,8 @@
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
- <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
+ <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute>
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute>
  <Attribute Name="ThermalSettings.1#FanSpeedOffset">Max Fan Speed</Attribute>
@@ -1649,6 +1649,7 @@
         <Attribute Name="RAIDaction">Update</Attribute>
         <Attribute Name="LockStatus">Unlocked</Attribute>
         <Attribute Name="RAIDinitOperation">None</Attribute>
+        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute> -->
         <Attribute Name="DiskCachePolicy">Default</Attribute>
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute>
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute>
@@ -1686,7 +1687,7 @@
         </Component>
         <Component FQDD="Disk.Bay.4:Enclosure.Internal.0-1:RAID.Integrated.1-1">
             <!-- <Attribute Name="RAIDHotSpareStatus">No</Attribute> -->
-            <!-- <Attribute Name="RAIDPDState">Online</Attribute> -->
+            <!-- <Attribute Name="RAIDPDState">Failed</Attribute> -->
         </Component>
         <Component FQDD="Disk.Bay.5:Enclosure.Internal.0-1:RAID.Integrated.1-1">
             <!-- <Attribute Name="RAIDHotSpareStatus">No</Attribute> -->
@@ -1710,49 +1711,6 @@
     <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
     <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:59</Attribute> -->
     <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:59</Attribute> -->
-    <Attribute Name="VirtualizationMode">SRIOV</Attribute>
-    <Attribute Name="LegacyBootProto">PXE</Attribute>
-    <Attribute Name="WakeOnLan">Disabled</Attribute>
-    <!-- <Attribute Name="VLanId">0</Attribute> -->
-    <Attribute Name="NumberVFAdvertised">64</Attribute>
-    <!-- <Attribute Name="FirstFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="FirstFCoEBootTargetLUN">0</Attribute> -->
-    <!-- <Attribute Name="FirstFCoEFCFVLANID">1</Attribute> -->
-    <Attribute Name="BootOrderFirstFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderSecondFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderThirdFCoETarget">0</Attribute>
-    <Attribute Name="BootOrderFourthFCoETarget">0</Attribute>
-    <Attribute Name="INTEL_SecondFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_SecondFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_SecondFCoEFCFVLANID">1</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_ThirdFCoEFCFVLANID">1</Attribute>
-    <Attribute Name="INTEL_FourthFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
-    <Attribute Name="INTEL_FourthFCoEBootTargetLUN">0</Attribute>
-    <Attribute Name="INTEL_FourthFCoEFCFVLANID">1</Attribute>
-    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
-    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
-    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
-    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
-    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
-    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
-    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
-    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
-</Component>
-<Component FQDD="NIC.Integrated.1-2-1">
-    <Attribute Name="BlnkLeds">0</Attribute>
-    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
-    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:5B</Attribute> -->
-    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:5B</Attribute> -->
     <Attribute Name="VirtualizationMode">SRIOV</Attribute>
     <Attribute Name="LegacyBootProto">PXE</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
@@ -1820,6 +1778,49 @@
     <Attribute Name="LnkSpeed">AutoNeg</Attribute>
     <Attribute Name="WakeOnLan">Disabled</Attribute>
     <!-- <Attribute Name="VLanId">0</Attribute> -->
+    <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
+    <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
+    <Attribute Name="ChapAuthEnable">Disabled</Attribute>
+    <!-- <Attribute Name="ChapMutualAuth">Disabled</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorIpAddr">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorSubnet">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorGateway">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorName"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapId"></Attribute> -->
+    <!-- <Attribute Name="IscsiInitiatorChapPwd"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtIpAddress">0.0.0.0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtTcpPort">3260</Attribute> -->
+    <!-- <Attribute Name="FirstTgtBootLun">0</Attribute> -->
+    <!-- <Attribute Name="FirstTgtIscsiName"></Attribute> -->
+    <!-- <Attribute Name="FirstTgtChapPwd"></Attribute> -->
+</Component>
+<Component FQDD="NIC.Integrated.1-2-1">
+    <Attribute Name="BlnkLeds">0</Attribute>
+    <!-- <Attribute Name="VirtMacAddr">00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="VirtFIPMacAddr">00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="VirtWWN">20:00:E4:43:4B:11:07:5B</Attribute> -->
+    <!-- <Attribute Name="VirtWWPN">20:01:E4:43:4B:11:07:5B</Attribute> -->
+    <Attribute Name="VirtualizationMode">SRIOV</Attribute>
+    <Attribute Name="LegacyBootProto">PXE</Attribute>
+    <Attribute Name="WakeOnLan">Disabled</Attribute>
+    <!-- <Attribute Name="VLanId">0</Attribute> -->
+    <Attribute Name="NumberVFAdvertised">64</Attribute>
+    <!-- <Attribute Name="FirstFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute> -->
+    <!-- <Attribute Name="FirstFCoEBootTargetLUN">0</Attribute> -->
+    <!-- <Attribute Name="FirstFCoEFCFVLANID">1</Attribute> -->
+    <Attribute Name="BootOrderFirstFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderSecondFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderThirdFCoETarget">0</Attribute>
+    <Attribute Name="BootOrderFourthFCoETarget">0</Attribute>
+    <Attribute Name="INTEL_SecondFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_SecondFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_SecondFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_ThirdFCoEFCFVLANID">1</Attribute>
+    <Attribute Name="INTEL_FourthFCoEWWPNTarget">00:00:00:00:00:00:00:00</Attribute>
+    <Attribute Name="INTEL_FourthFCoEBootTargetLUN">0</Attribute>
+    <Attribute Name="INTEL_FourthFCoEFCFVLANID">1</Attribute>
     <Attribute Name="TcpIpViaDHCP">Enabled</Attribute>
     <Attribute Name="IscsiViaDHCP">Enabled</Attribute>
     <Attribute Name="ChapAuthEnable">Disabled</Attribute>
