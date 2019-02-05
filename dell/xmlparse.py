@@ -244,6 +244,8 @@ def main(argv):
     def start(mode):
         global errors
         disbutt('disabled')
+        print_to_gui('')
+        print_to_gui('')
         print_to_gui('Test started in {} mode '.format(mode))
         # fallbacks - to current workdir
         temp = os.path.join(os.getcwd(), 'temp')
