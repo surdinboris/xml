@@ -59,6 +59,7 @@ hw_collect.append({'displayname': 'PSU P/Ns', 'classname': 'DCIM_PowerSupplyView
 hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU status', 'classname': 'DCIM_PowerSupplyView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
+hw_collect.append({'displayname': 'PowerFailover', 'classname': 'DCIM_PowerSupplyView', 'name': 'RedundancyStatus', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'NIC status', 'classname': 'DCIM_NICView', 'name': 'LinkSpeed', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'HealthStatus', 'classname': 'DCIM_SystemView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PowerState', 'classname': 'DCIM_SystemView', 'name': 'PowerState', 'excluded_for_validation': 0})
@@ -244,7 +245,6 @@ def main(argv):
     def start(mode):
         global errors
         disbutt('disabled')
-        print_to_gui('')
         print_to_gui('')
         print_to_gui('Test started in {} mode '.format(mode))
         # fallbacks - to current workdir
