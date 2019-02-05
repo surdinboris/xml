@@ -244,6 +244,7 @@ def main(argv):
     buttons = [_startnetbutton,_startofflinebutton]
     def start(mode):
         global errors
+        global summary
         disbutt('disabled')
         print_to_gui('')
         print_to_gui('Test started in {} mode '.format(mode))
@@ -267,8 +268,8 @@ def main(argv):
             #########Network run
             # retrieving hosts information
             if len(spec_ip.get()) > 0:
-                print_to_gui('Special ip {}'.format(spec_ip.get()))
-                active_hosts=[spec_ip.get()]
+                print_to_gui('Predefined ip {}'.format(spec_ip.get()))
+                active_hosts = [spec_ip.get()]
             else:
                 def nmapscan():
                     nm = nmap.PortScanner()
@@ -333,7 +334,7 @@ def main(argv):
                     subprocess.run(["racadm", "-r", host, "-u", "root", "-p", password, "--nocertwarn", "set", "-f",
                                     "{}".format(os.path.join(os.getcwd(), "ConfigurationInventory.golden")), "-t", "xml", "-b",
                                     "graceful", "-w", "600", "-s", "on"])
-                if collectfinal.get()  == 1:
+                if collectfinal.get() == 1:
 
                     print_to_gui('- Collect final inventory')
                     # getting data after golden termplate enrollment:
@@ -363,6 +364,7 @@ def main(argv):
                 cleantemp(temp)
 
             writesummary(workbook,summary_report)
+            summary = {}
             # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
             print_to_gui(' - Process finished. Please inspect {}'.format(repname))
 
@@ -527,7 +529,6 @@ def unpack(latest_file):
                     return(os.path.join(epath,f))
 
 def writesummary(workbook,worksheet):
-    global summary
 
     maxwidth = {}
     # creating xls file
@@ -563,7 +564,7 @@ def writesummary(workbook,worksheet):
             maxwidth[coord[0]] = len(str(val))
         return str(val)
 
-    # print(summary)
+    print(summary)
 
     maxheight = 2
     for result in summary:
@@ -759,7 +760,6 @@ def writesummary(workbook,worksheet):
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
-    global summary
     rep_type = cur_report['rep_type']
     #overriding report type for
     geometry='rows'
