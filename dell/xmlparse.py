@@ -759,6 +759,7 @@ def writesummary(workbook,worksheet):
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
+    global summary
     rep_type = cur_report['rep_type']
     #overriding report type for
     geometry='rows'
