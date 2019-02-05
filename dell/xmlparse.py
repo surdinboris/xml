@@ -39,6 +39,7 @@ additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', '
 #additional_conf_collect.update({"iDRAC.Embedded.1": ["IPv4Static.1#Address"]})
 # summary object init
 summary = {}
+errors={}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
@@ -151,7 +152,7 @@ def getdata(xml,classname='', name=''):
 def main(argv):
 
     #helpers
-    def print_to_gui( txtstr):
+    def print_to_gui(txtstr):
         _texbox.config(state='normal')
         _texbox.insert('end', '%s\n' %txtstr)
         _texbox.config(state="disabled")
@@ -241,6 +242,7 @@ def main(argv):
 
     buttons = [_startnetbutton,_startofflinebutton]
     def start(mode):
+        global errors
         disbutt('disabled')
         print_to_gui('Test started in {} mode '.format(mode))
         # fallbacks - to current workdir
@@ -374,6 +376,11 @@ def main(argv):
             # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
             print_to_gui('Process finished. Servers raw data was saved in {}. Please inspect report {}'.format(repsdir, repname))
         workbook.close()
+        if len(errors) > 0:
+            print_to_gui('Following errors were detected:')
+            for er in errors:
+                print_to_gui("{}: {}".format(er, errors[er]))
+        errors={}
         disbutt('normal')
     _root.mainloop()
 
@@ -558,7 +565,7 @@ def writesummary(workbook,worksheet):
 
     maxheight = 2
     for result in summary:
-        print('Summary  detected for {}'.format(result))
+        print('Summary detected for {}'.format(result))
         ServiceTag = result
         conf_passed = 1
         conf_error = []
@@ -580,27 +587,38 @@ def writesummary(workbook,worksheet):
 
     # #if rep_type == 'config_report':
         try:
-            for ind, confsingle in enumerate(reps['config_report'], 0):
-            #coords = '{}{}'.format(colnum_string(i), ind)
-                #print(ind, v, )
-                conf_items=reps['config_report'][confsingle]
-                for confitem in conf_items:
-                    for key, value in confitem.items():
-                        if key != 'golden':
-                            if value == 1:
-                                pass
-                                # conf_passed.append('')
-                            elif value == 0:
-                                #print('conf error',confitem, key,value)
-                                conf_passed=0
-                                conf_error.append('Wrong value: of {},got {}  should be  {}'.format(confsingle, key, confitem['golden']))
-                            elif value == 2:
-                                pass
+            reps['config_report']
         except KeyError:
-            print('No configuration found for {}'.format(ServiceTag))
+            print('Error: No configuration found for {}!!!'.format(ServiceTag))
+            errors[ServiceTag] = 'Error: No configuration found for {}!!!'.format(ServiceTag)
             continue
 
+        for ind, confsingle in enumerate(reps['config_report'], 0):
+        #coords = '{}{}'.format(colnum_string(i), ind)
+            #print(ind, v, )
+            conf_items=reps['config_report'][confsingle]
+            for confitem in conf_items:
+                for key, value in confitem.items():
+                    if key != 'golden':
+                        if value == 1:
+                            pass
+                            # conf_passed.append('')
+                        elif value == 0:
+                            #print('conf error',confitem, key,value)
+                            conf_passed=0
+                            conf_error.append('Wrong value: of {},got {}  should be  {}'.format(confsingle, key, confitem['golden']))
+                        elif value == 2:
+                            pass
+
+
     #elif rep_type == 'hwinvent_report':
+        try:
+            reps['hwinvent_report']
+        except KeyError:
+            print('Error: No hardware inventory found for {}!!!'.format(ServiceTag))
+            errors[ServiceTag] = 'Error: No hardware inventory found for {}!!!'.format(ServiceTag)
+            continue
+
         correction=0
         for ind, hwfamily in enumerate(reps['hwinvent_report'],1):
             ind = ind+correction
@@ -736,7 +754,6 @@ def writesummary(workbook,worksheet):
     #print('maxcoords track',maxheight, ind)
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
-    summary={}
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
@@ -836,6 +853,7 @@ def writetoxlsx(report_file_name, cur_report, workbook):
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m, m), maxwidth[m])
+    summary = {}
     #workbook.close()
 
 #report constructor
