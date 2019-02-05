@@ -564,7 +564,7 @@ def writesummary(workbook,worksheet):
             maxwidth[coord[0]] = len(str(val))
         return str(val)
 
-    print(summary)
+    #print(summary)
 
     maxheight = 2
     for result in summary:
