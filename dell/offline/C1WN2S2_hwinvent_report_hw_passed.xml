@@ -2,16 +2,16 @@
 <Inventory version="2.0">
 	<Component Classname="DCIM_ControllerView" Key="RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RealtimeCapability" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>Capable</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Incapable</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SupportControllerBootMode" TYPE="uint8">
 	     <VALUE>1</VALUE>
@@ -30,8 +30,8 @@
 	     <DisplayValue>Generation 3</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PatrolReadState" TYPE="uint8">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Running</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DriverVersion" TYPE="string">
 	      <DisplayValue>Not Applicable</DisplayValue>
@@ -132,12 +132,12 @@
 	     <DisplayValue>0</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Degraded</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Integrated RAID Controller 1</VALUE>
@@ -158,8 +158,8 @@
 	     <DisplayValue>2018-11-06T10:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RealtimeCapability" TYPE="uint32">
 	     <VALUE>0</VALUE>
@@ -306,8 +306,8 @@
 	     <DisplayValue>2018-11-06T10:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RealtimeCapability" TYPE="uint32">
 	     <VALUE>0</VALUE>
@@ -454,16 +454,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -524,16 +524,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -594,16 +594,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -664,16 +664,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -734,16 +734,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -804,16 +804,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -874,16 +874,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -944,16 +944,16 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Rank" TYPE="uint8">
 	     <VALUE>2</VALUE>
 	     <DisplayValue>Double Rank</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ManufactureDate" TYPE="string">
 	     <VALUE>Mon Jul 09 07:00:00 2018 UTC</VALUE>
@@ -1010,12 +1010,12 @@
 	</Component>
 	<Component Classname="DCIM_PCIDeviceView" Key="RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115182443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T18:24:43</DisplayValue>
+	     <VALUE>20190204200042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T20:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1080,12 +1080,12 @@
 	</Component>
 	<Component Classname="DCIM_PCIDeviceView" Key="NIC.Integrated.1-1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190106192102.000000+000</VALUE>
-	     <DisplayValue>2019-01-06T19:21:02</DisplayValue>
+	     <VALUE>20190204200042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T20:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1154,8 +1154,8 @@
 	     <DisplayValue>2019-01-07T20:43:38</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1224,8 +1224,8 @@
 	     <DisplayValue>2018-12-05T17:34:58</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1294,8 +1294,8 @@
 	     <DisplayValue>2018-12-05T17:34:58</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1364,8 +1364,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1434,8 +1434,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1504,8 +1504,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1574,8 +1574,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1644,8 +1644,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1714,8 +1714,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1784,8 +1784,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1854,8 +1854,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1924,8 +1924,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -1994,8 +1994,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2064,8 +2064,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2134,8 +2134,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2204,8 +2204,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2274,8 +2274,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2344,8 +2344,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2414,8 +2414,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2484,8 +2484,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2554,32 +2554,32 @@
 	     <DisplayValue>2018-11-06T10:46:31</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="EstimatedExhaustTemperature" TYPE="uint16">
-	     <VALUE>26</VALUE>
-	     <DisplayValue>26 Degree C</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0 Degree C</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="EstimatedSystemAirflow" TYPE="uint16">
-	     <VALUE>68</VALUE>
-	     <DisplayValue>68 CFM</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0 CFM</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LicensingRollupStatus" TYPE="uint16">
 	     <VALUE>1</VALUE>
 	     <DisplayValue>OK</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="StorageRollupStatus" TYPE="uint32">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Degraded</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Error</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="MemoryRollupStatus" TYPE="uint32">
 	     <VALUE>1</VALUE>
 	     <DisplayValue>OK</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
+	     <VALUE>1</VALUE>
+	     <DisplayValue>OK</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="MemoryRollupStatus" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="TempStatisticsRollupStatus" TYPE="uint32">
 	     <VALUE>1</VALUE>
@@ -2597,8 +2597,7 @@
 	     <DisplayValue>OK</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="FanRollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="IDSDMRollupStatus" TYPE="uint32">
 	     <DisplayValue/>
@@ -2620,8 +2619,8 @@
 	     <DisplayValue>OK</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="CPURollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PopulatedPCIeSlots" TYPE="uint32">
 	     <VALUE>0</VALUE>
@@ -2640,8 +2639,8 @@
 	     <DisplayValue>2</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Error</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="BladeGeometry" TYPE="uint16">
 	     <VALUE>255</VALUE>
@@ -2675,8 +2674,8 @@
 	     <DisplayValue>Disabled</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PowerState" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>On</DisplayValue>
+	     <VALUE>8</VALUE>
+	     <DisplayValue>Off - Soft</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="BaseBoardChassisSlot" TYPE="string">
 	     <VALUE>NA</VALUE>
@@ -2812,48 +2811,46 @@
 	</Component>
 	<Component Classname="DCIM_NICView" Key="NIC.Integrated.1-1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190106202102.000000+000</VALUE>
-	     <DisplayValue>2019-01-06T20:21:02</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Protocol" TYPE="string">
-	     <VALUE>NIC</VALUE>
-	     <DisplayValue>NIC</DisplayValue>
+	     <VALUE>Unknown,</VALUE>
+	     <DisplayValue>Unknown,</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="MediaType" TYPE="string">
-	     <VALUE>SFP_PLUS</VALUE>
-	     <DisplayValue>SFP_PLUS</DisplayValue>
+	     <VALUE>Base T,KR,KX4</VALUE>
+	     <DisplayValue>Base T,KR,KX4</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ReceiveFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="TransmitFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="AutoNegotiation" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Disabled</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkSpeed" TYPE="uint8">
-	     <VALUE>5</VALUE>
-	     <DisplayValue>10 Gbps</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkDuplex" TYPE="uint8">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>Full Duplex</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="VendorName" TYPE="string">
-	     <VALUE>Intel Corp</VALUE>
-	     <DisplayValue>Intel Corp</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="FCoEWWNN" TYPE="string">
-	     <VALUE>e4:43:4b:11:07:31</VALUE>
-	     <DisplayValue>e4:43:4b:11:07:31</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -2981,44 +2978,42 @@
 	     <DisplayValue>2019-01-07T21:43:38</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Protocol" TYPE="string">
-	     <VALUE>NIC</VALUE>
-	     <DisplayValue>NIC</DisplayValue>
+	     <VALUE>Unknown,</VALUE>
+	     <DisplayValue>Unknown,</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="MediaType" TYPE="string">
-	     <VALUE>SFP_PLUS</VALUE>
-	     <DisplayValue>SFP_PLUS</DisplayValue>
+	     <VALUE>Base T,KR,KX4</VALUE>
+	     <DisplayValue>Base T,KR,KX4</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ReceiveFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="TransmitFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="AutoNegotiation" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Disabled</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkSpeed" TYPE="uint8">
-	     <VALUE>5</VALUE>
-	     <DisplayValue>10 Gbps</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkDuplex" TYPE="uint8">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>Full Duplex</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="VendorName" TYPE="string">
-	     <VALUE>Intel Corp</VALUE>
-	     <DisplayValue>Intel Corp</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="FCoEWWNN" TYPE="string">
-	     <VALUE>e4:43:4b:11:07:33</VALUE>
-	     <DisplayValue>e4:43:4b:11:07:33</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -3146,28 +3141,28 @@
 	     <DisplayValue>2018-12-05T18:34:58</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Protocol" TYPE="string">
-	     <VALUE>NIC</VALUE>
-	     <DisplayValue>NIC</DisplayValue>
+	     <VALUE>Unknown,</VALUE>
+	     <DisplayValue>Unknown,</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="MediaType" TYPE="string">
-	     <VALUE>Base T</VALUE>
-	     <DisplayValue>Base T</DisplayValue>
+	     <VALUE>Base T,KR,KX4</VALUE>
+	     <DisplayValue>Base T,KR,KX4</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ReceiveFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="TransmitFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="AutoNegotiation" TYPE="uint8">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Enabled</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkSpeed" TYPE="uint8">
 	     <VALUE>0</VALUE>
@@ -3178,8 +3173,7 @@
 	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="VendorName" TYPE="string">
-	     <VALUE>Intel Corp</VALUE>
-	     <DisplayValue>Intel Corp</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="FCoEWWNN" TYPE="string">
 	     <DisplayValue/>
@@ -3306,28 +3300,28 @@
 	     <DisplayValue>2018-12-05T18:34:58</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Protocol" TYPE="string">
-	     <VALUE>NIC</VALUE>
-	     <DisplayValue>NIC</DisplayValue>
+	     <VALUE>Unknown,</VALUE>
+	     <DisplayValue>Unknown,</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="MediaType" TYPE="string">
-	     <VALUE>Base T</VALUE>
-	     <DisplayValue>Base T</DisplayValue>
+	     <VALUE>Base T,KR,KX4</VALUE>
+	     <DisplayValue>Base T,KR,KX4</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ReceiveFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="TransmitFlowControl" TYPE="uint8">
-	     <VALUE>3</VALUE>
-	     <DisplayValue>Off</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="AutoNegotiation" TYPE="uint8">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Enabled</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LinkSpeed" TYPE="uint8">
 	     <VALUE>0</VALUE>
@@ -3338,8 +3332,7 @@
 	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="VendorName" TYPE="string">
-	     <VALUE>Intel Corp</VALUE>
-	     <DisplayValue>Intel Corp</DisplayValue>
+	     <DisplayValue/>
 	   </PROPERTY>
 	   <PROPERTY NAME="FCoEWWNN" TYPE="string">
 	     <DisplayValue/>
@@ -3460,36 +3453,14 @@
 	     <DisplayValue>NIC.Integrated.1-4-1</DisplayValue>
 	   </PROPERTY>
 	</Component>
-	<Component Classname="DCIM_ControllerBatteryView" Key="Battery.Integrated.1:RAID.Integrated.1-1">
-	   <PROPERTY NAME="RAIDState" TYPE="uint16">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>Ready</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Battery on Integrated RAID Controller 1</VALUE>
-	     <DisplayValue>Battery on Integrated RAID Controller 1</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Battery.Integrated.1:RAID.Integrated.1-1</VALUE>
-	     <DisplayValue>Battery.Integrated.1:RAID.Integrated.1-1</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Battery.Integrated.1:RAID.Integrated.1-1</VALUE>
-	     <DisplayValue>Battery.Integrated.1:RAID.Integrated.1-1</DisplayValue>
-	   </PROPERTY>
-	</Component>
 	<Component Classname="DCIM_VideoView" Key="Video.Embedded.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
 	     <VALUE>20181106095343.000000+000</VALUE>
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="SlotType" TYPE="string">
 	     <VALUE>0002</VALUE>
@@ -3554,12 +3525,12 @@
 	</Component>
 	<Component Classname="DCIM_PowerSupplyView" Key="PSU.Slot.1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202808.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:08</DisplayValue>
+	     <VALUE>20190205142815.000000+000</VALUE>
+	     <DisplayValue>2019-02-05T14:28:15</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PMBusMonitoring" TYPE="uint16">
 	     <VALUE>1</VALUE>
@@ -3582,8 +3553,8 @@
 	   </VALUE.ARRAY>
 	   </PROPERTY.ARRAY>
 	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Type" TYPE="uint16">
 	     <VALUE>0</VALUE>
@@ -3598,16 +3569,16 @@
 	     <DisplayValue>750 Watts</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="InputVoltage" TYPE="uint32">
-	     <VALUE>226</VALUE>
-	     <DisplayValue>226 Volts</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0 Volts</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="FirmwareVersion" TYPE="string">
 	     <VALUE>00.24.7D</VALUE>
 	     <DisplayValue>00.24.7D</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DetailedState" TYPE="string">
-	     <VALUE>Presence Detected</VALUE>
-	     <DisplayValue>Presence Detected</DisplayValue>
+	     <VALUE>Absent</VALUE>
+	     <DisplayValue>Absent</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Manufacturer" TYPE="string">
 	     <VALUE>Dell</VALUE>
@@ -3640,12 +3611,12 @@
 	</Component>
 	<Component Classname="DCIM_PowerSupplyView" Key="PSU.Slot.2">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202808.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:08</DisplayValue>
+	     <VALUE>20190205142815.000000+000</VALUE>
+	     <DisplayValue>2019-02-05T14:28:15</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PMBusMonitoring" TYPE="uint16">
 	     <VALUE>1</VALUE>
@@ -3668,8 +3639,8 @@
 	   </VALUE.ARRAY>
 	   </PROPERTY.ARRAY>
 	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Type" TYPE="uint16">
 	     <VALUE>0</VALUE>
@@ -3684,16 +3655,16 @@
 	     <DisplayValue>750 Watts</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="InputVoltage" TYPE="uint32">
-	     <VALUE>226</VALUE>
-	     <DisplayValue>226 Volts</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0 Volts</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="FirmwareVersion" TYPE="string">
 	     <VALUE>00.24.7D</VALUE>
 	     <DisplayValue>00.24.7D</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DetailedState" TYPE="string">
-	     <VALUE>Presence Detected</VALUE>
-	     <DisplayValue>Presence Detected</DisplayValue>
+	     <VALUE>Absent</VALUE>
+	     <DisplayValue>Absent</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Manufacturer" TYPE="string">
 	     <VALUE>Dell</VALUE>
@@ -3726,12 +3697,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -3848,12 +3819,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 0 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -3870,12 +3841,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -3992,12 +3963,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 1 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4012,14 +3983,158 @@
 	     <DisplayValue>Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
 	   </PROPERTY>
 	</Component>
-	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.3:Enclosure.Internal.0-1:RAID.Integrated.1-1">
+	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
+	     <VALUE>255</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="OperationPercentComplete" TYPE="uint8">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0%</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="OperationName" TYPE="string">
+	     <VALUE>None</VALUE>
+	     <DisplayValue>None</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY.ARRAY NAME="SupportedEncryptionTypes" TYPE="string">
+	  <VALUE.ARRAY>
+	   <VALUE>None</VALUE>
+	   <DisplayValue>None</DisplayValue>
+	   </VALUE.ARRAY>
+	   </PROPERTY.ARRAY>
+	   <PROPERTY NAME="DriveFormFactor" TYPE="uint8">
+	     <VALUE>2</VALUE>
+	     <DisplayValue>2.5 inch</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="PPID" TYPE="string">
+	     <VALUE>CN0G2G54SGW0088O013EA00</VALUE>
+	     <DisplayValue>CN0G2G54SGW0088O013EA00</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="SASAddress" TYPE="string">
+	     <VALUE>5000C500BBADDA51</VALUE>
+	     <DisplayValue>5000C500BBADDA51</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="MaxCapableSpeed" TYPE="uint32">
+	     <VALUE>4</VALUE>
+	     <DisplayValue>12Gbs</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="UsedSizeInBytes" TYPE="uint64">
+	     <VALUE>1199638052864</VALUE>
+	     <DisplayValue>1199638052864 Bytes</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="FreeSizeInBytes" TYPE="uint64">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0 Bytes</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="MediaType" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>HDD</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="BlockSizeInBytes" TYPE="uint32">
+	     <VALUE>512</VALUE>
+	     <DisplayValue>512 Bytes</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="T10PICapability" TYPE="uint8">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Not supported</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="SecurityState" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Not Capable</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="PredictiveFailureState" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Smart Alert Absent</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="HotSpareStatus" TYPE="uint16">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>No</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="BusProtocol" TYPE="uint32">
+	     <VALUE>6</VALUE>
+	     <DisplayValue>SAS</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="SerialNumber" TYPE="string">
+	     <VALUE>WFK1QB9P</VALUE>
+	     <DisplayValue>WFK1QB9P</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="Revision" TYPE="string">
+	     <VALUE>ST31</VALUE>
+	     <DisplayValue>ST31</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="ManufacturingYear" TYPE="uint32">
+	     <VALUE>2018</VALUE>
+	     <DisplayValue>2018</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="ManufacturingWeek" TYPE="uint16">
+	     <VALUE>34</VALUE>
+	     <DisplayValue>34</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="ManufacturingDay" TYPE="uint16">
+	     <VALUE>1</VALUE>
+	     <DisplayValue>1</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="Manufacturer" TYPE="string">
+	     <VALUE>SEAGATE</VALUE>
+	     <DisplayValue>SEAGATE</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="Model" TYPE="string">
+	     <VALUE>ST1200MM0099</VALUE>
+	     <DisplayValue>ST1200MM0099</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="SizeInBytes" TYPE="uint64">
+	     <VALUE>1199638052864</VALUE>
+	     <DisplayValue>1199638052864 Bytes</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="Slot" TYPE="uint16">
+	     <VALUE>2</VALUE>
+	     <DisplayValue>2</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="Connector" TYPE="uint16">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>0</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="RaidStatus" TYPE="uint32">
+	     <VALUE>2</VALUE>
+	     <DisplayValue>Online</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="DeviceDescription" TYPE="string">
+	     <VALUE>Disk 2 in Backplane 1 of Integrated RAID Controller 1</VALUE>
+	     <DisplayValue>Disk 2 in Backplane 1 of Integrated RAID Controller 1</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="FQDD" TYPE="string">
+	     <VALUE>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
+	     <DisplayValue>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="InstanceID" TYPE="string">
+	     <VALUE>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
+	     <DisplayValue>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
+	   </PROPERTY>
+	</Component>
+	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.3:Enclosure.Internal.0-1:RAID.Integrated.1-1">
+	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
+	   </PROPERTY>
+	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -4136,12 +4251,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 3 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4158,12 +4273,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.4:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -4280,12 +4395,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 4 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4302,12 +4417,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.5:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -4424,12 +4539,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 5 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4446,12 +4561,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.6:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -4568,12 +4683,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 6 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4590,12 +4705,12 @@
 	</Component>
 	<Component Classname="DCIM_PhysicalDiskView" Key="Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRatedWriteEndurance" TYPE="uint8">
 	     <VALUE>255</VALUE>
@@ -4712,12 +4827,12 @@
 	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Disk 7 in Backplane 1 of Integrated RAID Controller 1</VALUE>
@@ -4734,12 +4849,12 @@
 	</Component>
 	<Component Classname="DCIM_iDRACCardView" Key="iDRAC.Embedded.1-1#IDRACinfo">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202809.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:09</DisplayValue>
+	     <VALUE>20190205142816.000000+000</VALUE>
+	     <DisplayValue>2019-02-05T14:28:16</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DNSDomainName" TYPE="string">
 	     <DisplayValue/>
@@ -4799,12 +4914,12 @@
 	</Component>
 	<Component Classname="DCIM_VirtualDiskView" Key="Disk.Virtual.0:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY.ARRAY NAME="PendingOperations" TYPE="uint8">
 	  <VALUE.ARRAY>
@@ -4853,8 +4968,8 @@
 	     <DisplayValue>Default</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RemainingRedundancy" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
+	     <VALUE>1</VALUE>
+	     <DisplayValue>1</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="VirtualDiskTargetID" TYPE="uint32">
 	     <VALUE>0</VALUE>
@@ -4864,6 +4979,7 @@
 	  <VALUE.ARRAY>
 	   <VALUE>Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
 	   <VALUE>Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
+	   <VALUE>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
 	   <VALUE>Disk.Bay.3:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
 	   <VALUE>Disk.Bay.4:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
 	   <VALUE>Disk.Bay.5:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
@@ -4871,6 +4987,7 @@
 	   <VALUE>Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1</VALUE>
 	   <DisplayValue>Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
 	   <DisplayValue>Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
+	   <DisplayValue>Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
 	   <DisplayValue>Disk.Bay.3:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
 	   <DisplayValue>Disk.Bay.4:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
 	   <DisplayValue>Disk.Bay.5:Enclosure.Internal.0-1:RAID.Integrated.1-1</DisplayValue>
@@ -4911,20 +5028,20 @@
 	     <DisplayValue>Read Ahead</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RAIDStatus" TYPE="uint32">
-	     <VALUE>7</VALUE>
-	     <DisplayValue>Degraded</DisplayValue>
+	     <VALUE>2</VALUE>
+	     <DisplayValue>Online</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RAIDTypes" TYPE="uint32">
 	     <VALUE>2048</VALUE>
 	     <DisplayValue>RAID10</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="RollupStatus" TYPE="uint32">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Degraded</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Degraded</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Virtual Disk 0 on Integrated RAID Controller 1</VALUE>
@@ -4939,826 +5056,14 @@
 	     <DisplayValue>Disk.Virtual.0:RAID.Integrated.1-1</DisplayValue>
 	   </PROPERTY>
 	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.1A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>17880</VALUE>
-	     <DisplayValue>17880 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 1A</VALUE>
-	     <DisplayValue>Fan 1A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.1A</VALUE>
-	     <DisplayValue>Fan.Embedded.1A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.1A</VALUE>
-	     <DisplayValue>Fan.Embedded.1A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.2A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>17760</VALUE>
-	     <DisplayValue>17760 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 2A</VALUE>
-	     <DisplayValue>Fan 2A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.2A</VALUE>
-	     <DisplayValue>Fan.Embedded.2A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.2A</VALUE>
-	     <DisplayValue>Fan.Embedded.2A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.3A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>18120</VALUE>
-	     <DisplayValue>18120 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 3A</VALUE>
-	     <DisplayValue>Fan 3A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.3A</VALUE>
-	     <DisplayValue>Fan.Embedded.3A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.3A</VALUE>
-	     <DisplayValue>Fan.Embedded.3A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.4A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>18000</VALUE>
-	     <DisplayValue>18000 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 4A</VALUE>
-	     <DisplayValue>Fan 4A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.4A</VALUE>
-	     <DisplayValue>Fan.Embedded.4A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.4A</VALUE>
-	     <DisplayValue>Fan.Embedded.4A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.5A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>18120</VALUE>
-	     <DisplayValue>18120 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 5A</VALUE>
-	     <DisplayValue>Fan 5A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.5A</VALUE>
-	     <DisplayValue>Fan.Embedded.5A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.5A</VALUE>
-	     <DisplayValue>Fan.Embedded.5A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.6A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>18000</VALUE>
-	     <DisplayValue>18000 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 6A</VALUE>
-	     <DisplayValue>Fan 6A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.6A</VALUE>
-	     <DisplayValue>Fan.Embedded.6A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.6A</VALUE>
-	     <DisplayValue>Fan.Embedded.6A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.7A">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>18000</VALUE>
-	     <DisplayValue>18000 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 7A</VALUE>
-	     <DisplayValue>Fan 7A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.7A</VALUE>
-	     <DisplayValue>Fan.Embedded.7A</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.7A</VALUE>
-	     <DisplayValue>Fan.Embedded.7A</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.1B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 1B</VALUE>
-	     <DisplayValue>Fan 1B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.1B</VALUE>
-	     <DisplayValue>Fan.Embedded.1B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.1B</VALUE>
-	     <DisplayValue>Fan.Embedded.1B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.2B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 2B</VALUE>
-	     <DisplayValue>Fan 2B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.2B</VALUE>
-	     <DisplayValue>Fan.Embedded.2B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.2B</VALUE>
-	     <DisplayValue>Fan.Embedded.2B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.3B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14520</VALUE>
-	     <DisplayValue>14520 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 3B</VALUE>
-	     <DisplayValue>Fan 3B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.3B</VALUE>
-	     <DisplayValue>Fan.Embedded.3B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.3B</VALUE>
-	     <DisplayValue>Fan.Embedded.3B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.4B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 4B</VALUE>
-	     <DisplayValue>Fan 4B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.4B</VALUE>
-	     <DisplayValue>Fan.Embedded.4B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.4B</VALUE>
-	     <DisplayValue>Fan.Embedded.4B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.5B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 5B</VALUE>
-	     <DisplayValue>Fan 5B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.5B</VALUE>
-	     <DisplayValue>Fan.Embedded.5B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.5B</VALUE>
-	     <DisplayValue>Fan.Embedded.5B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.6B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 6B</VALUE>
-	     <DisplayValue>Fan 6B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.6B</VALUE>
-	     <DisplayValue>Fan.Embedded.6B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.6B</VALUE>
-	     <DisplayValue>Fan.Embedded.6B</DisplayValue>
-	   </PROPERTY>
-	</Component>
-	<Component Classname="DCIM_FanView" Key="Fan.Embedded.7B">
-	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115202810.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T20:28:10</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RedundancyStatus" TYPE="uint16">
-	     <VALUE>2</VALUE>
-	     <DisplayValue>Fully Redundant</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="ActiveCooling" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="VariableSpeed" TYPE="boolean">
-	     <VALUE>true</VALUE>
-	     <DisplayValue>true</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PWM" TYPE="uint8">
-	     <VALUE>100</VALUE>
-	     <DisplayValue>100%</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="CurrentReading" TYPE="sint32">
-	     <VALUE>14640</VALUE>
-	     <DisplayValue>14640 RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="RateUnits" TYPE="uint16">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>None</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="UnitModifier" TYPE="sint32">
-	     <VALUE>0</VALUE>
-	     <DisplayValue>0</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="BaseUnits" TYPE="uint16">
-	     <VALUE>19</VALUE>
-	     <DisplayValue>RPM</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="DeviceDescription" TYPE="string">
-	     <VALUE>Fan 7B</VALUE>
-	     <DisplayValue>Fan 7B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="FQDD" TYPE="string">
-	     <VALUE>Fan.Embedded.7B</VALUE>
-	     <DisplayValue>Fan.Embedded.7B</DisplayValue>
-	   </PROPERTY>
-	   <PROPERTY NAME="InstanceID" TYPE="string">
-	     <VALUE>Fan.Embedded.7B</VALUE>
-	     <DisplayValue>Fan.Embedded.7B</DisplayValue>
-	   </PROPERTY>
-	</Component>
 	<Component Classname="DCIM_EnclosureView" Key="Enclosure.Internal.0-1:RAID.Integrated.1-1">
 	   <PROPERTY NAME="LastUpdateTime" TYPE="string">
-	     <VALUE>20190115192443.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:43</DisplayValue>
+	     <VALUE>20190204210042.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:42</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ProductName" TYPE="string">
 	     <VALUE>BP13G+ 0:1</VALUE>
@@ -5807,12 +5112,12 @@
 	     <DisplayValue>OK</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="State" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>Ready</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="DeviceDescription" TYPE="string">
 	     <VALUE>Backplane 1 on Connector 0 of Integrated RAID Controller 1</VALUE>
@@ -5833,8 +5138,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Cache3Location" TYPE="uint8">
 	     <VALUE>0</VALUE>
@@ -6009,8 +5314,8 @@
 	     <DisplayValue>10</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ExternalBusClockSpeed" TYPE="uint32">
 	     <VALUE>8000</VALUE>
@@ -6047,8 +5352,8 @@
 	     <DisplayValue>2018-11-06T09:53:43</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="LastSystemInventoryTime" TYPE="string">
-	     <VALUE>20190115192451.000000+000</VALUE>
-	     <DisplayValue>2019-01-15T19:24:51</DisplayValue>
+	     <VALUE>20190204210050.000000+000</VALUE>
+	     <DisplayValue>2019-02-04T21:00:50</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="Cache3Location" TYPE="uint8">
 	     <VALUE>0</VALUE>
@@ -6223,8 +5528,8 @@
 	     <DisplayValue>10</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="PrimaryStatus" TYPE="uint32">
-	     <VALUE>1</VALUE>
-	     <DisplayValue>OK</DisplayValue>
+	     <VALUE>0</VALUE>
+	     <DisplayValue>Unknown</DisplayValue>
 	   </PROPERTY>
 	   <PROPERTY NAME="ExternalBusClockSpeed" TYPE="uint32">
 	     <VALUE>8000</VALUE>

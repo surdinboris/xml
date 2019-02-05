@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WR2S2" TimeStamp="Tue Jan 15 14:14:01 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WR2S2" TimeStamp="Tue Feb  5 08:18:21 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -39,7 +39,7 @@
  <!-- <Attribute Name="ServerTopology.1#RoomName"></Attribute> -->
  <!-- <Attribute Name="ServerOS.1#HostName">R33-L20</Attribute> -->
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute> -->
- <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute>
+ <Attribute Name="ChassisPwrState.1#ChassisLEDState">Blinking</Attribute>
  <Attribute Name="RepositoryUpdate"></Attribute>
 </Component>
 

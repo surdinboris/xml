@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WP2S2" TimeStamp="Tue Jan 15 14:11:02 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1WP2S2" TimeStamp="Tue Feb  5 08:15:49 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -19,8 +19,8 @@
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
- <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
+ <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute>
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute>
  <Attribute Name="ThermalSettings.1#FanSpeedOffset">Max Fan Speed</Attribute>
@@ -39,7 +39,7 @@
  <!-- <Attribute Name="ServerTopology.1#RoomName"></Attribute> -->
  <!-- <Attribute Name="ServerOS.1#HostName">R33-L19</Attribute> -->
  <!-- <Attribute Name="ServerOS.1#OSName"></Attribute> -->
- <Attribute Name="ChassisPwrState.1#ChassisLEDState">Off</Attribute>
+ <Attribute Name="ChassisPwrState.1#ChassisLEDState">Blinking</Attribute>
  <Attribute Name="RepositoryUpdate"></Attribute>
 </Component>
 

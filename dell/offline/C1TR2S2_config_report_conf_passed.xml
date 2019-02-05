@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TR2S2" TimeStamp="Mon Jan  7 12:55:59 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TR2S2" TimeStamp="Tue Feb  5 08:06:18 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -1649,7 +1649,6 @@
         <Attribute Name="RAIDaction">Update</Attribute>
         <Attribute Name="LockStatus">Unlocked</Attribute>
         <Attribute Name="RAIDinitOperation">None</Attribute>
-        <!-- <Attribute Name="T10PIStatus">Disabled</Attribute> -->
         <Attribute Name="DiskCachePolicy">Default</Attribute>
         <Attribute Name="RAIDdefaultWritePolicy">WriteBack</Attribute>
         <Attribute Name="RAIDdefaultReadPolicy">ReadAhead</Attribute>
@@ -2039,7 +2038,7 @@
     <Attribute Name="NmiButton">Disabled</Attribute>
     <Attribute Name="AcPwrRcvry">Last</Attribute>
     <Attribute Name="AcPwrRcvryDelay">Immediate</Attribute>
-    <!-- <Attribute Name="AcPwrRcvryUserDelay">0</Attribute> -->
+    <!-- <Attribute Name="AcPwrRcvryUserDelay">30462</Attribute> -->
     <Attribute Name="UefiVariableAccess">Standard</Attribute>
     <Attribute Name="SecureBoot">Disabled</Attribute>
     <Attribute Name="SecureBootPolicy">Standard</Attribute>

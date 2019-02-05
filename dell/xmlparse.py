@@ -566,6 +566,7 @@ def writesummary(workbook,worksheet):
         currheight = maxheight
         # entering to report data
         reps={}
+
         for res in summary[result]:
             try:
                 rep_type= res['rep_type']
@@ -578,22 +579,26 @@ def writesummary(workbook,worksheet):
                 # server_status = res['server_status']
 
     # #if rep_type == 'config_report':
-        for ind, confsingle in enumerate(reps['config_report'], 0):
-        #coords = '{}{}'.format(colnum_string(i), ind)
-            #print(ind, v, )
-            conf_items=reps['config_report'][confsingle]
-            for confitem in conf_items:
-                for key, value in confitem.items():
-                    if key != 'golden':
-                        if value == 1:
-                            pass
-                            # conf_passed.append('')
-                        elif value == 0:
-                            #print('conf error',confitem, key,value)
-                            conf_passed=0
-                            conf_error.append('Wrong value: of {},got {}  should be  {}'.format(confsingle, key, confitem['golden']))
-                        elif value == 2:
-                            pass
+        try:
+            for ind, confsingle in enumerate(reps['config_report'], 0):
+            #coords = '{}{}'.format(colnum_string(i), ind)
+                #print(ind, v, )
+                conf_items=reps['config_report'][confsingle]
+                for confitem in conf_items:
+                    for key, value in confitem.items():
+                        if key != 'golden':
+                            if value == 1:
+                                pass
+                                # conf_passed.append('')
+                            elif value == 0:
+                                #print('conf error',confitem, key,value)
+                                conf_passed=0
+                                conf_error.append('Wrong value: of {},got {}  should be  {}'.format(confsingle, key, confitem['golden']))
+                            elif value == 2:
+                                pass
+        except KeyError:
+            print('No configuration found for {}'.format(ServiceTag))
+            continue
 
     #elif rep_type == 'hwinvent_report':
         correction=0
