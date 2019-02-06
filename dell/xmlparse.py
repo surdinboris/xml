@@ -20,7 +20,7 @@ from IPy import IP
 # from email.mime.text import MIMEText
 # import datetime
 import xlsxwriter
-
+import telnetlib
 import nmap
 #generator for AB style excell cells
 def colnum_string(n):
@@ -32,7 +32,8 @@ def colnum_string(n):
 running = True
 hardware_golden = 'HardwareInventory.golden'
 configuration_golden = 'ConfigurationInventory.golden'
-
+pdus=['10.48.228.51', '10.48.228.52', '10.48.228.53', '10.48.228.54']
+servers_count=26
 #additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
 additional_conf_collect = {}
 additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', 'Size', 'StripeSize', 'SpanDepth', 'SpanLength', 'RAIDTypes', 'IncludedPhysicalDiskID']})
@@ -40,6 +41,7 @@ additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', '
 # summary object init
 summary = {}
 errors={}
+failoverresult={}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
@@ -59,7 +61,6 @@ hw_collect.append({'displayname': 'PSU P/Ns', 'classname': 'DCIM_PowerSupplyView
 hw_collect.append({'displayname': 'PSU serial', 'classname': 'DCIM_PowerSupplyView', 'name': 'SerialNumber', 'excluded_for_validation': 2})
 hw_collect.append({'displayname': 'PSU fw', 'classname': 'DCIM_PowerSupplyView', 'name': 'FirmwareVersion', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PSU status', 'classname': 'DCIM_PowerSupplyView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
-hw_collect.append({'displayname': 'PowerFailover', 'classname': 'DCIM_PowerSupplyView', 'name': 'RedundancyStatus', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'NIC status', 'classname': 'DCIM_NICView', 'name': 'LinkSpeed', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'HealthStatus', 'classname': 'DCIM_SystemView', 'name': 'PrimaryStatus', 'excluded_for_validation': 0})
 hw_collect.append({'displayname': 'PowerState', 'classname': 'DCIM_SystemView', 'name': 'PowerState', 'excluded_for_validation': 0})
@@ -151,8 +152,8 @@ def getdata(xml,classname='', name=''):
 
 
 def main(argv):
-
     #helpers
+    #gui operations
     def print_to_gui(txtstr):
         _texbox.config(state='normal')
         _texbox.insert('end', '%s\n' %txtstr)
@@ -164,9 +165,61 @@ def main(argv):
         _texbox.delete('1.0', END)
         _texbox.config(state="disabled")
         _root.update()
+    #network scan
+    def nmapscan():
+        nm = nmap.PortScanner()
+        nm.scan('10.48.228.1-40', '22')
+        """Sort an IP address list."""
+        ipl = [(IP(ip).int(), ip) for ip in nm.all_hosts()]
+        ipl.sort()
+        print("Found hosts:")
+        for host in ipl:
+            print('.' * 40)
+            print('Host : {}'.format(host[1]))
+        print('.' * 40)
+        return ipl
+    #pdu operations
+    def sendcom(tel, cmd=b""):
+        tel.write(cmd)
+        tel.write(bytes("\r", encoding='ascii'))
 
-    def stop():
-       pass
+    def login(tel):
+        user = 'root'
+        password = 'wildcat1'
+        tel.read_until(b"Username:")
+        sendcom(tel, user.encode())
+        tel.read_until(b"Password:")
+        sendcom(tel, password.encode())
+        tel.read_until(b"#")
+
+    def pdu_command(host, cmd):
+        tel = telnetlib.Telnet(host)
+        login(tel)
+        #print(cmd.encode())
+        sendcom(tel,cmd.encode())
+        tel.read_until(b"[y/n]")
+        #print('y/n')
+        sendcom(tel,'y'.encode())
+        tel.read_until(b"#")
+        sendcom(tel, b'exit')
+
+    def failover_check():
+        print_to_gui('Starting pdu failover check')
+        for num,pdu in enumerate(pdus, 1):
+            print('System powered without PDU-{}'.format(num))
+            print_to_gui('turning off PDU-{}'.format(num))
+            pdu_command(pdu, 'power outlets all off')
+            time.sleep(12)
+            if len(nmapscan()) == servers_count:
+                print_to_gui('All {} system servers are online'.format(len(nmapscan())))
+                failoverresult['PDU{}'.format(num)] = 'pass'
+            else:
+                print_to_gui('Error: found {} active servers, while should be {}'.format(len(nmapscan()), servers_count))
+                pdu_command(pdu, 'power outlets all on')
+                failoverresult['PDU{}'.format(num)]='fail'
+            pdu_command(pdu, 'power outlets all on')
+            time.sleep(12)
+
     def disbutt(opt):
         for bu in buttons:
             bu['state'] = opt
@@ -175,6 +228,7 @@ def main(argv):
     retrieveinitial = IntVar(value=0)
     applygolden = IntVar(value=0)
     collectfinal = IntVar(value=1)
+    checkfailover = IntVar(value=1)
     spec_ip = StringVar()
     spec_pwd = StringVar()
     #telad_logo = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "logo.gif")))
@@ -220,6 +274,8 @@ def main(argv):
     _collectfinal= Checkbutton(_optionsframe, text="Collect final report", variable=collectfinal)
     _collectfinal.grid(row=4, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
 
+    _collectfinal= Checkbutton(_optionsframe, text="Check PDU failover", variable=checkfailover)
+    _collectfinal.grid(row=5, padx=3, pady=3, column=0, columnspan=2, sticky=(W, N))
     # testing part
     _testingframe = tk.LabelFrame(_mainframe, text='Testing')
     _testingframe.grid(row=2, padx=3, pady=3, column=0,  sticky=(W,  N))
@@ -271,25 +327,7 @@ def main(argv):
                 print_to_gui('Predefined ip {}'.format(spec_ip.get()))
                 active_hosts = [spec_ip.get()]
             else:
-                def nmapscan():
-                    nm = nmap.PortScanner()
-                    nm.scan('10.48.228.1-40', '22')
-                    print("Found hosts:")
-                    for host in nm.all_hosts():
-                        print('-' * 100)
-                        print('Host : %s' % host)
-                        print('State : %s' % nm[host].state())
-                    return nm.all_hosts()
-
                 active_hosts = nmapscan()
-
-                def sort_ip_list(ip_list):
-                    """Sort an IP address list."""
-                    ipl = [(IP(ip).int(), ip) for ip in ip_list]
-                    ipl.sort()
-                    return [ip[1] for ip in ipl]
-
-                active_hosts = sort_ip_list(active_hosts)
 
             print_to_gui('Found {} active hosts'.format(len(active_hosts)))
             #cli part
@@ -299,6 +337,7 @@ def main(argv):
             #     exit(1)
 
             for host in active_hosts:
+                host = host[1]
                 print('\n' * 2)
                 print('-_' * 30)
                 print_to_gui("Connecting to host {}".format(host))
@@ -362,7 +401,8 @@ def main(argv):
                 # verifying against golden template
                 files_processing(temp, xmldatadir, workbook, step='golden', ip=host)
                 cleantemp(temp)
-
+            if checkfailover.get() == 1:
+                failover_check()
             writesummary(workbook,summary_report)
             summary = {}
             # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
@@ -375,6 +415,8 @@ def main(argv):
             #server_status={'Health': 'N/A', 'PowerState': 'N/A'}
             repsdir=os.path.join(os.getcwd(), "offline")
             files_processing(repsdir, repsdir, workbook, ip= '0.0.0.0')
+            if checkfailover.get() == 1:
+                failover_check()
             writesummary(workbook, summary_report)
             #
             # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
@@ -722,7 +764,6 @@ def writesummary(workbook,worksheet):
             worksheet.write(coords, toStr('Config report', coords), header_cell)
         coords = '{}{}'.format(colnum_string(ind), maxheight)
         worksheet.write(coords, 'internal:\'{}_config_report\'!A1'.format(ServiceTag))
-
         #appending server_status from Redfish
         # ind = ind + 1
         # if maxheight == 2:
@@ -757,6 +798,15 @@ def writesummary(workbook,worksheet):
     #print('maxcoords track',maxheight, ind)
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+    #appending failover result
+    if len(failoverresult) > 0:
+        worksheet.write('A{}'.format(maxheight), 'PDU failover check:', header_cell)
+        for num, res  in enumerate(failoverresult):
+            pduformat = green_cell
+            if res == 'fail':
+                pduformat = red_cell
+            coords = 'A{}'.format(maxheight+1+num)
+            worksheet.write(coords,str("{}- {}".format(res,failoverresult[res])), pduformat)
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
@@ -947,6 +997,19 @@ def report(xml):
 #     except:
 #        if ConnectionRefusedError():
 #            print('SMTP connection error, please check network and local Sendmail server')
+
+
+
+
+# if __name__ == "__main__":
+#     cmdlist=[]
+#     for num in range(13,17):
+#         onoff='OFF '
+#         outlname='Master_'
+#         cmdlist.append(''.join([onoff,outlname,str(num)]))
+#     print(cmdlist)
+#     command(cmdlist)
+        #print(''.join([onoff,outlname,str(num)]))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
