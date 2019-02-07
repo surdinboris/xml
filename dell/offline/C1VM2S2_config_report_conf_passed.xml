@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VM2S2" TimeStamp="Tue Feb  5 07:59:05 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VM2S2" TimeStamp="Thu Feb  7 12:51:37 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -19,8 +19,8 @@
  <Attribute Name="LCD.1#vConsoleIndication">Disabled</Attribute>
  <Attribute Name="LCD.1#QualifierWatt">Watts</Attribute>
  <Attribute Name="LCD.1#QualifierTemp">C</Attribute>
- <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalConfig.1#EventGenerationInterval">30</Attribute>
+ <Attribute Name="ThermalConfig.1#CriticalEventGenerationInterval">30</Attribute>
  <Attribute Name="ThermalSettings.1#ThermalProfile">Default Thermal Profile Settings</Attribute>
  <Attribute Name="ThermalSettings.1#AirExhaustTemp">70</Attribute>
  <Attribute Name="ThermalSettings.1#FanSpeedOffset">Max Fan Speed</Attribute>
@@ -444,8 +444,8 @@
  <Attribute Name="SNMPAlert.1#Destination">0.0.0.0</Attribute>
  <Attribute Name="SNMPAlert.1#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.1#SNMPv3Username"></Attribute>
- <Attribute Name="SNMPAlert.2#SNMPv3Username"></Attribute>
  <Attribute Name="SNMPAlert.2#Destination">0.0.0.0</Attribute>
+ <Attribute Name="SNMPAlert.2#SNMPv3Username"></Attribute>
  <Attribute Name="SNMPAlert.2#State">Disabled</Attribute>
  <Attribute Name="SNMPAlert.3#SNMPv3Username"></Attribute>
  <Attribute Name="SNMPAlert.3#Destination">0.0.0.0</Attribute>

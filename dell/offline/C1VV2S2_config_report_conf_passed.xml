@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VV2S2" TimeStamp="Tue Feb  5 07:45:56 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1VV2S2" TimeStamp="Thu Feb  7 12:32:33 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -1686,7 +1686,7 @@
         </Component>
         <Component FQDD="Disk.Bay.4:Enclosure.Internal.0-1:RAID.Integrated.1-1">
             <!-- <Attribute Name="RAIDHotSpareStatus">No</Attribute> -->
-            <!-- <Attribute Name="RAIDPDState">Failed</Attribute> -->
+            <!-- <Attribute Name="RAIDPDState">Online</Attribute> -->
         </Component>
         <Component FQDD="Disk.Bay.5:Enclosure.Internal.0-1:RAID.Integrated.1-1">
             <!-- <Attribute Name="RAIDHotSpareStatus">No</Attribute> -->

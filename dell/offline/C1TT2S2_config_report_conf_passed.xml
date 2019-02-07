@@ -1,4 +1,4 @@
-<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TT2S2" TimeStamp="Tue Feb  5 08:20:10 2019">
+<SystemConfiguration Model="PowerEdge R630" ServiceTag="C1TT2S2" TimeStamp="Thu Feb  7 13:17:55 2019">
 <!--Export type is Normal,XML-->
 <!--Exported configuration may contain commented attributes. Attributes may be commented due to dependency, destructive nature, preserving server identity or for security reasons.-->
 <!--Exported configuration does not contain FC-HBA data as the presence of the appropriate cards could not be detected!-->
@@ -27,7 +27,7 @@
  <Attribute Name="ThermalSettings.1#MinimumFanSpeed">255</Attribute>
  <Attribute Name="ThermalSettings.1#ThirdPartyPCIFanResponse">Enabled</Attribute>
  <Attribute Name="ServerPwr.1#PowerCapSetting">Disabled</Attribute>
- <!-- <Attribute Name="ServerPwr.1#PowerCapValue">484</Attribute> -->
+ <!-- <Attribute Name="ServerPwr.1#PowerCapValue">433</Attribute> -->
  <Attribute Name="ServerPwr.1#PSRedPolicy">Input Power Redundant</Attribute>
  <Attribute Name="ServerPwr.1#PSPFCEnabled">Disabled</Attribute>
  <Attribute Name="ServerPwr.1#PSRapidOn">Disabled</Attribute>

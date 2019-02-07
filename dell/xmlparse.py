@@ -114,7 +114,10 @@ def getdata(xml,classname='', name=''):
                         fqdd = prop.find('VALUE').text
 
                 hwinventory[fqdd] = val
+
         hwinventory=dict(sorted(hwinventory.items()))
+        if len(hwinventory) == 0:
+            return ['n/a']
         return list(hwinventory.values())
     #router to use both two types of hwinventory retrieved via web interface or
     #racadmin and additional support for segregate requests configuration parsing (possibly not needed)
@@ -286,7 +289,7 @@ def main(argv):
     # _testingframe.rowconfigure(1, weight=10)
     #control
     # test buttons - start stop test
-    _startnetbutton = tk.Button(_testingframe, text='Start (nework)',width=20, height=2,
+    _startnetbutton = tk.Button(_testingframe, text='Start (network)',width=20, height=2,
                                 command = lambda: start('network'))
     _startnetbutton.grid(row=0, padx=3, pady=3, column=0, sticky=(W, N))
 
@@ -732,7 +735,7 @@ def writesummary(workbook,worksheet):
                 correction = correction - 1
             if hwfamily_pass == 1:
                 coords = '{}{}'.format(colnum_string(ind),maxheight)
-                worksheet.write(coords, toStr('pass', coords), green_cell)
+                worksheet.write(coords, toStr(hwfamily, coords), green_cell)
             if hwfamily_pass == 0:
                 coords = '{}{}'.format(colnum_string(ind),maxheight)
                 worksheet.write(coords, toStr('fail', coords), red_cell)
@@ -925,6 +928,7 @@ def report(xml):
         print('hwinventory configuration data for {} discovered {}'.format(service_tag, xml))
         rep_type = 'hwinvent_report'
         for hwrequest in hw_collect:
+
             results.append({hwrequest['displayname']: getdata(xml, classname=hwrequest['classname'], name=hwrequest['name']),
                             'excluded_for_validation': hwrequest['excluded_for_validation']})
         # compare 1=to be validated, 0=without validation(data not to be validated - serial numbers, et.c.)
