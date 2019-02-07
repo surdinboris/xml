@@ -172,10 +172,12 @@ def main(argv):
         """Sort an IP address list."""
         ipl = [(IP(ip).int(), ip) for ip in nm.all_hosts()]
         ipl.sort()
+        ipl= list(map(lambda i: i[1], ipl))
+
         print("Found hosts:")
         for host in ipl:
             print('.' * 40)
-            print('Host : {}'.format(host[1]))
+            print('Host : {}'.format(host))
         print('.' * 40)
         return ipl
     #pdu operations
@@ -301,6 +303,7 @@ def main(argv):
     def start(mode):
         global errors
         global summary
+        global failoverresult
         disbutt('disabled')
         print_to_gui('')
         print_to_gui('Test started in {} mode '.format(mode))
@@ -337,7 +340,6 @@ def main(argv):
             #     exit(1)
 
             for host in active_hosts:
-                host = host[1]
                 print('\n' * 2)
                 print('-_' * 30)
                 print_to_gui("Connecting to host {}".format(host))
@@ -405,6 +407,7 @@ def main(argv):
                 failover_check()
             writesummary(workbook,summary_report)
             summary = {}
+            failoverresult = {}
             # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
             print_to_gui(' - Process finished. Please inspect {}'.format(repname))
 
@@ -421,6 +424,8 @@ def main(argv):
             #
             # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
             print_to_gui('Process finished. Servers raw data was saved in {}. Please inspect report {}'.format(repsdir, repname))
+            summary = {}
+            failoverresult = {}
         workbook.close()
         if len(errors) > 0:
             print_to_gui('Following errors were detected:')
@@ -906,7 +911,8 @@ def writetoxlsx(report_file_name, cur_report, workbook):
     #sheet setup for better look
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m, m), maxwidth[m])
-    summary = {}
+    # summary = {}
+    # failoverresult = {}
     #workbook.close()
 
 #report constructor
