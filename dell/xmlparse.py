@@ -208,20 +208,34 @@ def main(argv):
         tel.read_until(b"#")
         sendcom(tel, b'exit')
 
+    def checkwatt(wpdu):
+        return '291'
+
+    def checktemp(wpdu):
+        return '29'
+
     def failover_check():
         print_to_gui('Starting pdu failover check')
-        for num,pdu in enumerate(pdus, 1):
+        #building data structure
+        #{'PDU-1':{'result':'pass','wattage':'100','temp':'27'}, 'PDU-2':...}
+        failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+        #executing
+        for num, pdu in enumerate(pdus, 1):
             print('System powered without PDU-{}'.format(num))
             print_to_gui('turning off PDU-{}'.format(num))
             pdu_command(pdu, 'power outlets all off')
             time.sleep(12)
             if len(nmapscan()) == servers_count:
                 print_to_gui('All {} system servers are online'.format(len(nmapscan())))
-                failoverresult['PDU{}'.format(num)] = 'pass'
+                for wnum, wpdu in enumerate(pdus, 1):
+                    print_to_gui('Checking wattage and temperature for PDU-{}'.format(wnum))
+                    failoverresult['PDU-{}'.format(wnum)]['wattage'] = checkwatt(wpdu)
+                    failoverresult['PDU-{}'.format(wnum)]['temp'] = checktemp(wpdu)
+                failoverresult['PDU-{}'.format(num)]['result'] = 'pass'
             else:
                 print_to_gui('Error: found {} active servers, while should be {}'.format(len(nmapscan()), servers_count))
                 pdu_command(pdu, 'power outlets all on')
-                failoverresult['PDU{}'.format(num)]='fail'
+                failoverresult['PDU-{}'.format(num)]='fail'
             pdu_command(pdu, 'power outlets all on')
             time.sleep(12)
 
@@ -408,7 +422,7 @@ def main(argv):
                 cleantemp(temp)
             if checkfailover.get() == 1:
                 failover_check()
-            writesummary(workbook,summary_report)
+            writesummary(workbook, summary_report)
             summary = {}
             failoverresult = {}
             # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
@@ -735,7 +749,7 @@ def writesummary(workbook,worksheet):
                 correction = correction - 1
             if hwfamily_pass == 1:
                 coords = '{}{}'.format(colnum_string(ind),maxheight)
-                worksheet.write(coords, toStr(hwfamily, coords), green_cell)
+                worksheet.write(coords, toStr('pass', coords), green_cell)
             if hwfamily_pass == 0:
                 coords = '{}{}'.format(colnum_string(ind),maxheight)
                 worksheet.write(coords, toStr('fail', coords), red_cell)
@@ -807,14 +821,24 @@ def writesummary(workbook,worksheet):
     for m in maxwidth:
         worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
     #appending failover result
+    # {'PDU-1':{'result':'pass','wattage':'100','temp':'27'}, 'PDU-2':...}
     if len(failoverresult) > 0:
         worksheet.write('A{}'.format(maxheight), 'PDU failover check:', header_cell)
         for num, res  in enumerate(failoverresult):
-            pduformat = green_cell
-            if res == 'fail':
-                pduformat = red_cell
-            coords = 'A{}'.format(maxheight+1+num)
-            worksheet.write(coords,str("{}- {}".format(res,failoverresult[res])), pduformat)
+            coords = 'A{}'.format(maxheight + 1 + num)
+            if res['result'] == 'fail':
+                worksheet.write(coords,str("{}- {}".format(res, failoverresult[res]['result'])), red_cell)
+            if res['result'] == 'pass':
+                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['result'])), green_cell)
+                #for pnum, pres in enumerate(res):
+                #writing wattage
+                coords = '{}{}'.format(colnum_string(num+1), maxheight+1+num)
+                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['wattage'])), green_cell)
+                #writing temp
+                coords = '{}{}'.format(colnum_string(num+2), maxheight+1+num)
+                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['temp'])), green_cell)
+            else:
+                worksheet.write(coords, str("{}- {}".format(res,failoverresult[res]['result'])), red_cell)
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
@@ -829,9 +853,7 @@ def writetoxlsx(report_file_name, cur_report, workbook):
     cur_report=cur_report['report']
     #for column wide calculation purpose
     maxwidth = {}
-
     #creating xls file
-
     #header
     header_cell = workbook.add_format()
     header_cell.set_bold()
