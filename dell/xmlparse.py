@@ -241,7 +241,7 @@ def main(argv):
             if len(nmapscan()) == servers_count:
                 print_to_gui('All {} system servers are online'.format(len(nmapscan())))
                 for wnum, wpdu in enumerate(pdus, 1):
-                    print_to_gui('Checking wattage and temperature for sensor{}'.format(wnum))
+                    #print_to_gui('Checking wattage and temperature for sensor{}'.format(wnum))
                     #creating sensor record
                     sensor = failoverresult['PDU-{}'.format(num)]['sensor{}'.format(wnum)] = {}
                     sensorsdata = sensorscheck(wpdu)
