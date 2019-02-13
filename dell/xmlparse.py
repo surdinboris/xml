@@ -8,7 +8,7 @@ import glob
 #import sys, getopt
 import subprocess
 import shutil
-#import re
+import re
 import time
 import tkinter as tk
 import tkinter.scrolledtext as tkst
@@ -32,7 +32,11 @@ def colnum_string(n):
 running = True
 hardware_golden = 'HardwareInventory.golden'
 configuration_golden = 'ConfigurationInventory.golden'
+#pdus/sensors lists
+sensors = {'sensor1': 'Front-Down', 'sensor2': 'Front-Up', 'sensor3': 'Rear-Down', 'sensor4': 'Rear-Up'}
 pdus=['10.48.228.51', '10.48.228.52', '10.48.228.53', '10.48.228.54']
+
+#servers count for power test
 servers_count=26
 #additional attributes to collect for dynamic configuration data (FQDD, <!-- <Attribute Name=" ....)
 additional_conf_collect = {}
@@ -41,7 +45,7 @@ additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', '
 # summary object init
 summary = {}
 errors={}
-failoverresult={}
+failoverresult= {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
@@ -208,34 +212,46 @@ def main(argv):
         tel.read_until(b"#")
         sendcom(tel, b'exit')
 
-    def checkwatt(wpdu):
-        return '291'
+    def sensorscheck(pdu):
+        with telnetlib.Telnet(pdu) as t:
+            t.read_until(b'Username:')
+            t.write(b'root\n')
+            t.read_until(b'Password:')
+            t.write(b'wildcat1\n')
+            t.read_until(b"#")
+            t.write(b'show sensor externalsensor 2\n')
+            temp_output = t.read_until(b"#").decode('utf-8')
+            t.write(b'show inlets details\n')
+            pow_output = t.read_until(b"#").decode('utf-8')
+            temp = re.search('Reading:\s+(\d+\.\d)', temp_output).group(1)
+            wattage = re.search('Active Power:\s+(\d+)', pow_output).group(1)
+            return {'wattage': wattage, 'temp': temp}
 
-    def checktemp(wpdu):
-        return '29'
 
     def failover_check():
         print_to_gui('Starting pdu failover check')
         #building data structure
-        #{'PDU-1':{'result':'pass','wattage':'100','temp':'27'}, 'PDU-2':...}
-        failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+        #{'PDU-1':{'result':'pass','sensor1':{'wattage':'100','temp':'27'},'sensor2':{'wattage':'100','temp':'27'}}, 'PDU-2':...}
         #executing
         for num, pdu in enumerate(pdus, 1):
             print('System powered without PDU-{}'.format(num))
             print_to_gui('turning off PDU-{}'.format(num))
             pdu_command(pdu, 'power outlets all off')
-            time.sleep(12)
+            time.sleep(5)
             if len(nmapscan()) == servers_count:
                 print_to_gui('All {} system servers are online'.format(len(nmapscan())))
                 for wnum, wpdu in enumerate(pdus, 1):
-                    print_to_gui('Checking wattage and temperature for PDU-{}'.format(wnum))
-                    failoverresult['PDU-{}'.format(wnum)]['wattage'] = checkwatt(wpdu)
-                    failoverresult['PDU-{}'.format(wnum)]['temp'] = checktemp(wpdu)
+                    print_to_gui('Checking wattage and temperature for sensor{}'.format(wnum))
+                    #creating sensor record
+                    sensor = failoverresult['PDU-{}'.format(num)]['sensor{}'.format(wnum)] = {}
+                    sensorsdata = sensorscheck(wpdu)
+                    sensor['wattage'] = sensorsdata['wattage']
+                    sensor['temp'] = sensorsdata['temp']
                 failoverresult['PDU-{}'.format(num)]['result'] = 'pass'
             else:
                 print_to_gui('Error: found {} active servers, while should be {}'.format(len(nmapscan()), servers_count))
                 pdu_command(pdu, 'power outlets all on')
-                failoverresult['PDU-{}'.format(num)]='fail'
+                failoverresult['PDU-{}'.format(num)]['result']='fail'
             pdu_command(pdu, 'power outlets all on')
             time.sleep(12)
 
@@ -423,9 +439,9 @@ def main(argv):
             if checkfailover.get() == 1:
                 failover_check()
             writesummary(workbook, summary_report)
+            #reinit of data placeholders
             summary = {}
-            failoverresult = {}
-            # combinereport(os.path.join(os.getcwd(), 'passed', 'summary_report.xlsx'))
+            failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
             print_to_gui(' - Process finished. Please inspect {}'.format(repname))
 
 
@@ -438,11 +454,10 @@ def main(argv):
             if checkfailover.get() == 1:
                 failover_check()
             writesummary(workbook, summary_report)
-            #
-            # combinereport(os.path.join(repsdir, 'summary_report.xlsx'))
-            print_to_gui('Process finished. Servers raw data was saved in {}. Please inspect report {}'.format(repsdir, repname))
+            #reinit of data placeholders
             summary = {}
-            failoverresult = {}
+            failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+            print_to_gui(' - Process finished. Please inspect {}'.format(repname))
         workbook.close()
         if len(errors) > 0:
             print_to_gui('Following errors were detected:')
@@ -490,7 +505,6 @@ def files_processing(inputdir, outputdir, workbook, step=None, ip=None):
                 summary[service_tag].append({'ip': ip})
                 # writetoxlsx(os.path.join(outputdir, "{}_{}_{}".format(service_tag, rep_type, fn+'_report.xlsx',workbook)), cur_report)
                 writetoxlsx("{}_{}".format(service_tag, rep_type), cur_report, workbook)
-
                 counter += 1
                 print('Passed report for {} stored in {}'.format(service_tag, filename))
 
@@ -513,7 +527,7 @@ def files_processing(inputdir, outputdir, workbook, step=None, ip=None):
                 #writetoxlsx(report_file_name, cur_report, workbook)
                 writetoxlsx("{}_{}".format(service_tag, rep_type), cur_report, workbook)
                 counter += 1
-    #last execution block
+                #last execution block
                 print('{} done. Processed {}, files'.format(service_tag, counter))
 
 def report_analyze(currep):
@@ -819,26 +833,38 @@ def writesummary(workbook,worksheet):
         maxheight = currheight+1
     #print('maxcoords track',maxheight, ind)
     for m in maxwidth:
-        worksheet.set_column('{}:{}'.format(m,m), maxwidth[m])
+        worksheet.set_column('{}:{}'.format(m,m), maxwidth[m]*1.2)
     #appending failover result
-    # {'PDU-1':{'result':'pass','wattage':'100','temp':'27'}, 'PDU-2':...}
+    # {'PDU-1':{'result':'pass',sensor1:{'wattage':'100','temp':'27'},sensor2:{'wattage':'100','temp':'27'}...}, 'PDU-2':...}
     if len(failoverresult) > 0:
+        # writing header
         worksheet.write('A{}'.format(maxheight), 'PDU failover check:', header_cell)
-        for num, res  in enumerate(failoverresult):
-            coords = 'A{}'.format(maxheight + 1 + num)
-            if res['result'] == 'fail':
-                worksheet.write(coords,str("{}- {}".format(res, failoverresult[res]['result'])), red_cell)
-            if res['result'] == 'pass':
-                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['result'])), green_cell)
-                #for pnum, pres in enumerate(res):
-                #writing wattage
-                coords = '{}{}'.format(colnum_string(num+1), maxheight+1+num)
-                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['wattage'])), green_cell)
-                #writing temp
-                coords = '{}{}'.format(colnum_string(num+2), maxheight+1+num)
-                worksheet.write(coords, str("{}- {}".format(res, failoverresult[res]['temp'])), green_cell)
+        #writing table header
+        maxheight = maxheight + 1
+        worksheet.write('A{}'.format(maxheight), toStr('Result', 'A{}'.format(maxheight)), header_cell)
+        worksheet.write('B{}'.format(maxheight), toStr('Wattage', 'B{}'.format(maxheight)), header_cell)
+        worksheet.write('C{}'.format(maxheight), toStr('Temperature', 'C{}'.format(maxheight)), header_cell)
+
+        for num, res in enumerate(failoverresult):
+            maxheight=maxheight + 1
+            coords = 'A{}'.format(maxheight)
+            if failoverresult[res]['result'] == 'fail':
+                worksheet.write(coords, toStr("{} {}".format(res, failoverresult[res]['result']), coords), red_cell)
+            if failoverresult[res]['result'] == 'pass':
+                worksheet.write(coords, toStr("{} {}".format(res, failoverresult[res]['result']), coords), green_cell)
+                #iretation over sensors based on global sensors\pdu amount
+                for snum, sres in enumerate(pdus, 1):
+                    pdu = 'PDU-%s' % snum
+                    sensor = 'sensor%s' % snum
+                    #writing wattage
+                    coords = 'B{}'.format(maxheight)
+                    worksheet.write(coords, toStr("{}: {}W".format(pdu, failoverresult[res][sensor]['wattage']), coords))
+                    #writing temp
+                    coords = 'C{}'.format(maxheight)
+                    worksheet.write(coords, toStr("{}: {}C".format(sensors[sensor], failoverresult[res][sensor]['temp']), coords))
+                    maxheight = maxheight + 1
             else:
-                worksheet.write(coords, str("{}- {}".format(res,failoverresult[res]['result'])), red_cell)
+                worksheet.write(coords, toStr("{} {}".format(res, failoverresult[res]['result']), coords), red_cell)
     #workbook.close()
 
 def writetoxlsx(report_file_name, cur_report, workbook):
