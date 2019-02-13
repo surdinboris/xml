@@ -842,7 +842,7 @@ def writesummary(workbook,worksheet):
         #writing table header
         maxheight = maxheight + 1
         worksheet.write('A{}'.format(maxheight), toStr('Result', 'A{}'.format(maxheight)), header_cell)
-        worksheet.write('B{}'.format(maxheight), toStr('Wattage', 'B{}'.format(maxheight)), header_cell)
+        worksheet.write('B{}'.format(maxheight), toStr('Consumption', 'B{}'.format(maxheight)), header_cell)
         worksheet.write('C{}'.format(maxheight), toStr('Temperature', 'C{}'.format(maxheight)), header_cell)
 
         for num, res in enumerate(failoverresult):
