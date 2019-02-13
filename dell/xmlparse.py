@@ -240,6 +240,8 @@ def main(argv):
             time.sleep(5)
             if len(nmapscan()) == servers_count:
                 print_to_gui('All {} system servers are online'.format(len(nmapscan())))
+                pdu_command(pdu, 'power outlets all on')
+                time.sleep(12)
                 for wnum, wpdu in enumerate(pdus, 1):
                     #print_to_gui('Checking wattage and temperature for sensor{}'.format(wnum))
                     #creating sensor record
@@ -252,8 +254,8 @@ def main(argv):
                 print_to_gui('Error: found {} active servers, while should be {}'.format(len(nmapscan()), servers_count))
                 pdu_command(pdu, 'power outlets all on')
                 failoverresult['PDU-{}'.format(num)]['result']='fail'
-            pdu_command(pdu, 'power outlets all on')
-            time.sleep(12)
+                pdu_command(pdu, 'power outlets all on')
+                time.sleep(12)
 
     def disbutt(opt):
         for bu in buttons:
@@ -842,7 +844,7 @@ def writesummary(workbook,worksheet):
         #writing table header
         maxheight = maxheight + 1
         worksheet.write('A{}'.format(maxheight), toStr('Result', 'A{}'.format(maxheight)), header_cell)
-        worksheet.write('B{}'.format(maxheight), toStr('Consumption', 'B{}'.format(maxheight)), header_cell)
+        worksheet.write('B{}'.format(maxheight), toStr('Power', 'B{}'.format(maxheight)), header_cell)
         worksheet.write('C{}'.format(maxheight), toStr('Temperature', 'C{}'.format(maxheight)), header_cell)
 
         for num, res in enumerate(failoverresult):
