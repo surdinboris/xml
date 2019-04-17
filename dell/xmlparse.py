@@ -45,7 +45,7 @@ additional_conf_collect.update({"Disk.Virtual.0:RAID.Integrated.1-1": ['Name', '
 # summary object init
 summary = {}
 errors={}
-failoverresult= {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+failoverresult= {'PDU-{}'.format(num): {'result': 'na'} for num, pdu in enumerate(pdus, 1)}
 #harware collection constructor
 hw_collect=[]
 hw_collect.append({'displayname': 'ServiceTag', 'classname': 'DCIM_SystemView', 'name': 'ServiceTag', 'excluded_for_validation': 2})
@@ -443,7 +443,7 @@ def main(argv):
             writesummary(workbook, summary_report)
             #reinit of data placeholders
             summary = {}
-            failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+            failoverresult = {'PDU-{}'.format(num): {'result': 'na'} for num, pdu in enumerate(pdus, 1)}
             print_to_gui(' - Process finished. Please inspect {}'.format(repname))
 
 
@@ -458,7 +458,7 @@ def main(argv):
             writesummary(workbook, summary_report)
             #reinit of data placeholders
             summary = {}
-            failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
+            # failoverresult = {'PDU-{}'.format(num): {} for num, pdu in enumerate(pdus, 1)}
             print_to_gui(' - Process finished. Please inspect {}'.format(repname))
         workbook.close()
         if len(errors) > 0:
